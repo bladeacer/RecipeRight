@@ -21,7 +21,8 @@ namespace LearningAPI.Controllers
                 IQueryable<Resource> result = context.Resources.Include(r => r.User);
                 if (search != null)
                 {
-                    result = result.Where(x => x.ResourceName.Contains(search));
+                    result = result.Where(x => x.ResourceName.Contains(search) 
+                    || x.ResourceDescription.Contains(search));
                 }
                 var list = await result.OrderByDescending(x => x.CreatedAt).ToListAsync();
                 IEnumerable<ResourceDTO> data = list.Select(mapper.Map<ResourceDTO>);

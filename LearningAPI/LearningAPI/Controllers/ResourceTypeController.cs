@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LearningAPI.Models;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace LearningAPI.Controllers
 {
@@ -21,7 +19,7 @@ namespace LearningAPI.Controllers
                 IQueryable<ResourceType> result = context.ResourceTypes;
                 if (search != null)
                 {
-                    result = result.Where(x => x.TypeName.Contains(search));
+                    result = result.Where(x => x.TypeName.Contains(search) || x.ResourceTypeDescription.Contains(search));
                 }
                 var list = await result.OrderByDescending(x => x.CreatedAt).ToListAsync();
                 IEnumerable<ResourceTypeDTO> data = list.Select(mapper.Map<ResourceTypeDTO>);

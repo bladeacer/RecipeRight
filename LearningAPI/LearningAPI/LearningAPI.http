@@ -60,3 +60,95 @@ Authorization: Bearer {{token}}
 # Authorization: Bearer {{token}}
 
 
+
+@search=string
+GET {{LearningAPI_HostAddress}}/resourcetype?search={{search}}
+
+###
+
+POST {{LearningAPI_HostAddress}}/resourcetype
+Content-Type: application/json
+
+{
+  //ResourceTypeRequest
+}
+
+###
+
+@id=0
+DELETE {{LearningAPI_HostAddress}}/resourcetype/{{id}}
+
+###
+
+GET {{LearningAPI_HostAddress}}/resourcetype/{{id}}
+
+###
+
+PUT {{LearningAPI_HostAddress}}/resourcetype/{{id}}
+Content-Type: application/json
+
+{
+  //ResourceTypeRequest
+}
+
+###
+
+GET {{LearningAPI_HostAddress}}/resource?search={{search}}
+
+###
+
+POST {{LearningAPI_HostAddress}}/resource
+Content-Type: application/json
+
+{
+  //AddResourceRequest
+}
+
+###
+
+DELETE {{LearningAPI_HostAddress}}/resource/{{id}}
+
+###
+
+GET {{LearningAPI_HostAddress}}/resource/{{id}}
+
+###
+
+PUT {{LearningAPI_HostAddress}}/resource/{{id}}
+Content-Type: application/json
+
+{
+  //UpdateResourceRequest
+}
+
+###
+
+GET {{LearningAPI_HostAddress}}/policy?search={{search}}
+
+###
+
+POST {{LearningAPI_HostAddress}}/policy
+Content-Type: application/json
+
+{
+  //PolicyRequest
+}
+
+###
+
+DELETE {{LearningAPI_HostAddress}}/policy/{{id}}
+
+###
+
+GET {{LearningAPI_HostAddress}}/policy/{{id}}
+
+###
+
+PUT {{LearningAPI_HostAddress}}/policy/{{id}}
+Content-Type: application/json
+
+{
+  //PolicyRequest
+}
+
+###
