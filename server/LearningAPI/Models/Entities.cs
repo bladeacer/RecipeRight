@@ -58,6 +58,7 @@ namespace LearningAPI.Models
     }
 
     // Add resource types, which the user can select from a dropdown in the frontend when defining a resource :skull:
+    // TODO: ResourceTypeName must be unique
     public class ResourceType
     {
         public int ResourceTypeId { get; set; }

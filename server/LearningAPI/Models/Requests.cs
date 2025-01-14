@@ -35,16 +35,9 @@ namespace LearningAPI.Models
         public string ResourceTypeDescription { get; set; } = string.Empty;
 
     }
-    public class AddResourceRequest
+    public class ResourceRequest
     {
         public int ResourceTypeId { get; set; } 
-        [Required, MinLength(3), MaxLength(50)]
-        public string ResourceName { get; set; } = string.Empty;
-        [MaxLength(500)]
-        public string ResourceDescription { get; set; } = string.Empty;
-    }
-    public class UpdateResourceRequest
-    {
         [Required, MinLength(3), MaxLength(50)]
         public string ResourceName { get; set; } = string.Empty;
         [MaxLength(500)]

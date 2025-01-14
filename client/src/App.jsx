@@ -4,14 +4,21 @@ import { Container, AppBar, Toolbar, Typography, Box, Button } from '@mui/materi
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import MyTheme from './themes/MyTheme';
-import Tutorials from './pages/Tutorials';
-import AddTutorial from './pages/AddTutorial';
-import EditTutorial from './pages/EditTutorial';
-import MyForm from './pages/MyForm';
+// import Tutorials from './pages/Tutorials';
+// import AddTutorial from './pages/AddTutorial';
+// import EditTutorial from './pages/EditTutorial';
+// import MyForm from './reference/MyForm';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import http from './http';
 import UserContext from './contexts/UserContext';
+import ResourceTypes from './pages/ResourceTypes';
+import AddResourceType from './crud/AddResourceType';
+import EditResourceType from './crud/EditResourceType';
+import Home from './pages/Home';
+import AddResource from './crud/AddResource';
+import Resources from './pages/Resources';
+import EditResource from './crud/EditResource';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -38,11 +45,20 @@ function App() {
               <Toolbar disableGutters={true}>
                 <Link to="/">
                   <Typography variant="h6" component="div">
-                    Learning
+                    RecipeRight
                   </Typography>
                 </Link>
-                <Link to="/tutorials" ><Typography>Tutorials</Typography></Link>
-                <Link to="/form" ><Typography>Form</Typography></Link>
+                {user && (
+                  <>
+                    <Link to="/resourcetypes"><Typography>Resource Types</Typography></Link>
+                    <Link to="/resources"><Typography>Resources</Typography></Link>
+                    <Link to="/policide"><Typography>Policies</Typography></Link>
+                    <Link to="/attributes"><Typography>Attributes</Typography></Link>
+                    <Link to="/userattributes"><Typography>User Attributes</Typography></Link>
+                  </>
+                )}
+                {/* <Link to="/tutorials" ><Typography>Tutorials</Typography></Link> */}
+                {/* <Link to="/form" ><Typography>Form</Typography></Link> */}
                 <Box sx={{ flexGrow: 1 }}></Box>
                 {user && (
                   <>
@@ -63,13 +79,24 @@ function App() {
 
           <Container>
             <Routes>
-              <Route path={"/"} element={<Tutorials />} />
+              {/* <Route path={"/"} element={<Tutorials />} />
               <Route path={"/tutorials"} element={<Tutorials />} />
               <Route path={"/addtutorial"} element={<AddTutorial />} />
-              <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
+              <Route path={"/edittutorial/:id"} element={<EditTutorial />} /> */}
+
+              <Route path={"resourcetypes"} element={<ResourceTypes />} />
+              <Route path={"addresourcetype"} element={<AddResourceType />} />
+              <Route path={"/editresourcetype/:id"} element={<EditResourceType />} />
+
+
+              <Route path={"/resources"} element={<Resources />} />
+              <Route path={"/addresource"} element={<AddResource />} />
+              <Route path={"/editresource/:id"} element={<EditResource/>} />
+
+              <Route path={"/"} element={<Home />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
-              <Route path={"/form"} element={<MyForm />} />
+              {/* <Route path={"/form"} element={<MyForm />} /> */}
             </Routes>
           </Container>
         </ThemeProvider>

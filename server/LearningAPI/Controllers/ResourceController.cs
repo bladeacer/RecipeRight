@@ -58,7 +58,7 @@ namespace LearningAPI.Controllers
         [HttpPost, Authorize]
         [ProducesResponseType(typeof(ResourceDTO), StatusCodes.Status200OK)]
 
-        public async Task<IActionResult> AddResource(AddResourceRequest resource)
+        public async Task<IActionResult> AddResource(ResourceRequest resource)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace LearningAPI.Controllers
             }
         }
         [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> UpdateResource(int id, UpdateResourceRequest resource)
+        public async Task<IActionResult> UpdateResource(int id, ResourceRequest resource)
         {
             try
             {
@@ -110,6 +110,8 @@ namespace LearningAPI.Controllers
                     myResource.ResourceDescription = resource.ResourceDescription.Trim();
                 }
                 myResource.UpdatedAt = DateTime.Now;
+
+                myResource.ResourceTypeId = resource.ResourceTypeId;
 
                 await context.SaveChangesAsync();
                 return Ok();
