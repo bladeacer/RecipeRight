@@ -6,8 +6,10 @@ import http from '../http';
 import dayjs from 'dayjs';
 import UserContext from '../contexts/UserContext';
 import global from '../global';
+import { useNavigate } from 'react-router-dom';
 
 export default function Resources() {
+    const navigate = useNavigate();
     const [resList, setReslist] = useState([]);
     const [search, setSearch] = useState("");
     const { user } = useContext(UserContext);
@@ -52,74 +54,63 @@ export default function Resources() {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
+            <h5>Resources</h5>
+            {/* <Typography variant="h5" sx={{ my: 2 }}>
                 Resources 
-            </Typography>
+            </Typography> */}
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search"
-                    onChange={onSearchChange}
-                    onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary"
-                    onClick={onClickSearch}>
-                    <Search />
-                </IconButton>
-                <IconButton color="primary"
-                    onClick={onClickClear}>
-                    <Clear />
-                </IconButton>
-                <Box sx={{ flexGrow: 1 }} />
-                {
-                    user && (
-                        <Link to="/addresource">
-                            <Button variant='contained'>
-                                Add
-                            </Button>
-                        </Link>
-                    )
-                }
-            </Box>
+            <section>
+                <div role="search">
+                    <input value={search}
+                        placeholder="Search"
+                        onChange={onSearchChange}
+                        onKeyDown={onSearchKeyDown}
+                        style={{ scale: '104.5%', marginTop: '2.5px', marginLeft: '12px', marginRight: '14px' }}>
+                    </input>
+                    <button onClick={onClickSearch}
+                    >
+                        <Search />
+                    </button>
+                    <button onClick={onClickClear} >
+                        <Clear />
+                    </button>
+                    <button onClick={() => navigate('/addresource')} >
+                        Add
+                    </button>
+                </div>
+            </section>
 
             <Grid container spacing={2}>
                 {
                     resList.map((res, i) => {
                         return (
                             <Grid size={{ xs: 12, md: 6, lg: 4 }} key={res.resourceId}>
-                                <Card>
-                                    <CardContent>
-                                        <Box sx={{ display: 'flex', mb: 1 }}>
-                                            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                                                {res.resourceName}
-                                            </Typography>
-                                            {
-                                                user && (
-                                                    <Link to={`/editresource/${res.resourceId}`}>
-                                                        <IconButton color="primary" sx={{ padding: '4px' }}>
-                                                            <Edit />
-                                                        </IconButton>
-                                                    </Link>
-                                                )
-                                            }
-                                        </Box>
-                                        {/* <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-                                            color="text.secondary">
-                                            <AccountCircle sx={{ mr: 1 }} />
-                                            <Typography>
-                                                {rt.user?.name}
-                                            </Typography>
-                                        </Box> */}
-                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-                                            color="text.secondary">
-                                            <AccessTime sx={{ mr: 1 }} />
-                                            <Typography>
-                                                {dayjs(res.createdAt).format(global.datetimeFormat)}
-                                            </Typography>
-                                        </Box>
-                                        <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                                            {res.resourceDescription}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                                <article style={{ padding: '1rem' }}>
+                                    <header>
+                                        <nav>
+                                            <ul>
+                                                <li>
+                                                    Name: <strong> {res.resourceName} </strong>
+                                                    <AccessTime sx={{ scale: "72.5%" }} />
+                                                    <small>
+                                                        {dayjs(res.createdAt).format(global.datetimeFormat)}
+                                                    </small>
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li style={{ marginTop: '-2rem' }}>
+                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editresource/${res.resourceId}`)}>
+                                                        <Edit />
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </header>
+                                    <section>
+
+                                    {res.resourceDescription}
+                                    </section>
+                                </article>
                             </Grid>
                         );
                     })

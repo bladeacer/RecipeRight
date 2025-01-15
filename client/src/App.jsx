@@ -37,53 +37,66 @@ function App() {
   };
 
   return (
+
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
-        <ThemeProvider theme={MyTheme}>
-          <AppBar position="static" className="AppBar">
-            <Container>
-              <Toolbar disableGutters={true}>
-                <Link to="/">
-                  <Typography variant="h6" component="div">
-                    RecipeRight
-                  </Typography>
-                </Link>
+        {/* <ThemeProvider theme={MyTheme}> */}
+        {/* <AppBar position="static" className="AppBar"> */}
+
+        <main className="container">
+          <nav>
+            {/* <Toolbar disableGutters={true}> */}
+            <ul>
+              <li>
+                <a href="/">
+                  <strong>RecipeRight</strong>
+                </a>
+              </li>
                 {user && (
                   <>
-                    <Link to="/resourcetypes"><Typography>Resource Types</Typography></Link>
-                    <Link to="/resources"><Typography>Resources</Typography></Link>
-                    <Link to="/policide"><Typography>Policies</Typography></Link>
-                    <Link to="/attributes"><Typography>Attributes</Typography></Link>
-                    <Link to="/userattributes"><Typography>User Attributes</Typography></Link>
+                  <li>
+                    <a href="/resources"> Resource </a>
+                  </li>
+                  <li>
+                    <a href="/resourcetypes"> ResourceTypes </a>
+                  </li>
+                  <li>
+                    <a href="/policies"> Policies </a>
+                  </li>
+                  <li>
+                    <a href="/attributes"> Attributes </a>
+                  </li>
+                  <li>
+                    <a href="/userattributes"> User Attributes </a>
+                  </li>
                   </>
                 )}
-                {/* <Link to="/tutorials" ><Typography>Tutorials</Typography></Link> */}
-                {/* <Link to="/form" ><Typography>Form</Typography></Link> */}
-                <Box sx={{ flexGrow: 1 }}></Box>
+            </ul>
                 {user && (
-                  <>
-                    <Typography>{user.name}</Typography>
-                    <Button onClick={logout}>Logout</Button>
-                  </>
-                )
-                }
+              <ul>
+                {/* TODO: Have this redirect to settings */}
+                <li>{user.name}</li>
+                <li><button onClick={logout}>Logout</button></li>
+              </ul>
+            )}
                 {!user && (
-                  <>
-                    <Link to="/register" ><Typography>Register</Typography></Link>
-                    <Link to="/login" ><Typography>Login</Typography></Link>
-                  </>
+              <ul>
+                <li>
+                  <button>
+                  <a href="/register" className="contrast">Register</a>
+                  </button>
+                </li>
+                <li>
+                  <button className="secondary">
+                  <a href="/login" className="contrast">Login</a>
+                  </button>
+                </li>
+              </ul>
                 )}
-              </Toolbar>
-            </Container>
-          </AppBar>
+          </nav>
 
           <Container>
             <Routes>
-              {/* <Route path={"/"} element={<Tutorials />} />
-              <Route path={"/tutorials"} element={<Tutorials />} />
-              <Route path={"/addtutorial"} element={<AddTutorial />} />
-              <Route path={"/edittutorial/:id"} element={<EditTutorial />} /> */}
-
               <Route path={"resourcetypes"} element={<ResourceTypes />} />
               <Route path={"addresourcetype"} element={<AddResourceType />} />
               <Route path={"/editresourcetype/:id"} element={<EditResourceType />} />
@@ -91,15 +104,14 @@ function App() {
 
               <Route path={"/resources"} element={<Resources />} />
               <Route path={"/addresource"} element={<AddResource />} />
-              <Route path={"/editresource/:id"} element={<EditResource/>} />
+                <Route path={"/editresource/:id"} element={<EditResource />} />
 
               <Route path={"/"} element={<Home />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
-              {/* <Route path={"/form"} element={<MyForm />} /> */}
             </Routes>
           </Container>
-        </ThemeProvider>
+        </main>
       </Router>
     </UserContext.Provider>
   );

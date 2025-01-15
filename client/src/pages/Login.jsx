@@ -44,40 +44,46 @@ function Login() {
 
     return (
         <Box sx={{
-            marginTop: 8,
+            marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center'
         }}>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Login
-            </Typography>
+            <h5>Login</h5>
             <Box component="form" sx={{ maxWidth: '500px' }}
                 onSubmit={formik.handleSubmit}>
-                <TextField
-                    fullWidth margin="dense" autoComplete="off"
-                    label="Email"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                />
-                <TextField
-                    fullWidth margin="dense" autoComplete="off"
-                    label="Password"
-                    name="password" type="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.password && Boolean(formik.errors.password)}
-                    helperText={formik.touched.password && formik.errors.password}
-                />
-                <Button fullWidth variant="contained" sx={{ mt: 2 }}
-                    type="submit">
+
+                <label>
+                    Email
+                    <input
+                        type="email"
+                        name="email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className={formik.touched.email && formik.errors.email ? 'error' : ''}
+                        aria-invalid={formik.touched.email && formik.errors.email ? 'true' : 'false'}
+                    />
+                    {formik.touched.email && formik.errors.email && <small>{formik.errors.email}</small>}
+                </label>
+
+                <label>
+                    Password
+                    <input
+                        type="password"
+                        name="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className={formik.touched.password && formik.errors.password ? 'error' : ''}
+                        aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                    />
+                    {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
+                </label>
+
+                <button type="submit">
                     Login
-                </Button>
+                </button>
             </Box>
 
             <ToastContainer />

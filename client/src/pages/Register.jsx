@@ -55,60 +55,72 @@ function Register() {
 
     return (
         <Box sx={{
-            marginTop: 8,
+            marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
         }}>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Register
-            </Typography>
-            <Box component="form" sx={{ maxWidth: '500px' }}
-                onSubmit={formik.handleSubmit}>
-                <TextField
-                    fullWidth margin="dense" autoComplete="off"
-                    label="Name"
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
-                />
-                <TextField
-                    fullWidth margin="dense" autoComplete="off"
-                    label="Email"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                />
-                <TextField
-                    fullWidth margin="dense" autoComplete="off"
-                    label="Password"
-                    name="password" type="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.password && Boolean(formik.errors.password)}
-                    helperText={formik.touched.password && formik.errors.password}
-                />
-                <TextField
-                    fullWidth margin="dense" autoComplete="off"
-                    label="Confirm Password"
-                    name="confirmPassword" type="password"
-                    value={formik.values.confirmPassword}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                />
-                <Button fullWidth variant="contained" sx={{ mt: 2 }}
-                    type="submit">
+            <h5>Register</h5>
+            <Box sx={{ maxWidth: '500px' }} onSubmit={formik.handleSubmit}>
+                <label>
+                    Name
+                    <input
+                        type="text"
+                        name="name"
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className={formik.touched.name && formik.errors.name ? 'error' : ''}
+                        aria-invalid={formik.touched.name && formik.errors.name ? 'true' : 'false'}
+                    />
+                    {formik.touched.name && formik.errors.name && <small>{formik.errors.name}</small>}
+                </label>
+
+                <label>
+                    Email
+                    <input
+                        type="email"
+                        name="email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className={formik.touched.email && formik.errors.email ? 'error' : ''}
+                        aria-invalid={formik.touched.email && formik.errors.email ? 'true' : 'false'}
+                    />
+                    {formik.touched.email && formik.errors.email && <small>{formik.errors.email}</small>}
+                </label>
+
+                <label>
+                    Password
+                    <input
+                        type="password"
+                        name="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className={formik.touched.password && formik.errors.password ? 'error' : ''}
+                        aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                    />
+                    {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
+                </label>
+
+                <label>
+                    Confirm Password
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formik.values.confirmPassword}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        className={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'error' : ''}
+                        aria-invalid={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'true' : 'false'}
+                    />
+                    {formik.touched.confirmPassword && formik.errors.confirmPassword && <small>{formik.errors.confirmPassword}</small>}
+                </label>
+
+                <button type="submit">
                     Register
-                </Button>
+                </button>
             </Box>
 
             <ToastContainer />

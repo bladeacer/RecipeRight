@@ -1,9 +1,9 @@
-import {Box, Typography} from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import UserContext from "../contexts/UserContext";
-import {useContext} from 'react';
+import { useContext } from 'react';
 
 export default function Home() {
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
     return (
 
         <Box sx={{
@@ -13,16 +13,18 @@ export default function Home() {
             alignItems: 'center'
         }}>
             {!user && (
-
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Login to get started!
-            </Typography>
+                <>
+                    <h2>Login to get started</h2>
+                    <blockquote>
+                        This is a simple recipe generation application.
+                        <footer>
+                            <cite>- bladeacer, 2025</cite>
+                        </footer>
+                    </blockquote>
+                </>
             )}
             {user && (
-
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Welcome back, {user.name}
-            </Typography>
+                <h5>Welcome back, {user.name}</h5>
             )}
         </Box>
     )
