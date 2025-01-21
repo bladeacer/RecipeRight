@@ -63,6 +63,7 @@ function Login() {
                         onBlur={formik.handleBlur}
                         className={formik.touched.email && formik.errors.email ? 'error' : ''}
                         aria-invalid={formik.touched.email && formik.errors.email ? 'true' : 'false'}
+                        autoComplete='off'
                     />
                     {formik.touched.email && formik.errors.email && <small>{formik.errors.email}</small>}
                 </label>
@@ -77,6 +78,7 @@ function Login() {
                         onBlur={formik.handleBlur}
                         className={formik.touched.password && formik.errors.password ? 'error' : ''}
                         aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                        autoComplete='off'
                     />
                     {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
                 </label>

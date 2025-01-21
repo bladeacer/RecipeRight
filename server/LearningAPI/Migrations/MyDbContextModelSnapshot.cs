@@ -83,7 +83,7 @@ namespace LearningAPI.Migrations
 
                     b.HasIndex("ResourceId");
 
-                    b.HasIndex("ResourceTypeId");
+                    b.HasIndex("ResourceTypeId", "ResourceId");
 
                     b.ToTable("Policies");
                 });
@@ -123,6 +123,8 @@ namespace LearningAPI.Migrations
 
                     b.HasIndex("UserId")
                         .IsUnique();
+
+                    b.HasIndex("UserId", "ResourceTypeId");
 
                     b.ToTable("Resources");
                 });
@@ -216,9 +218,9 @@ namespace LearningAPI.Migrations
 
                     b.HasKey("UserAttributesId");
 
-                    b.HasIndex("AttributeId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("AttributeId", "UserId");
 
                     b.ToTable("UserAttributes");
                 });

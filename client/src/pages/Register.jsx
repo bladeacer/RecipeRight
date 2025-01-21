@@ -61,7 +61,7 @@ function Register() {
             alignItems: 'center',
         }}>
             <h5>Register</h5>
-            <Box sx={{ maxWidth: '500px' }} onSubmit={formik.handleSubmit}>
+            <Box component="form" sx={{ maxWidth: '500px' }} onSubmit={formik.handleSubmit}>
                 <label>
                     Name
                     <input
@@ -72,6 +72,7 @@ function Register() {
                         onBlur={formik.handleBlur}
                         className={formik.touched.name && formik.errors.name ? 'error' : ''}
                         aria-invalid={formik.touched.name && formik.errors.name ? 'true' : 'false'}
+                        autoComplete='off'
                     />
                     {formik.touched.name && formik.errors.name && <small>{formik.errors.name}</small>}
                 </label>
@@ -86,6 +87,7 @@ function Register() {
                         onBlur={formik.handleBlur}
                         className={formik.touched.email && formik.errors.email ? 'error' : ''}
                         aria-invalid={formik.touched.email && formik.errors.email ? 'true' : 'false'}
+                        autoComplete='off'
                     />
                     {formik.touched.email && formik.errors.email && <small>{formik.errors.email}</small>}
                 </label>
@@ -100,6 +102,7 @@ function Register() {
                         onBlur={formik.handleBlur}
                         className={formik.touched.password && formik.errors.password ? 'error' : ''}
                         aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                        autoComplete='off'
                     />
                     {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
                 </label>
@@ -114,6 +117,7 @@ function Register() {
                         onBlur={formik.handleBlur}
                         className={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'error' : ''}
                         aria-invalid={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'true' : 'false'}
+                        autoComplete='off'
                     />
                     {formik.touched.confirmPassword && formik.errors.confirmPassword && <small>{formik.errors.confirmPassword}</small>}
                 </label>

@@ -14,7 +14,7 @@ export default function AddResource() {
 
     const getRTs = () => {
         http.get("/resourcetype").then((res) => {
-            setRtOptions(res.data);
+                setRtOptions(res.data);
         });
     };
     useEffect(() => {
@@ -23,9 +23,9 @@ export default function AddResource() {
 
     const formik = useFormik({
         initialValues: {
-            resourceTypeId: 0,
             resourceName: "",
             resourceDescription: "",
+            resourceTypeId: 0,
         },
         validationSchema: yup.object({
             resourceTypeId: yup.number()
@@ -41,6 +41,15 @@ export default function AddResource() {
                 .required('Description is required')
         }),
         onSubmit: (data) => {
+            data.resourceTypeId = parseInt(data.resourceTypeId);
+            data.resourceDescription = data.resourceDescription.trim();
+            data.resourceName = data.resourceName.trim();
+
+            const sent_data = {
+                ResourceTypeId: data.resourceTypeId,
+                ResourceName: data.resourceName,
+                ResourceDescription: data.resourceDescription
+            }
             http.post("/resource", data)
                 .then((res) => {
                     console.log(res.data);
@@ -62,77 +71,74 @@ export default function AddResource() {
     };
 
     return (
+        <>
+        {rtOptions.length > 0 && (
         <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Add Resource
-            </Typography>
+            <h5>Add Resource</h5>
             <Box component="form" onSubmit={formik.handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6} lg={8}>
-                        <TextField
-                            select
-                            fullWidth
-                            margin="dense"
-                            label="Select Resource Type"
-                            name="resourceTypeId"
-                            value={formik.values.resourceTypeId}
-                            onChange={handleResourceTypeChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.resourceTypeId && Boolean(formik.errors.resourceTypeId)}
-                            helperText={formik.touched.resourceTypeId && formik.errors.resourceTypeId}
-                            slotProps={{
-                                select: { native: true },
-                            }}
-                        >
-                            <option value={0}>Select Resource Type</option>
-                            {rtOptions.map((rt) => (
-                                <option key={rt.resourceTypeId} value={rt.resourceTypeId}>
-                                    {rt.typeName}
-                                </option>
-                            ))}
-                        </TextField>
-
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            label="Resource Name"
-                            name="resourceName"
-                            value={formik.values.resourceName}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.resourceName && Boolean(formik.errors.resourceName)}
-                            helperText={formik.touched.resourceName && formik.errors.resourceName}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            multiline
-                            minRows={2}
-                            label="Description"
-                            name="resourceDescription"
-                            value={formik.values.resourceDescription}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.resourceDescription && Boolean(formik.errors.resourceDescription)}
-                            helperText={formik.touched.resourceDescription && formik.errors.resourceDescription}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={4}>
-                        <Box sx={{ textAlign: 'center', ml: 6 }}>
-                            <Typography> Resource Type Description: {rtDesc} </Typography>
-                        </Box>
-                    </Grid>
-                </Grid>
-                <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" type="submit">
-                        Add
-                    </Button>
-                </Box>
+                <label>
+                    Resource Type
+                    <select type="number"
+                    id='resourceTypeId'
+                        name='resourceTypeId'
+                        value={formik.values.resourceTypeId}
+                        onChange={handleResourceTypeChange}
+                        onBlur={formik.handleBlur}
+                        autoComplete='off'
+                    >
+                        <option value={0}>Select Resource Type</option>
+                        {rtOptions.map((rt) => (
+                            <option key={rt.resourceTypeId} value={rt.resourceTypeId}>
+                                {rt.typeName}
+                            </option>
+                        ))}
+                    </select>
+                    {formik.touched.resourceTypeId && Boolean(formik.errors.resourceTypeId) && <small>{formik.errors.resourceTypeId}</small>}
+                </label>
+                <label>
+                    Resource Name
+                    <input type="textarea"
+                    id='resourceName'
+                        name="resourceName"
+                        value={formik.values.resourceName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.resourceName && formik.errors.resourceName ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.resourceName && formik.errors.resourceName && <small>{formik.errors.resourceName}</small>}
+                </label>
+                <label>
+                    Description
+                    <input placeholder='Enter a description'
+                    id='resourceDescription'
+                        value={formik.values.resourceDescription}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.resourceDescription && formik.errors.resourceDescription ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.resourceDescription && formik.errors.resourceDescription && <small>{formik.errors.resourceDescription}</small>}
+                </label>
+                <h5>Resource Type Description:
+                    <blockquote>
+                        {rtDesc}
+                    </blockquote>
+                </h5>
+                <button type="submit">
+                    Add
+                </button>
             </Box>
 
             <ToastContainer />
         </Box>
+        )}
+        {rtOptions.length == 0 && (
+            <div>
+            <h5>No resource types have been made. Click <a href="/addresouurcetype">here</a> to add a resource type.</h5>
+            </div>
+        )}
+        </>
+
     );
 }

@@ -107,8 +107,7 @@ export default function Resources() {
                                         </nav>
                                     </header>
                                     <section>
-
-                                    {res.resourceDescription}
+                                        {res.resourceDescription}
                                     </section>
                                 </article>
                             </Grid>

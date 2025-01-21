@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250108103807_AddDescriptions")]
-    partial class AddDescriptions
+    [Migration("20250116025957_indexesv2")]
+    partial class indexesv2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,11 +30,13 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("AttributeDescription")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("AttributeName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
@@ -63,11 +65,13 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("PoliciesDescription")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("PoliciesName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
@@ -82,7 +86,7 @@ namespace LearningAPI.Migrations
 
                     b.HasIndex("ResourceId");
 
-                    b.HasIndex("ResourceTypeId");
+                    b.HasIndex("ResourceTypeId", "ResourceId");
 
                     b.ToTable("Policies");
                 });
@@ -98,12 +102,13 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("ResourceDescription")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("ResourceName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("ResourceTypeId")
                         .HasColumnType("int");
@@ -122,6 +127,8 @@ namespace LearningAPI.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
+                    b.HasIndex("UserId", "ResourceTypeId");
+
                     b.ToTable("Resources");
                 });
 
@@ -136,12 +143,13 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("ResourceTypeDescription")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("TypeName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
@@ -200,20 +208,22 @@ namespace LearningAPI.Migrations
 
                     b.Property<string>("UserAttributeDescription")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("UserAttributeName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("UserAttributesId");
 
-                    b.HasIndex("AttributeId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("AttributeId", "UserId");
 
                     b.ToTable("UserAttributes");
                 });

@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class indexesv2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,8 @@ namespace LearningAPI.Migrations
                 {
                     ResourceTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    TypeName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    TypeName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    ResourceTypeDescription = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -55,7 +56,8 @@ namespace LearningAPI.Migrations
                 {
                     ResourceId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    ResourceName = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    ResourceName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    ResourceDescription = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     ResourceTypeId = table.Column<int>(type: "int", nullable: false),
@@ -85,8 +87,8 @@ namespace LearningAPI.Migrations
                 {
                     PoliciesId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    PoliciesName = table.Column<string>(type: "longtext", nullable: false),
-                    PoliciesDescription = table.Column<string>(type: "longtext", nullable: false),
+                    PoliciesName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    PoliciesDescription = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     ResourceTypeId = table.Column<int>(type: "int", nullable: false),
@@ -116,8 +118,8 @@ namespace LearningAPI.Migrations
                 {
                     AttributesId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    AttributeName = table.Column<string>(type: "longtext", nullable: false),
-                    AttributeDescription = table.Column<string>(type: "longtext", nullable: false),
+                    AttributeName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    AttributeDescription = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     PoliciesId = table.Column<int>(type: "int", nullable: true)
@@ -139,8 +141,8 @@ namespace LearningAPI.Migrations
                 {
                     UserAttributesId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserAttributeName = table.Column<string>(type: "longtext", nullable: false),
-                    UserAttributeDescription = table.Column<string>(type: "longtext", nullable: false),
+                    UserAttributeName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    UserAttributeDescription = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     AttributeId = table.Column<int>(type: "int", nullable: false),
@@ -175,9 +177,9 @@ namespace LearningAPI.Migrations
                 column: "ResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Policies_ResourceTypeId",
+                name: "IX_Policies_ResourceTypeId_ResourceId",
                 table: "Policies",
-                column: "ResourceTypeId");
+                columns: new[] { "ResourceTypeId", "ResourceId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Resources_ResourceTypeId",
@@ -192,9 +194,14 @@ namespace LearningAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserAttributes_AttributeId",
+                name: "IX_Resources_UserId_ResourceTypeId",
+                table: "Resources",
+                columns: new[] { "UserId", "ResourceTypeId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAttributes_AttributeId_UserId",
                 table: "UserAttributes",
-                column: "AttributeId");
+                columns: new[] { "AttributeId", "UserId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAttributes_UserId",

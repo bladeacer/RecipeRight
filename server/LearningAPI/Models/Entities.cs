@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
@@ -36,6 +37,7 @@ namespace LearningAPI.Models
         public Resource? Resource { get; set; }
     }
 
+    [Index(nameof(ResourceId), nameof(UserId), nameof(ResourceTypeId))]
     public class Resource
     {
         public int ResourceId { get; set; }
@@ -53,7 +55,7 @@ namespace LearningAPI.Models
         public int UserId { get; set; }
 
         public ResourceType? ResourceType { get; set; }
-        public User? User { get; set; } 
+        public User? User { get; set; }
 
     }
 
@@ -74,14 +76,14 @@ namespace LearningAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
         // One Resource to one ResourceType
-        public Resource? Resource { get; set; } 
+        public Resource? Resource { get; set; }
 
     }
 
     public class Policies
     {
         public int PoliciesId { get; set; }
-        
+
         [Required, MinLength(3), MaxLength(50)]
         public string PoliciesName { get; set; } = string.Empty;
         [MaxLength(500)]
@@ -105,7 +107,7 @@ namespace LearningAPI.Models
         [Required, MinLength(3), MaxLength(50)]
         public string AttributeName { get; set; } = string.Empty;
         [MaxLength(500)]
-        public string AttributeDescription {  get; set; } = string.Empty;
+        public string AttributeDescription { get; set; } = string.Empty;
         [Column(TypeName = "datetime")]
         public DateTime CreatedAt { get; set; }
 
@@ -115,11 +117,12 @@ namespace LearningAPI.Models
     }
 
     // Assign attributes to users
+    [Index(nameof(AttributeId), nameof(UserId), IsUnique = false)]
     public class UserAttributes
     {
         public int UserAttributesId { get; set; }
         [Required, MinLength(3), MaxLength(50)]
-        public string UserAttributeName {  get; set; } = string.Empty;
+        public string UserAttributeName { get; set; } = string.Empty;
         [MaxLength(500)]
         public string UserAttributeDescription { get; set; } = string.Empty;
         [Column(TypeName = "datetime")]
