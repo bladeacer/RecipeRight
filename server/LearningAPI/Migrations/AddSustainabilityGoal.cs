@@ -1,154 +1,50 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LearningAPI.Models;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LearningAPI.Controllers
+#nullable disable
+
+namespace LearningAPI.Migrations
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class SustainabilityGoalController(MyDbContext context, IMapper mapper, ILogger<SustainabilityGoalController> logger) : ControllerBase
+    /// <inheritdoc />
+    public partial class AddSustainabilityGoal : Migration
     {
-        [HttpGet, Authorize]
-        [ProducesResponseType(typeof(IEnumerable<SustainabilityGoalDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll(string? search)
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
         {
-            try
-            {
-                IQueryable<SustainabilityGoal> result = context.SustainabilityGoals.Include(g => g.User);
-                if (search != null)
+            migrationBuilder.CreateTable(
+                name: "SustainabilityGoals",
+                columns: table => new
                 {
-                    result = result.Where(x => x.GoalName.Contains(search));
-                }
-                var list = await result.OrderByDescending(x => x.CreatedOn).ToListAsync();
-                IEnumerable<SustainabilityGoalDTO> data = list.Select(mapper.Map<SustainabilityGoalDTO>);
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when getting all sustainability goals");
-                return StatusCode(500);
-            }
+                    GoalId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    GoalName = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false),
+                    TargetValue = table.Column<int>(type: "int", nullable: false),
+                    CurrentValue = table.Column<int>(type: "int", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SustainabilityGoals", x => x.GoalId);
+                    table.ForeignKey(
+                        name: "FK_SustainabilityGoals_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SustainabilityGoals_UserId",
+                table: "SustainabilityGoals",
+                column: "UserId");
         }
 
-        [HttpGet("{id}"), Authorize]
-        [ProducesResponseType(typeof(SustainabilityGoalDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetGoal(int id)
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
         {
-            try
-            {
-                SustainabilityGoal? goal = await context.SustainabilityGoals.Include(g => g.User).SingleOrDefaultAsync(g => g.GoalId == id);
-                if (goal == null)
-                {
-                    return NotFound();
-                }
-                SustainabilityGoalDTO data = mapper.Map<SustainabilityGoalDTO>(goal);
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when getting sustainability goal by ID");
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPost, Authorize]
-        [ProducesResponseType(typeof(SustainabilityGoalDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddGoal(SustainabilityGoalRequest goalRequest)
-        {
-            try
-            {
-                int userId = GetUserId();
-                var now = DateTime.Now;
-                var goal = new SustainabilityGoal()
-                {
-                    GoalName = goalRequest.GoalName.Trim(),
-                    TargetValue = goalRequest.TargetValue,
-                    CurrentValue = goalRequest.CurrentValue,
-                    Deadline = goalRequest.Deadline,
-                    CreatedOn = now,
-                    UserId = userId
-                };
-                await context.SustainabilityGoals.AddAsync(goal);
-                await context.SaveChangesAsync();
-                SustainabilityGoal? newGoal = context.SustainabilityGoals.Include(g => g.User).FirstOrDefault(g => g.GoalId == goal.GoalId);
-                SustainabilityGoalDTO goalDTO = mapper.Map<SustainabilityGoalDTO>(newGoal);
-                return Ok(goalDTO);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when adding sustainability goal");
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPut("{id}"), Authorize]
-        public async Task<IActionResult> UpdateGoal(int id, SustainabilityGoalRequest goalRequest)
-        {
-            try
-            {
-                var goal = await context.SustainabilityGoals.FindAsync(id);
-                if (goal == null)
-                {
-                    return NotFound();
-                }
-                int userId = GetUserId();
-                if (goal.UserId != userId)
-                {
-                    return Forbid();
-                }
-                if (!string.IsNullOrEmpty(goalRequest.GoalName))
-                {
-                    goal.GoalName = goalRequest.GoalName.Trim();
-                }
-                goal.TargetValue = goalRequest.TargetValue;
-                goal.CurrentValue = goalRequest.CurrentValue;
-                goal.Deadline = goalRequest.Deadline;
-                await context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when updating sustainability goal");
-                return StatusCode(500);
-            }
-        }
-
-        [HttpDelete("{id}"), Authorize]
-        public async Task<IActionResult> DeleteGoal(int id)
-        {
-            try
-            {
-                var goal = context.SustainabilityGoals.Find(id);
-                if (goal == null)
-                {
-                    return NotFound();
-                }
-
-                int userId = GetUserId();
-                if (goal.UserId != userId)
-                {
-                    return Forbid();
-                }
-
-                context.SustainabilityGoals.Remove(goal);
-                await context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when deleting sustainability goal");
-                return StatusCode(500);
-            }
-        }
-
-        private int GetUserId()
-        {
-            return Convert.ToInt32(User.Claims
-                .Where(c => c.Type == ClaimTypes.NameIdentifier)
-                .Select(c => c.Value).SingleOrDefault());
+            migrationBuilder.DropTable(
+                name: "SustainabilityGoals");
         }
     }
 }
