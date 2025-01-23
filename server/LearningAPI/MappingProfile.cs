@@ -16,6 +16,7 @@ namespace LearningAPI
             CreateMap<Policies, PoliciesDTO>();
             CreateMap<Attributes, AttributesDTO>();
             CreateMap<UserAttributes, UserAttributesDTO>();
+            CreateMap<SustainabilityGoal, SustainabilityGoalDTO>();
         }
     }
 }

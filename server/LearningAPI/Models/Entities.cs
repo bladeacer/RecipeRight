@@ -134,29 +134,19 @@ namespace LearningAPI.Models
     }
     public class SustainabilityGoal
     {
-        public int GoalId { get; set; } // Primary key (ensure this matches what the controller expects)
+        public int SustainabilityGoalId { get; set; } // Primary Key
 
-        [Required, MinLength(3), MaxLength(100)]
+        public int UserId { get; set; } // Foreign Key
         public string GoalName { get; set; } = string.Empty;
-
-        [MaxLength(500)]
         public string GoalDescription { get; set; } = string.Empty;
-
-        public int TargetValue { get; set; } // Target value
-        public int CurrentValue { get; set; } // Current progress
-
-        [Column(TypeName = "datetime")]
+        public int TargetValue { get; set; }
+        public int CurrentValue { get; set; }
         public DateTime Deadline { get; set; }
+        public DateTime CreatedOn { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime CreatedAt { get; set; }
-
-        [Column(TypeName = "datetime")]
-        public DateTime UpdatedAt { get; set; }
-
-        public int UserId { get; set; } // Foreign key reference to the user
         public User? User { get; set; } // Navigation property
     }
+
 
 
 

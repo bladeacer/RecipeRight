@@ -22,7 +22,7 @@ namespace LearningAPI.Controllers
                 {
                     result = result.Where(x => x.GoalName.Contains(search));
                 }
-                var list = await result.OrderByDescending(x => x.CreatedAt).ToListAsync();
+                var list = await result.OrderByDescending(x => x.CreatedOn).ToListAsync();
                 IEnumerable<SustainabilityGoalDTO> data = list.Select(mapper.Map<SustainabilityGoalDTO>);
                 return Ok(data);
             }
@@ -39,7 +39,7 @@ namespace LearningAPI.Controllers
         {
             try
             {
-                SustainabilityGoal? goal = await context.SustainabilityGoals.Include(g => g.User).SingleOrDefaultAsync(g => g.GoalId == id);
+                SustainabilityGoal? goal = await context.SustainabilityGoals.Include(g => g.User).SingleOrDefaultAsync(g => g.SustainabilityGoalId == id);
                 if (goal == null)
                 {
                     return NotFound();
@@ -65,15 +65,16 @@ namespace LearningAPI.Controllers
                 var goal = new SustainabilityGoal()
                 {
                     GoalName = goalRequest.GoalName.Trim(),
+                    GoalDescription = goalRequest.GoalDescription.Trim(),
                     TargetValue = goalRequest.TargetValue,
                     CurrentValue = goalRequest.CurrentValue,
                     Deadline = goalRequest.Deadline,
-                    CreatedAt = now,
+                    CreatedOn = now,
                     UserId = userId
                 };
                 await context.SustainabilityGoals.AddAsync(goal);
                 await context.SaveChangesAsync();
-                SustainabilityGoal? newGoal = context.SustainabilityGoals.Include(g => g.User).FirstOrDefault(g => g.GoalId == goal.GoalId);
+                SustainabilityGoal? newGoal = context.SustainabilityGoals.Include(g => g.User).FirstOrDefault(g => g.SustainabilityGoalId == goal.SustainabilityGoalId);
                 SustainabilityGoalDTO goalDTO = mapper.Map<SustainabilityGoalDTO>(newGoal);
                 return Ok(goalDTO);
             }
@@ -102,6 +103,10 @@ namespace LearningAPI.Controllers
                 if (!string.IsNullOrEmpty(goalRequest.GoalName))
                 {
                     goal.GoalName = goalRequest.GoalName.Trim();
+                }
+                if (!string.IsNullOrEmpty(goalRequest.GoalDescription))
+                {
+                    goal.GoalDescription = goalRequest.GoalDescription.Trim();
                 }
                 goal.TargetValue = goalRequest.TargetValue;
                 goal.CurrentValue = goalRequest.CurrentValue;
