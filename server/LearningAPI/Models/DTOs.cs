@@ -66,4 +66,17 @@ namespace LearningAPI.Models
         public AttributesDTO? Attributes { get; set; }
 
     }
+    public class SustainabilityGoalDTO
+    {
+        public int SustainabilityGoalId { get; set; } 
+        public string GoalName { get; set; } = string.Empty; 
+        public string GoalDescription { get; set; } = string.Empty; 
+        public DateTime CreatedAt { get; set; } 
+        public DateTime UpdatedAt { get; set; } 
+        public int UserId { get; set; } 
+        public UserDTO? User { get; set; } 
+
+
+    }
+
 }

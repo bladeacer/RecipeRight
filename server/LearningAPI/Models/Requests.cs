@@ -71,4 +71,18 @@ namespace LearningAPI.Models
         public int AttributeId { get; set; } = 0;
         public int UserId { get; set; }
     }
+
+    public class SustainabilityGoalRequest
+    {
+        [Required, MinLength(3), MaxLength(100)]
+        public string GoalName { get; set; } = string.Empty; // Name of the goal
+        [MaxLength(500)]
+        public string GoalDescription { get; set; } = string.Empty; // Description of the goal
+        [Required]
+        public int TargetValue { get; set; } // Target value
+        [Required]
+        public int CurrentValue { get; set; } // Current progress
+        [Required]
+        public DateTime Deadline { get; set; } // Deadline for the goal
+    }
 }
