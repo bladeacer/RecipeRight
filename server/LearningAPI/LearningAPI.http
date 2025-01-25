@@ -1,13 +1,18 @@
 ﻿@LearningAPI_HostAddress = https://localhost:7004
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwidW5pcXVlX25hbWUiOiJMaSBIYWl5dW4iLCJlbWFpbCI6ImxpX2hhaXl1bkBueXAuZWR1LnNnIiwibmJmIjoxNzMxNTg0MDQ1LCJleHAiOjE3MzQxNzYwNDUsImlhdCI6MTczMTU4NDA0NX0.-7oqL5bSYY3A9odsRTYfTeN1Iuk8aGzTYxb1Ib5oAug
 
-# GET {{LearningAPI_HostAddress}}/tutorial?search=hello
+GET {{LearningAPI_HostAddress}}/weatherforecast/
+Accept: application/json
 
+###
 
+GET {{LearningAPI_HostAddress}}/tutorial?search=hello
 
-# GET {{LearningAPI_HostAddress}}/tutorial/1
+###
 
+GET {{LearningAPI_HostAddress}}/tutorial/1
 
+###
 
 POST {{LearningAPI_HostAddress}}/user/register
 Content-Type: application/json
@@ -34,121 +39,29 @@ GET {{LearningAPI_HostAddress}}/user/auth
 Authorization: Bearer {{token}}
 
 ###
-# POST {{LearningAPI_HostAddress}}/tutorial
-# Content-Type: application/json
-# Authorization: Bearer {{token}}
-
-# {
-#  "title": "Web API",
-#  "description": "Happy coding :)"
-# }
-
-
-
-# PUT {{LearningAPI_HostAddress}}/tutorial/2
-# Content-Type: application/json
-# Authorization: Bearer {{token}}
-
-# {
-#  "title": "My Story",
-#  "description": "Your Song ❤"
-# }
-
-
-
-# DELETE {{LearningAPI_HostAddress}}/tutorial/2
-# Authorization: Bearer {{token}}
-
-
-
-@search=string
-GET {{LearningAPI_HostAddress}}/resourcetype?search={{search}}
-
-###
-
-POST {{LearningAPI_HostAddress}}/resourcetype
+POST {{LearningAPI_HostAddress}}/tutorial
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  //ResourceTypeRequest
+ "title": "Web API",
+ "description": "Happy coding :)"
 }
 
 ###
 
-@id=0
-DELETE {{LearningAPI_HostAddress}}/resourcetype/{{id}}
-
-###
-
-GET {{LearningAPI_HostAddress}}/resourcetype/{{id}}
-
-###
-
-PUT {{LearningAPI_HostAddress}}/resourcetype/{{id}}
+PUT {{LearningAPI_HostAddress}}/tutorial/2
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  //ResourceTypeRequest
+ "title": "My Story",
+ "description": "Your Song ❤"
 }
 
 ###
 
-GET {{LearningAPI_HostAddress}}/resource?search={{search}}
-
-###
-
-POST {{LearningAPI_HostAddress}}/resource
-Content-Type: application/json
-
-{
-  //AddResourceRequest
-}
-
-###
-
-DELETE {{LearningAPI_HostAddress}}/resource/{{id}}
-
-###
-
-GET {{LearningAPI_HostAddress}}/resource/{{id}}
-
-###
-
-PUT {{LearningAPI_HostAddress}}/resource/{{id}}
-Content-Type: application/json
-
-{
-  //UpdateResourceRequest
-}
-
-###
-
-GET {{LearningAPI_HostAddress}}/policy?search={{search}}
-
-###
-
-POST {{LearningAPI_HostAddress}}/policy
-Content-Type: application/json
-
-{
-  //PolicyRequest
-}
-
-###
-
-DELETE {{LearningAPI_HostAddress}}/policy/{{id}}
-
-###
-
-GET {{LearningAPI_HostAddress}}/policy/{{id}}
-
-###
-
-PUT {{LearningAPI_HostAddress}}/policy/{{id}}
-Content-Type: application/json
-
-{
-  //PolicyRequest
-}
+DELETE {{LearningAPI_HostAddress}}/tutorial/2
+Authorization: Bearer {{token}}
 
 ###
