@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, TextField, Button, Grid2 as Grid } from '@mui/material';
+import { Box, Grid2 as Grid } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import http from '../http';
@@ -14,7 +14,7 @@ export default function AddResource() {
 
     const getRTs = () => {
         http.get("/resourcetype").then((res) => {
-                setRtOptions(res.data);
+            setRtOptions(res.data);
         });
     };
     useEffect(() => {
@@ -45,11 +45,6 @@ export default function AddResource() {
             data.resourceDescription = data.resourceDescription.trim();
             data.resourceName = data.resourceName.trim();
 
-            const sent_data = {
-                ResourceTypeId: data.resourceTypeId,
-                ResourceName: data.resourceName,
-                ResourceDescription: data.resourceDescription
-            }
             http.post("/resource", data)
                 .then((res) => {
                     console.log(res.data);
@@ -72,72 +67,78 @@ export default function AddResource() {
 
     return (
         <>
-        {rtOptions.length > 0 && (
-        <Box>
-            <h5>Add Resource</h5>
-            <Box component="form" onSubmit={formik.handleSubmit}>
-                <label>
-                    Resource Type
-                    <select type="number"
-                    id='resourceTypeId'
-                        name='resourceTypeId'
-                        value={formik.values.resourceTypeId}
-                        onChange={handleResourceTypeChange}
-                        onBlur={formik.handleBlur}
-                        autoComplete='off'
-                    >
-                        <option value={0}>Select Resource Type</option>
-                        {rtOptions.map((rt) => (
-                            <option key={rt.resourceTypeId} value={rt.resourceTypeId}>
-                                {rt.typeName}
-                            </option>
-                        ))}
-                    </select>
-                    {formik.touched.resourceTypeId && Boolean(formik.errors.resourceTypeId) && <small>{formik.errors.resourceTypeId}</small>}
-                </label>
-                <label>
-                    Resource Name
-                    <input type="textarea"
-                    id='resourceName'
-                        name="resourceName"
-                        value={formik.values.resourceName}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        aria-invalid={formik.touched.resourceName && formik.errors.resourceName ? 'true' : 'false'}
-                        autoComplete='off'
-                    />
-                    {formik.touched.resourceName && formik.errors.resourceName && <small>{formik.errors.resourceName}</small>}
-                </label>
-                <label>
-                    Description
-                    <input placeholder='Enter a description'
-                    id='resourceDescription'
-                        value={formik.values.resourceDescription}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        aria-invalid={formik.touched.resourceDescription && formik.errors.resourceDescription ? 'true' : 'false'}
-                        autoComplete='off'
-                    />
-                    {formik.touched.resourceDescription && formik.errors.resourceDescription && <small>{formik.errors.resourceDescription}</small>}
-                </label>
-                <h5>Resource Type Description:
-                    <blockquote>
-                        {rtDesc}
-                    </blockquote>
-                </h5>
-                <button type="submit">
-                    Add
-                </button>
-            </Box>
+            {rtOptions.length > 0 && (
+                <Box sx={{
+                    marginTop: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}>
+                    <h5>Add Resource</h5>
+                    <Box component="form" onSubmit={formik.handleSubmit}>
+                        <label>
+                            Resource Type
+                            <select type="number"
+                                id='resourceTypeId'
+                                name='resourceTypeId'
+                                value={formik.values.resourceTypeId}
+                                onChange={handleResourceTypeChange}
+                                onBlur={formik.handleBlur}
+                                autoComplete='off'
+                            >
+                                <option value={0}>Select Resource Type</option>
+                                {rtOptions.map((rt) => (
+                                    <option key={rt.resourceTypeId} value={rt.resourceTypeId}>
+                                        {rt.typeName}
+                                    </option>
+                                ))}
+                            </select>
+                            {formik.touched.resourceTypeId && Boolean(formik.errors.resourceTypeId) && <small>{formik.errors.resourceTypeId}</small>}
+                        </label>
+                        <label>
+                            Resource Name
+                            <input type="textarea"
+                                id='resourceName'
+                                name="resourceName"
+                                value={formik.values.resourceName}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                aria-invalid={formik.touched.resourceName && formik.errors.resourceName ? 'true' : 'false'}
+                                autoComplete='off'
+                            />
+                            {formik.touched.resourceName && formik.errors.resourceName && <small>{formik.errors.resourceName}</small>}
+                        </label>
+                        <label>
+                            Description
+                            <input placeholder='Enter a description'
+                                id='resourceDescription'
+                                value={formik.values.resourceDescription}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                aria-invalid={formik.touched.resourceDescription && formik.errors.resourceDescription ? 'true' : 'false'}
+                                autoComplete='off'
+                            />
+                            {formik.touched.resourceDescription && formik.errors.resourceDescription && <small>{formik.errors.resourceDescription}</small>}
+                        </label>
+                        <h5>Resource Type Description:
+                            <blockquote>
+                                {rtDesc}
+                            </blockquote>
+                        </h5>
+                        <button type="submit">
+                            Add
+                        </button>
+                    </Box>
 
-            <ToastContainer />
-        </Box>
-        )}
-        {rtOptions.length == 0 && (
-            <div>
-            <h5>No resource types have been made. Click <a href="/addresouurcetype">here</a> to add a resource type.</h5>
-            </div>
-        )}
+                    <ToastContainer />
+                </Box>
+            )}
+            {rtOptions.length == 0 && (
+                <div>
+                    <h4 className='pico-color-red-500'>Warning</h4>
+                    <p>No resource types have been made. Click <a href="/addresourcetype">here</a> to add a resource type.</p>
+                </div>
+            )}
         </>
 
     );

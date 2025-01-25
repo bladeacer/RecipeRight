@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Typography, Grid2 as Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
-import { AccountCircle, AccessTime, Search, Clear, Edit } from '@mui/icons-material';
+import { useEffect, useState, useContext } from 'react';
+import { Box, Grid2 as Grid} from '@mui/material';
+import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
 import UserContext from '../contexts/UserContext';
@@ -13,7 +12,6 @@ export default function Resources() {
     const [resList, setReslist] = useState([]);
     const [search, setSearch] = useState("");
     const { user } = useContext(UserContext);
-    const [desList, setDesList] = useState('not selected');
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);
@@ -55,10 +53,6 @@ export default function Resources() {
     return (
         <Box>
             <h5>Resources</h5>
-            {/* <Typography variant="h5" sx={{ my: 2 }}>
-                Resources 
-            </Typography> */}
-
             <section>
                 <div role="search">
                     <input value={search}

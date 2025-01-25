@@ -3,6 +3,7 @@ using System;
 using LearningAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250125050431_fix")]
+    partial class fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +123,8 @@ namespace LearningAPI.Migrations
 
                     b.HasIndex("ResourceTypeId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Resources");
                 });
@@ -258,8 +262,8 @@ namespace LearningAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("LearningAPI.Models.User", "User")
-                        .WithMany("Resource")
-                        .HasForeignKey("UserId")
+                        .WithOne("Resource")
+                        .HasForeignKey("LearningAPI.Models.Resource", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

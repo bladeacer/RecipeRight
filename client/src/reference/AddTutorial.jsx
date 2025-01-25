@@ -65,7 +65,7 @@ function AddTutorial() {
     };
 
     return (
-        <Box>
+        <Box >
             <Typography variant="h5" sx={{ my: 2 }}>
                 Add Tutorial
             </Typography>

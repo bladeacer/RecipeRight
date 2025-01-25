@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Typography, Grid2 as Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
-import { AccountCircle, AccessTime, Search, Clear, Edit } from '@mui/icons-material';
+import { useEffect, useState, useContext } from 'react';
+import { Box, Grid2 as Grid } from '@mui/material';
+import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
 import UserContext from '../contexts/UserContext';
 import global from '../global';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResourceTypes() {
+    const navigate = useNavigate();
     const [rtList, setRtlist] = useState([]);
     const [search, setSearch] = useState("");
     const { user } = useContext(UserContext);
@@ -51,74 +52,58 @@ export default function ResourceTypes() {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Resource Types
-            </Typography>
-
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search"
-                    onChange={onSearchChange}
-                    onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary"
-                    onClick={onClickSearch}>
-                    <Search />
-                </IconButton>
-                <IconButton color="primary"
-                    onClick={onClickClear}>
-                    <Clear />
-                </IconButton>
-                <Box sx={{ flexGrow: 1 }} />
-                {
-                    user && (
-                        <Link to="/addresourcetype">
-                            <Button variant='contained'>
-                                Add
-                            </Button>
-                        </Link>
-                    )
-                }
-            </Box>
+            <h5>Resource Types</h5>
+            <section>
+                <div role="search">
+                    <input value={search}
+                        placeholder="Search"
+                        onChange={onSearchChange}
+                        onKeyDown={onSearchKeyDown}
+                        style={{ scale: '104.5%', marginTop: '2.5px', marginLeft: '12px', marginRight: '14px' }}>
+                    </input>
+                    <button onClick={onClickSearch}
+                    >
+                        <Search />
+                    </button>
+                    <button onClick={onClickClear} >
+                        <Clear />
+                    </button>
+                    <button onClick={() => navigate('/addresourcetype')} >
+                        Add
+                    </button>
+                </div>
+            </section>
 
             <Grid container spacing={2}>
                 {
                     rtList.map((rt, i) => {
                         return (
                             <Grid size={{ xs: 12, md: 6, lg: 4 }} key={rt.resourceTypeId}>
-                                <Card>
-                                    <CardContent>
-                                        <Box sx={{ display: 'flex', mb: 1 }}>
-                                            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                                                {rt.typeName}
-                                            </Typography>
-                                            {
-                                                user && (
-                                                    <Link to={`/editresourcetype/${rt.resourceTypeId}`}>
-                                                        <IconButton color="primary" sx={{ padding: '4px' }}>
-                                                            <Edit />
-                                                        </IconButton>
-                                                    </Link>
-                                                )
-                                            }
-                                        </Box>
-                                        {/* <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-                                            color="text.secondary">
-                                            <AccountCircle sx={{ mr: 1 }} />
-                                            <Typography>
-                                                {rt.user?.name}
-                                            </Typography>
-                                        </Box> */}
-                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-                                            color="text.secondary">
-                                            <AccessTime sx={{ mr: 1 }} />
-                                            <Typography>
-                                                {dayjs(rt.createdAt).format(global.datetimeFormat)}
-                                            </Typography>
-                                        </Box>
-                                        <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                                            {rt.resourceTypeDescription}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                                <article style={{ padding: '1rem' }}>
+                                    <header>
+                                        <nav>
+                                            <ul>
+                                                <li>
+                                                    <strong> {rt.typeName} </strong>
+                                                    <AccessTime sx={{ scale: "72.5%" }} />
+                                                    <small>
+                                                        {dayjs(rt.createdAt).format(global.datetimeFormat)}
+                                                    </small>
+                                                </li>
+                                            </ul>
+                                            <ul>
+                                                <li style={{ marginTop: '-2rem' }}>
+                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editresourcetype/${rt.resourceTypeId}`)}>
+                                                        <Edit />
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </header>
+                                    <section>
+                                        {rt.resourceTypeDescription}
+                                    </section>
+                                </article>
                             </Grid>
                         );
                     })

@@ -34,10 +34,9 @@ namespace LearningAPI.Models
         [JsonIgnore]
         public List<UserAttributes>? UserAttributes { get; set; }
         // One user to one Resource
-        public Resource? Resource { get; set; }
+        public List<Resource>? Resource { get; set; }
     }
 
-    [Index(nameof(ResourceId), nameof(UserId), nameof(ResourceTypeId))]
     public class Resource
     {
         public int ResourceId { get; set; }
@@ -76,7 +75,7 @@ namespace LearningAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
         // One Resource to one ResourceType
-        public Resource? Resource { get; set; }
+        public List<Resource>? Resource { get; set; }
 
     }
 

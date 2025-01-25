@@ -1,13 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import { Container, AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
-import MyTheme from './themes/MyTheme';
-// import Tutorials from './pages/Tutorials';
-// import AddTutorial from './pages/AddTutorial';
-// import EditTutorial from './pages/EditTutorial';
-// import MyForm from './reference/MyForm';
+import { Container, } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import http from './http';
@@ -40,59 +34,74 @@ function App() {
 
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
-        {/* <ThemeProvider theme={MyTheme}> */}
-        {/* <AppBar position="static" className="AppBar"> */}
-
         <main className="container">
-          <nav>
-            {/* <Toolbar disableGutters={true}> */}
+          <nav style={{paddingBlock: "0.75rem"}} >
             <ul>
               <li>
                 <a href="/">
                   <strong>RecipeRight</strong>
                 </a>
               </li>
-                {user && (
-                  <>
+              <li></li>
+              {user && (
+                <>
                   <li>
-                    <a href="/resources"> Resource </a>
+                    <details className="dropdown">
+                      <summary>
+                        Resources
+                      </summary>
+                      <ul>
+                        <li><a href="/resources">View Resources</a></li>
+                        <li>
+                          <a href="/resourcetypes"> View Resource Types </a>
+                        </li>
+                      </ul>
+                    </details>
                   </li>
-                  <li>
-                    <a href="/resourcetypes"> ResourceTypes </a>
-                  </li>
+                  <li></li>
                   <li>
                     <a href="/policies"> Policies </a>
                   </li>
+                  <li></li>
                   <li>
-                    <a href="/attributes"> Attributes </a>
+                    <details className="dropdown">
+                      <summary>
+                        Attributes
+                      </summary>
+                      <ul>
+                        <li>
+                          <a href="/attributes"> Attributes </a>
+                        </li>
+                        <li>
+                          <a href="/userattributes"> User Attributes </a>
+                        </li>
+                      </ul>
+                    </details>
                   </li>
-                  <li>
-                    <a href="/userattributes"> User Attributes </a>
-                  </li>
-                  </>
-                )}
+                </>
+              )}
             </ul>
-                {user && (
+            {user && (
               <ul>
                 {/* TODO: Have this redirect to settings */}
                 <li>{user.name}</li>
                 <li><button onClick={logout}>Logout</button></li>
               </ul>
             )}
-                {!user && (
+            {!user && (
               <ul>
                 <li>
                   <button>
-                  <a href="/register" className="contrast">Register</a>
+                    <a href="/register" className="contrast">Register</a>
                   </button>
                 </li>
                 <li>
                   <button className="secondary">
-                  <a href="/login" className="contrast">Login</a>
+                    <a href="/login" className="contrast">Login</a>
                   </button>
                 </li>
               </ul>
-                )}
+            )}
           </nav>
 
           <Container>
@@ -104,7 +113,7 @@ function App() {
 
               <Route path={"/resources"} element={<Resources />} />
               <Route path={"/addresource"} element={<AddResource />} />
-                <Route path={"/editresource/:id"} element={<EditResource />} />
+              <Route path={"/editresource/:id"} element={<EditResource />} />
 
               <Route path={"/"} element={<Home />} />
               <Route path={"/register"} element={<Register />} />

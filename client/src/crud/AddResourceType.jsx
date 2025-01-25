@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, TextField, Button, Grid2 as Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import http from '../http';
@@ -35,41 +35,41 @@ export default function AddResourceType() {
     });
 
     return (
-        <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Add Resource Type
-            </Typography>
+        <Box sx={{
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        }}>
+            <h5>Add Resource Type</h5>
             <Box component="form" onSubmit={formik.handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, md: 6, lg: 8 }}>
-                        <TextField
-                            fullWidth margin="dense" autoComplete="off"
-                            label="Resource Type Name"
-                            name="typeName"
-                            value={formik.values.typeName}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.typeName && Boolean(formik.errors.typeName)}
-                            helperText={formik.touched.typeName && formik.errors.typeName}
-                        />
-                        <TextField
-                            fullWidth margin="dense" autoComplete="off"
-                            multiline minRows={2}
-                            label="Resource Type Description"
-                            name="resourceTypeDescription"
-                            value={formik.values.resourceTypeDescription}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.resourceTypeDescription && Boolean(formik.errors.resourceTypeDescription)}
-                            helperText={formik.touched.resourceTypeDescription && formik.errors.resourceTypeDescription}
-                        />
-                    </Grid>
-                </Grid>
-                <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" type="submit">
-                        Add
-                    </Button>
-                </Box>
+                <label>
+                    Resource Name
+                    <input placeholder='Enter a resource type name'
+                        id='typeName'
+                        name="typeName"
+                        value={formik.values.typeName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.typeName && formik.errors.typeName ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.typeName && formik.errors.typeName && <small>{formik.errors.typeName}</small>}
+                </label>
+
+                <label>
+                    Description
+                    <input placeholder='Enter a description'
+                        id='resourceTypeDescription'
+                        value={formik.values.resourceTypeDescription}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.resourceTypeDescription && formik.errors.resourceTypeDescription ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.resourceTypeDescription && formik.errors.resourceTypeDescription && <small>{formik.errors.resourceTypeDescription}</small>}
+                </label>
+                <button type="submit"> Add </button>
             </Box>
 
             <ToastContainer />
