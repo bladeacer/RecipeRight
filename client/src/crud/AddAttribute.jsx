@@ -24,7 +24,7 @@ export default function AddAttribute() {
                 .required('Description is required')
         }),
         onSubmit: (data) => {
-            http.post("/attribute", data).then((res) => {
+            http.post("/attributes", data).then((res) => {
                 console.log(res.data);
                 navigate("/attributes");
             })

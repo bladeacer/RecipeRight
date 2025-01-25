@@ -15,11 +15,9 @@ export default function ResourceTypes() {
         setSearch(e.target.value);
     };
 
-
     const getRTs = () => {
         http.get("/resourcetype").then((res) => {
             setRtlist(res.data);
-            // console.log(res.data);
         });
     };
 
@@ -74,7 +72,7 @@ export default function ResourceTypes() {
 
             <Grid container spacing={2}>
                 {
-                    rtList.map((rt, i) => {
+                    rtList.map((rt) => {
                         return (
                             <Grid size={{ xs: 12, md: 6, lg: 4 }} key={rt.resourceTypeId}>
                                 <article style={{ padding: '1rem' }}>
