@@ -37,6 +37,8 @@ export default function EditResource() {
         http.delete(`/resource/${id}`).then((res) => {
             console.log(res.data);
             navigate("/resources");
+        }).catch(function (err) {
+            toast.error(`${err.response.data.message}`);
         });
     }
     useEffect(() => {
@@ -165,7 +167,7 @@ export default function EditResource() {
                     <header>
                         <h5> Delete Resource </h5>
                     </header>
-                    <p> Are you sure you want to delete this resource type?  </p>
+                    <p> Are you sure you want to delete this resource?  </p>
                     <footer>
                         <button onClick={handleClose}>
                             Cancel

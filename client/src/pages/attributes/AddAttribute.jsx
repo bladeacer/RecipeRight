@@ -27,7 +27,9 @@ export default function AddAttribute() {
             http.post("/attributes", data).then((res) => {
                 console.log(res.data);
                 navigate("/attributes");
-            })
+            }).catch(function (err) {
+                toast.error(`${err.response.data.message}`);
+            });
         }
     });
 

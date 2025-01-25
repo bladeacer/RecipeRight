@@ -29,7 +29,9 @@ export default function AddResourceType() {
                 .then((res) => {
                     console.log(res.data);
                     navigate("/resourcetypes");
-                })
+                }).catch(function (err) {
+                    toast.error(`${err.response.data.message}`);
+                });
         }
     });
 

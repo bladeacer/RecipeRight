@@ -15,6 +15,8 @@ export default function AddResource() {
     const getRTs = () => {
         http.get("/resourcetype").then((res) => {
             setRtOptions(res.data);
+        }).catch(function (err) {
+            toast.error(`${err.response.data.message}`);
         });
     };
     useEffect(() => {

@@ -3,6 +3,8 @@ import { Page, Text, View, Document, StyleSheet, PDFViewer } from '@react-pdf/re
 import http from '../http';
 import dayjs from 'dayjs';
 import global from '../global';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Report() {
 
@@ -13,7 +15,11 @@ export default function Report() {
     const getRes = () => {
         http.get("/resource").then((res) => {
             setReslist(res.data);
+        }).catch(function (err) {
+            toast.error(`${err.response.data.message}`);
         });
+
+        ;
     };
     const getRTs = () => {
         http.get("/resourcetype").then((res) => {
@@ -114,6 +120,7 @@ export default function Report() {
                     <PDFViewer style={{ width: '106%', height: '82.5vh', marginLeft: '-3%' }}>
                         <MyDocument />
                     </PDFViewer>
+                    <ToastContainer />
                 </>
             )}
         </>

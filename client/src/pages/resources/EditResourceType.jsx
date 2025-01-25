@@ -25,8 +25,8 @@ export default function EditResourceType() {
         http.get(`/resourcetype/${id}`).then((res) => {
             setRt(res.data);
             setLoading(false);
-            console.log(res.data);
-            console.log(rt);
+        }).catch(function (err) {
+            toast.error(`${err.response.data.message}`);
         });
     }, [id, rt]);
 
@@ -49,7 +49,9 @@ export default function EditResourceType() {
             http.put(`/resourcetype/${id}`, data).then((res) => {
                 console.log(res.data);
                 navigate("/resourcetypes")
-            })
+            }).catch(function (err) {
+                toast.error(`${err.response.data.message}`)
+            });
         }
     });
 
@@ -65,6 +67,8 @@ export default function EditResourceType() {
         http.delete(`/resourcetype/${id}`).then((res) => {
             console.log(res.data);
             navigate("/resourcetypes")
+        }).catch(function(err) {
+            toast.error(`${err.response.data.message}`)
         })
     };
 
