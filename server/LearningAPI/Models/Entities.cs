@@ -144,7 +144,7 @@ namespace LearningAPI.Models
         public DateTime Deadline { get; set; }
         public DateTime CreatedOn { get; set; }
 
-        public User? User { get; set; } // Navigation property
+        public User? User { get; set; } 
     }
 
 

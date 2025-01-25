@@ -19,6 +19,12 @@ import Home from './pages/Home';
 import AddResource from './crud/AddResource';
 import Resources from './pages/Resources';
 import EditResource from './crud/EditResource';
+import EditSustainabilityGoal from './crud/EditSustainabilityGoal';
+import AddSustainabilityGoal from './crud/AddSustainabilityGoal';
+import SustainabilityGoals from './pages/SustainabilityGoals';
+
+
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -55,6 +61,7 @@ function App() {
                     <Link to="/policide"><Typography>Policies</Typography></Link>
                     <Link to="/attributes"><Typography>Attributes</Typography></Link>
                     <Link to="/userattributes"><Typography>User Attributes</Typography></Link>
+                    <Link to="/sustainability-goals"><Typography>Sustainability Goals</Typography></Link>
                   </>
                 )}
                 {/* <Link to="/tutorials" ><Typography>Tutorials</Typography></Link> */}
@@ -87,6 +94,10 @@ function App() {
               <Route path={"resourcetypes"} element={<ResourceTypes />} />
               <Route path={"addresourcetype"} element={<AddResourceType />} />
               <Route path={"/editresourcetype/:id"} element={<EditResourceType />} />
+              <Route path={"/add-sustainability-goal"} element={<AddSustainabilityGoal />} /> 
+              <Route path={"/edit-sustainability-goal/:id"} element={<EditSustainabilityGoal />} />
+              <Route path="/sustainability-goals" element={<SustainabilityGoals />} />
+
 
 
               <Route path={"/resources"} element={<Resources />} />

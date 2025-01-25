@@ -72,7 +72,7 @@ namespace LearningAPI.Models
         public string GoalName { get; set; } = string.Empty;
         public string GoalDescription { get; set; } = string.Empty;
 
-        public DateTime Deadline { get; set; }  // Add this
+        public DateTime Deadline { get; set; }  
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
         public int UserId { get; set; }
