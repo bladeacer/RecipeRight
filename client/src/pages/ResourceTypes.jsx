@@ -1,9 +1,8 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Grid2 as Grid } from '@mui/material';
 import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
-import UserContext from '../contexts/UserContext';
 import global from '../global';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +10,6 @@ export default function ResourceTypes() {
     const navigate = useNavigate();
     const [rtList, setRtlist] = useState([]);
     const [search, setSearch] = useState("");
-    const { user } = useContext(UserContext);
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);

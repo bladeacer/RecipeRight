@@ -23,6 +23,7 @@ import AddUserAttribute from './crud/AddUserAttribute';
 import EditUserAttribute from './crud/EditUserAttribute';
 import UserAttributes from './pages/UserAttributes';
 import Report from './pages/Report';
+import Error from './pages/Error';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,7 +46,7 @@ function App() {
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <main className="container">
-          <nav style={{paddingBlock: "0.75rem"}} >
+          <nav style={{ paddingBlock: "0.75rem" }} >
             <ul>
               <li>
                 <a href="/">
@@ -119,31 +120,120 @@ function App() {
 
           <Container>
             <Routes>
-              <Route path={"resourcetypes"} element={<ResourceTypes />} />
-              <Route path={"addresourcetype"} element={<AddResourceType />} />
-              <Route path={"/editresourcetype/:id"} element={<EditResourceType />} />
+              <Route path={"resourcetypes"} element={
+                <>
+                  {user && (<ResourceTypes />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"addresourcetype"} element={
+                <>
+                  {user && (<AddResourceType />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/editresourcetype/:id"} element={
+                <>
+                  {user && (<EditResourceType />)}
+                  {!user && (<Error />)}
+                </>
+              } />
 
-              <Route path={"/resources"} element={<Resources />} />
-              <Route path={"/addresource"} element={<AddResource />} />
-              <Route path={"/editresource/:id"} element={<EditResource />} />
+              <Route path={"/resources"} element={
+                <>
+                  {user && (<Resources />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/addresource"} element={
+                <>
+                  {user && (<AddResource />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/editresource/:id"} element={
+                <>
+                  {user && (<EditResource />)}
+                  {!user && (<Error />)}
+                </>
+              } />
 
-              <Route path={"/attributes"} element={<Attributes />} />
-              <Route path={"/addattribute"} element={<AddAttribute />} />
-              <Route path={"/editattribute/:id"} element={<EditAttribute />} />
+              <Route path={"/attributes"} element={
+                <>
+                  {user && (<Attributes />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/addattribute"} element={
+                <>
+                  {user && (<AddAttribute />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/editattribute/:id"} element={
+                <>
+                  {user && (<EditAttribute />)}
+                  {!user && (<Error />)}
+                </>
+              } />
 
-              <Route path={"/policies"} element={<Policies />} />
-              <Route path={"/addpolicy"} element={<AddPolicy />} />
-              <Route path={"/editpolicy/:id"} element={<EditPolicy />} />
+              <Route path={"/policies"} element={
+                <>
+                  {user && (<Policies />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/addpolicy"} element={
+                <>
+                  {user && (<AddPolicy />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/editpolicy/:id"} element={
+                <>
+                  {user && (<EditPolicy />)}
+                  {!user && (<Error />)}
+                </>
+              } />
 
-              <Route path={"/userattributes"} element={<UserAttributes />} />
-              <Route path={"/adduserattribute"} element={<AddUserAttribute />} />
-              <Route path={"/edituserattribute/:id"} element={<EditUserAttribute />} />
-              {/* TODO: Report generation as advanced feature??? */}
-              <Route path={"/report"} element={<Report />} />
+              <Route path={"/userattributes"} element={
+                <>
+                  {user && (<UserAttributes />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/adduserattribute"} element={
+                <>
+                  {user && (<AddUserAttribute />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/edituserattribute/:id"} element={
+                <>
+                  {user && (<EditUserAttribute />)}
+                  {!user && (<Error />)}
+                </>
+              } />
+              <Route path={"/report"} element={
+                <>
+                  {user && (<Report />)}
+                  {!user && (<Error />)}
+                </>
+              } />
 
               <Route path={"/"} element={<Home />} />
-              <Route path={"/register"} element={<Register />} />
-              <Route path={"/login"} element={<Login />} />
+              <Route path={"/register"} element={
+                <>
+                  {!user && (<Register />)}
+                  {user && (<Error />)}
+                </>
+              } />
+              <Route path={"/login"} element={
+                <>
+                  {!user && (<Login />)}
+                  {user && (<Error />)}
+                </>
+              } />
             </Routes>
           </Container>
         </main>

@@ -18,7 +18,6 @@ export default function Report() {
     const getRTs = () => {
         http.get("/resourcetype").then((res) => {
             setRtlist(res.data);
-            // console.log(res.data);
         });
     };
     // Create styles
@@ -28,8 +27,8 @@ export default function Report() {
             backgroundColor: '#E4E4E4'
         },
         section: {
-            margin: 10,
-            padding: 10,
+            margin: 16,
+            padding: 16,
             flexGrow: 1
         }
     });
@@ -39,33 +38,48 @@ export default function Report() {
             <Document>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.section}>
-                    <Text style={{textAlign: 'center', fontSize: '2.5rem', paddingTop: '40vh', fontWeight: 'extrabold'}}>System snapshot</Text>
-                    <Text>&nbsp;</Text>
-                    <Text style={{textAlign: 'center', fontSize: '0.8rem'}}>Updated on: {dayjs(date).format(global.datetimeFormat)}</Text>
+                        <Text style={{ textAlign: 'center', fontSize: '2.5rem', paddingTop: '40vh', fontWeight: 'extrabold' }}>System snapshot</Text>
+                        <Text>&nbsp;</Text>
+                        <Text style={{ textAlign: 'center', fontSize: '0.8rem' }}>Updated on: {dayjs(date).format(global.datetimeFormat)}</Text>
                     </View>
                 </Page>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.section}>
-                        <Text style={{fontWeight: 'bold', fontSize: '1.05rem', textDecoration: 'underline'}}>Resources</Text>
-                        {resList.map(x => (
-                            <>
-                                <Text key={x.resourceId}>
+                        <Text style={{ fontWeight: 'bold', fontSize: '1.1rem', textDecoration: 'underline' }}>
+                            Resources</Text>
+                        {resList.reverse().map(x => (
+                            <div key={x.resourceId}>
+                                <Text>
+                                    ID: {x.resourceId.toString()}
+                                </Text>
+                                <Text>
                                     Name: {x.resourceName}
                                 </Text>
                                 <Text>
                                     Description: {x.resourceDescription}
                                 </Text>
                                 <Text>
+                                    Type: {rtList.find(y => y.resourceTypeId === x.resourceTypeId).typeName}
+                                </Text>
+                                <Text>
                                     Created at: {dayjs(x.createdAt).format(global.datetimeFormat)}
                                 </Text>
                                 <Text>&nbsp;</Text>
-                            </>
+                            </div>
                         ))}
-                        <Text>&nbsp;</Text>
-                        <Text style={{fontWeight: 'bold', fontSize: '1.05rem', textDecoration: 'underline'}}>Resource Types</Text>
-                        {rtList.map(x => (
-                            <>
-                                <Text key={x.resourceTypeId}>
+                        <Text>Number of Resources: {resList.length}</Text>
+                    </View>
+                </Page>
+                <Page style={styles.page}>
+                    <View style={styles.section}>
+                        <Text style={{ fontWeight: 'bold', fontSize: '1.1rem', textDecoration: 'underline' }}>
+                            Resource Types</Text>
+                        {rtList.reverse().map(x => (
+                            <div key={x.resourceTypeId}>
+                                <Text>
+                                    ID: {x.resourceTypeId.toString()}
+                                </Text>
+                                <Text>
                                     Resource Type: {x.typeName}
                                 </Text>
                                 <Text>
@@ -75,8 +89,9 @@ export default function Report() {
                                     Created at: {dayjs(x.createdAt).format(global.datetimeFormat)}
                                 </Text>
                                 <Text>&nbsp;</Text>
-                            </>
+                            </div>
                         ))}
+                        <Text>Number of Resource Types: {rtList.length}</Text>
                     </View>
                 </Page>
             </Document>
@@ -95,9 +110,11 @@ export default function Report() {
                 <span aria-busy="true"> Loading...  </span>
             )}
             {!loading && (
-                <PDFViewer style={{ width: '100%', height: '82.5vh' }}>
-                    <MyDocument />
-                </PDFViewer>
+                <>
+                    <PDFViewer style={{ width: '106%', height: '82.5vh', marginLeft: '-3%' }}>
+                        <MyDocument />
+                    </PDFViewer>
+                </>
             )}
         </>
     )

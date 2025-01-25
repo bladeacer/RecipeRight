@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box} from '@mui/material';
 import UserContext from "../contexts/UserContext";
 import { useContext } from 'react';
 
