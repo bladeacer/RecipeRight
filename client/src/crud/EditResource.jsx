@@ -156,11 +156,9 @@ export default function EditResource() {
 
                 )
             }
-            {
-                loading && !open && (
-                    <span aria-busy="true"> Loading...  </span>
-                )
-            }
+            {loading && !open && (
+                <span aria-busy="true"> Loading...  </span>
+            )}
 
             <dialog open={open} onClose={handleClose}>
                 <article>

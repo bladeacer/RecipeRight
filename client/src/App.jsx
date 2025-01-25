@@ -13,6 +13,16 @@ import Home from './pages/Home';
 import AddResource from './crud/AddResource';
 import Resources from './pages/Resources';
 import EditResource from './crud/EditResource';
+import AddPolicy from './crud/AddPolicy';
+import EditPolicy from './crud/EditPolicy';
+import Policies from './pages/Policies';
+import AddAttribute from './crud/AddAttribute';
+import EditAttribute from './crud/EditAttribute';
+import Attributes from './pages/Attributes';
+import AddUserAttribute from './crud/AddUserAttribute';
+import EditUserAttribute from './crud/EditUserAttribute';
+import UserAttributes from './pages/UserAttributes';
+import Report from './pages/Report';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -78,6 +88,9 @@ function App() {
                       </ul>
                     </details>
                   </li>
+                  <li>
+                    <a href="/report"> Generate Report </a>
+                  </li>
                 </>
               )}
             </ul>
@@ -110,10 +123,23 @@ function App() {
               <Route path={"addresourcetype"} element={<AddResourceType />} />
               <Route path={"/editresourcetype/:id"} element={<EditResourceType />} />
 
-
               <Route path={"/resources"} element={<Resources />} />
               <Route path={"/addresource"} element={<AddResource />} />
               <Route path={"/editresource/:id"} element={<EditResource />} />
+
+              <Route path={"/attributes"} element={<Attributes />} />
+              <Route path={"/addattribute"} element={<AddAttribute />} />
+              <Route path={"/editattribute/:id"} element={<EditAttribute />} />
+
+              <Route path={"/policies"} element={<Policies />} />
+              <Route path={"/addpolicy"} element={<AddPolicy />} />
+              <Route path={"/editpolicy/:id"} element={<EditPolicy />} />
+
+              <Route path={"/userattributes"} element={<UserAttributes />} />
+              <Route path={"/adduserattribute"} element={<AddUserAttribute />} />
+              <Route path={"/edituserattribute/:id"} element={<EditUserAttribute />} />
+              {/* TODO: Report generation as advanced feature??? */}
+              <Route path={"/report"} element={<Report />} />
 
               <Route path={"/"} element={<Home />} />
               <Route path={"/register"} element={<Register />} />

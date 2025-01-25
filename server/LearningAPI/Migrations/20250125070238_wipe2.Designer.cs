@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250116025957_indexesv2")]
-    partial class indexesv2
+    [Migration("20250125070238_wipe2")]
+    partial class wipe2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,17 +76,12 @@ namespace LearningAPI.Migrations
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ResourceTypeId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
                     b.HasKey("PoliciesId");
 
                     b.HasIndex("ResourceId");
-
-                    b.HasIndex("ResourceTypeId", "ResourceId");
 
                     b.ToTable("Policies");
                 });
@@ -121,13 +116,9 @@ namespace LearningAPI.Migrations
 
                     b.HasKey("ResourceId");
 
-                    b.HasIndex("ResourceTypeId")
-                        .IsUnique();
+                    b.HasIndex("ResourceTypeId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "ResourceTypeId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Resources");
                 });
@@ -221,9 +212,9 @@ namespace LearningAPI.Migrations
 
                     b.HasKey("UserAttributesId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AttributeId");
 
-                    b.HasIndex("AttributeId", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserAttributes");
                 });
@@ -245,28 +236,20 @@ namespace LearningAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LearningAPI.Models.ResourceType", "ResourceType")
-                        .WithMany()
-                        .HasForeignKey("ResourceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Resource");
-
-                    b.Navigation("ResourceType");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Resource", b =>
                 {
                     b.HasOne("LearningAPI.Models.ResourceType", "ResourceType")
-                        .WithOne("Resource")
-                        .HasForeignKey("LearningAPI.Models.Resource", "ResourceTypeId")
+                        .WithMany("Resource")
+                        .HasForeignKey("ResourceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LearningAPI.Models.User", "User")
-                        .WithOne("Resource")
-                        .HasForeignKey("LearningAPI.Models.Resource", "UserId")
+                        .WithMany("Resource")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -278,7 +261,7 @@ namespace LearningAPI.Migrations
             modelBuilder.Entity("LearningAPI.Models.UserAttributes", b =>
                 {
                     b.HasOne("LearningAPI.Models.Attributes", "Attribute")
-                        .WithMany()
+                        .WithMany("UserAttributes")
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -292,6 +275,11 @@ namespace LearningAPI.Migrations
                     b.Navigation("Attribute");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Attributes", b =>
+                {
+                    b.Navigation("UserAttributes");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Policies", b =>

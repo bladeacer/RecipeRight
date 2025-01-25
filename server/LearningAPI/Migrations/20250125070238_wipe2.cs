@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class indexesv2 : Migration
+    public partial class wipe2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -91,18 +91,11 @@ namespace LearningAPI.Migrations
                     PoliciesDescription = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ResourceTypeId = table.Column<int>(type: "int", nullable: false),
                     ResourceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Policies", x => x.PoliciesId);
-                    table.ForeignKey(
-                        name: "FK_Policies_ResourceTypes_ResourceTypeId",
-                        column: x => x.ResourceTypeId,
-                        principalTable: "ResourceTypes",
-                        principalColumn: "ResourceTypeId",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Policies_Resources_ResourceId",
                         column: x => x.ResourceId,
@@ -177,31 +170,19 @@ namespace LearningAPI.Migrations
                 column: "ResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Policies_ResourceTypeId_ResourceId",
-                table: "Policies",
-                columns: new[] { "ResourceTypeId", "ResourceId" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Resources_ResourceTypeId",
                 table: "Resources",
-                column: "ResourceTypeId",
-                unique: true);
+                column: "ResourceTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Resources_UserId",
                 table: "Resources",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Resources_UserId_ResourceTypeId",
-                table: "Resources",
-                columns: new[] { "UserId", "ResourceTypeId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAttributes_AttributeId_UserId",
+                name: "IX_UserAttributes_AttributeId",
                 table: "UserAttributes",
-                columns: new[] { "AttributeId", "UserId" });
+                column: "AttributeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserAttributes_UserId",

@@ -45,7 +45,6 @@ namespace LearningAPI.Models
     }
     public class PolicyRequest
     {
-        public int ResourceTypeId { get; set; }
         public int ResourceId { get; set; }
         public List<Attributes>? RequiredAttributes { get; set; }
         [Required, MinLength(3), MaxLength(50)]

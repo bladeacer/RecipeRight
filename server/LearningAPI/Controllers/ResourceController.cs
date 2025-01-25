@@ -108,6 +108,12 @@ namespace LearningAPI.Controllers
                 {
                     return Forbid();
                 }
+                var foundResource = await context.Resources.Where(x => x.ResourceName == resource.ResourceName).FirstOrDefaultAsync();
+                if (foundResource != null)
+                {
+                    string message = "Resource name already exists";
+                    return BadRequest(new { message });
+                }
                 if (resource.ResourceName != null)
                 {
                     myResource.ResourceName = resource.ResourceName.Trim();

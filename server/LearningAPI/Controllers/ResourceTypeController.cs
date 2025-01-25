@@ -65,10 +65,20 @@ namespace LearningAPI.Controllers
                     CreatedAt = now,
                     UpdatedAt = now
                 };
-                await context.ResourceTypes.AddAsync(myResourceType);
-                await context.SaveChangesAsync();
-                ResourceTypeDTO resourceTypeDTO = mapper.Map<ResourceTypeDTO>(myResourceType);
-                return Ok(resourceTypeDTO);
+
+                var foundRT = await context.ResourceTypes.Where(x => x.TypeName == resourceType.TypeName).FirstOrDefaultAsync();
+                if (foundRT != null)
+                {
+                    string message = "Name already exists";
+                    return BadRequest(new { message });
+                }
+                else
+                {
+                    await context.ResourceTypes.AddAsync(myResourceType);
+                    await context.SaveChangesAsync();
+                    ResourceTypeDTO resourceTypeDTO = mapper.Map<ResourceTypeDTO>(myResourceType);
+                    return Ok(resourceTypeDTO);
+                }
 
             }
             catch (Exception ex)
@@ -80,14 +90,22 @@ namespace LearningAPI.Controllers
         [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> UpdateResourceType(int id, ResourceTypeRequest resourceType)
         {
-            
+
             try
             {
                 var myResourceType = await context.ResourceTypes.FindAsync(id);
+
                 if (myResourceType == null)
                 {
                     return NotFound();
                 }
+                var foundRT = await context.ResourceTypes.Where(x => x.TypeName == resourceType.TypeName).FirstOrDefaultAsync();
+                if (foundRT != null)
+                {
+                    string message = "Name already exists";
+                    return BadRequest(new { message });
+                }
+
                 if (resourceType.TypeName != null)
                 {
                     myResourceType.TypeName = resourceType.TypeName.Trim();
@@ -110,7 +128,7 @@ namespace LearningAPI.Controllers
         }
 
         [HttpDelete("{id}"), Authorize]
-        public async Task<IActionResult> DeleteResourceType(int id) 
+        public async Task<IActionResult> DeleteResourceType(int id)
         {
             try
             {

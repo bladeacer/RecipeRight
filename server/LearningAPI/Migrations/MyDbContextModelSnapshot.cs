@@ -73,17 +73,12 @@ namespace LearningAPI.Migrations
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ResourceTypeId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
                     b.HasKey("PoliciesId");
 
                     b.HasIndex("ResourceId");
-
-                    b.HasIndex("ResourceTypeId");
 
                     b.ToTable("Policies");
                 });
@@ -214,9 +209,9 @@ namespace LearningAPI.Migrations
 
                     b.HasKey("UserAttributesId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AttributeId");
 
-                    b.HasIndex("AttributeId", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserAttributes");
                 });
@@ -238,15 +233,7 @@ namespace LearningAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LearningAPI.Models.ResourceType", "ResourceType")
-                        .WithMany()
-                        .HasForeignKey("ResourceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Resource");
-
-                    b.Navigation("ResourceType");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Resource", b =>
@@ -271,7 +258,7 @@ namespace LearningAPI.Migrations
             modelBuilder.Entity("LearningAPI.Models.UserAttributes", b =>
                 {
                     b.HasOne("LearningAPI.Models.Attributes", "Attribute")
-                        .WithMany()
+                        .WithMany("UserAttributes")
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -285,6 +272,11 @@ namespace LearningAPI.Migrations
                     b.Navigation("Attribute");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Attributes", b =>
+                {
+                    b.Navigation("UserAttributes");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Policies", b =>

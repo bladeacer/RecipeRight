@@ -58,7 +58,6 @@ namespace LearningAPI.Models
 
     }
 
-    // Add resource types, which the user can select from a dropdown in the frontend when defining a resource :skull:
     // TODO: ResourceTypeName must be unique
     public class ResourceType
     {
@@ -93,11 +92,9 @@ namespace LearningAPI.Models
 
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
-        public int ResourceTypeId { get; set; }
         public int ResourceId { get; set; }
         [Column(TypeName = "JSON"), JsonIgnore]
         public List<Attributes>? RequiredAttributes { get; set; }
-        public ResourceType? ResourceType { get; set; }
         public Resource? Resource { get; set; }
     }
     public class Attributes
@@ -113,10 +110,11 @@ namespace LearningAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
         public Policies? Policies { get; set; }
+
+        public List<UserAttributes>? UserAttributes { get; set; }
     }
 
     // Assign attributes to users
-    [Index(nameof(AttributeId), nameof(UserId), IsUnique = false)]
     public class UserAttributes
     {
         public int UserAttributesId { get; set; }

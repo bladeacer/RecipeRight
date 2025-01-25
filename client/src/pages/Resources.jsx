@@ -11,7 +11,6 @@ export default function Resources() {
     const navigate = useNavigate();
     const [resList, setReslist] = useState([]);
     const [search, setSearch] = useState("");
-    const { user } = useContext(UserContext);
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);

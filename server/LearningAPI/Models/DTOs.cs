@@ -38,7 +38,6 @@ namespace LearningAPI.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public int ResourceTypeId { get; set; }
         public int ResourceId { get; set; }
 
         [JsonIgnore]

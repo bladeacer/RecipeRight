@@ -68,7 +68,6 @@ namespace LearningAPI.Controllers
                     PoliciesDescription = policy.PoliciesDescription.Trim(),
                     CreatedAt = now,
                     UpdatedAt = now,
-                    ResourceTypeId = policy.ResourceTypeId,
                     ResourceId = policy.ResourceId,
                     RequiredAttributes = policy.RequiredAttributes,
                 };
