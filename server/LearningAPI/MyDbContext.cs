@@ -1,4 +1,7 @@
 ﻿using LearningAPI.Models;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+
+//using LearningAPI.Reference;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningAPI
@@ -14,28 +17,19 @@ namespace LearningAPI
             }
         }
 
-        public required DbSet<Tutorial> Tutorials { get; set; }
         public required DbSet<User> Users { get; set; }
+        public required DbSet<Resource> Resources { get; set; }
+        public required DbSet<ResourceType> ResourceTypes { get; set; }
+        public required DbSet<Policies> Policies { get; set; }
+        public required DbSet<Attributes> Attributes { get; set; }
+        public required DbSet<UserAttributes> UserAttributes { get; set; }
 
-        // Add DbSet properties for bookmarks
-        public required DbSet<BookmarkFolder> BookmarkFolders { get; set; }
-        public required DbSet<BookmarkRecipe> BookmarkRecipes { get; set; }
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    base.OnModelCreating(builder);
+        //}
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
 
-            // Configure BookmarkFolder and BookmarkRecipe relationships
-            modelBuilder.Entity<BookmarkFolder>()
-                .HasMany(f => f.Recipes)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<BookmarkRecipe>()
-                .HasKey(r => r.Id);
-
-            modelBuilder.Entity<BookmarkFolder>()
-                .HasKey(f => f.Id);
-        }
     }
+
 }

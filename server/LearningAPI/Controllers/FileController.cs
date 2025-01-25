@@ -19,9 +19,9 @@ namespace LearningAPI.Controllers
         {
             try
             {
-                if (file.Length > 1024 * 1024)
+                if (file.Length > 10 * 1024 * 1024)
                 {
-                    var message = "Maximum file size is 1MB";
+                    var message = "Maximum file size is 10 MB";
                     return BadRequest(new { message });
                 }
 
