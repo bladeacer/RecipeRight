@@ -1,57 +1,54 @@
-import { useEffect, useState, useContext } from 'react';
-import { Box, Grid2 as Grid} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Grid2 as Grid } from '@mui/material';
 import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
-import http from '../http';
+import http from '../../http';
 import dayjs from 'dayjs';
-import UserContext from '../contexts/UserContext';
-import global from '../global';
+import global from '../../global';
 import { useNavigate } from 'react-router-dom';
 
-export default function Resources() {
+export default function ResourceTypes() {
     const navigate = useNavigate();
-    const [resList, setReslist] = useState([]);
+    const [rtList, setRtlist] = useState([]);
     const [search, setSearch] = useState("");
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);
     };
 
-    const getRes = () => {
-        http.get("/resource").then((res) => {
-            setReslist(res.data);
-            console.log(res.data);
+    const getRTs = () => {
+        http.get("/resourcetype").then((res) => {
+            setRtlist(res.data);
         });
     };
-    // Get resource type id and render details on it.
 
-    const searchRes = () => {
-        http.get(`/resource?search=${search}`).then((res) => {
-            setReslist(res.data);
+    const searchRTs = () => {
+        http.get(`/resourcetype?search=${search}`).then((res) => {
+            setRtlist(res.data);
         })
     };
     useEffect(() => {
-        getRes();
+        getRTs();
     }, []);
 
     const onSearchKeyDown = (e) => {
         if (e.key === "Enter") {
-            searchRes();
+            searchRTs();
         }
-    }
+    };
 
     const onClickSearch = () => {
-        searchRes();
+        searchRTs();
     };
 
     const onClickClear = () => {
         setSearch('');
-        getRes();
+        getRTs();
     };
 
 
     return (
         <Box>
-            <h5>Resources</h5>
+            <h5>Resource Types</h5>
             <section>
                 <div role="search">
                     <input value={search}
@@ -67,7 +64,7 @@ export default function Resources() {
                     <button onClick={onClickClear} >
                         <Clear />
                     </button>
-                    <button onClick={() => navigate('/addresource')} >
+                    <button onClick={() => navigate('/addresourcetype')} >
                         Add
                     </button>
                 </div>
@@ -75,24 +72,24 @@ export default function Resources() {
 
             <Grid container spacing={2}>
                 {
-                    resList.map((res, i) => {
+                    rtList.map((rt) => {
                         return (
-                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={res.resourceId}>
+                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={rt.resourceTypeId}>
                                 <article style={{ padding: '1rem' }}>
                                     <header>
                                         <nav>
                                             <ul>
                                                 <li>
-                                                    Name: <strong> {res.resourceName} </strong>
+                                                    <strong> {rt.typeName} </strong>
                                                     <AccessTime sx={{ scale: "72.5%" }} />
                                                     <small>
-                                                        {dayjs(res.createdAt).format(global.datetimeFormat)}
+                                                        {dayjs(rt.createdAt).format(global.datetimeFormat)}
                                                     </small>
                                                 </li>
                                             </ul>
                                             <ul>
                                                 <li style={{ marginTop: '-2rem' }}>
-                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editresource/${res.resourceId}`)}>
+                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editresourcetype/${rt.resourceTypeId}`)}>
                                                         <Edit />
                                                     </button>
                                                 </li>
@@ -100,7 +97,7 @@ export default function Resources() {
                                         </nav>
                                     </header>
                                     <section>
-                                        {res.resourceDescription}
+                                        {rt.resourceTypeDescription}
                                     </section>
                                 </article>
                             </Grid>

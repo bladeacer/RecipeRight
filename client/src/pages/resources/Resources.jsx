@@ -1,54 +1,55 @@
-import { useEffect, useState } from 'react';
-import { Box, Grid2 as Grid } from '@mui/material';
+import { useEffect, useState} from 'react';
+import { Box, Grid2 as Grid} from '@mui/material';
 import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
-import http from '../http';
+import http from '../../http';
 import dayjs from 'dayjs';
-import global from '../global';
+import global from '../../global';
 import { useNavigate } from 'react-router-dom';
 
-export default function ResourceTypes() {
+export default function Resources() {
     const navigate = useNavigate();
-    const [rtList, setRtlist] = useState([]);
+    const [resList, setReslist] = useState([]);
     const [search, setSearch] = useState("");
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);
     };
 
-    const getRTs = () => {
-        http.get("/resourcetype").then((res) => {
-            setRtlist(res.data);
+    const getRes = () => {
+        http.get("/resource").then((res) => {
+            setReslist(res.data);
+            console.log(res.data);
         });
     };
 
-    const searchRTs = () => {
-        http.get(`/resourcetype?search=${search}`).then((res) => {
-            setRtlist(res.data);
+    const searchRes = () => {
+        http.get(`/resource?search=${search}`).then((res) => {
+            setReslist(res.data);
         })
     };
     useEffect(() => {
-        getRTs();
+        getRes();
     }, []);
 
     const onSearchKeyDown = (e) => {
         if (e.key === "Enter") {
-            searchRTs();
+            searchRes();
         }
-    };
+    }
 
     const onClickSearch = () => {
-        searchRTs();
+        searchRes();
     };
 
     const onClickClear = () => {
         setSearch('');
-        getRTs();
+        getRes();
     };
 
 
     return (
         <Box>
-            <h5>Resource Types</h5>
+            <h5>Resources</h5>
             <section>
                 <div role="search">
                     <input value={search}
@@ -64,7 +65,7 @@ export default function ResourceTypes() {
                     <button onClick={onClickClear} >
                         <Clear />
                     </button>
-                    <button onClick={() => navigate('/addresourcetype')} >
+                    <button onClick={() => navigate('/addresource')} >
                         Add
                     </button>
                 </div>
@@ -72,24 +73,24 @@ export default function ResourceTypes() {
 
             <Grid container spacing={2}>
                 {
-                    rtList.map((rt) => {
+                    resList.map((res, i) => {
                         return (
-                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={rt.resourceTypeId}>
+                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={res.resourceId}>
                                 <article style={{ padding: '1rem' }}>
                                     <header>
                                         <nav>
                                             <ul>
                                                 <li>
-                                                    <strong> {rt.typeName} </strong>
+                                                    Name: <strong> {res.resourceName} </strong>
                                                     <AccessTime sx={{ scale: "72.5%" }} />
                                                     <small>
-                                                        {dayjs(rt.createdAt).format(global.datetimeFormat)}
+                                                        {dayjs(res.createdAt).format(global.datetimeFormat)}
                                                     </small>
                                                 </li>
                                             </ul>
                                             <ul>
                                                 <li style={{ marginTop: '-2rem' }}>
-                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editresourcetype/${rt.resourceTypeId}`)}>
+                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editresource/${res.resourceId}`)}>
                                                         <Edit />
                                                     </button>
                                                 </li>
@@ -97,7 +98,7 @@ export default function ResourceTypes() {
                                         </nav>
                                     </header>
                                     <section>
-                                        {rt.resourceTypeDescription}
+                                        {res.resourceDescription}
                                     </section>
                                 </article>
                             </Grid>

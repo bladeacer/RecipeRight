@@ -2,28 +2,33 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { Container, } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Register from './pages/Register';
-import Login from './pages/Login';
+
 import http from './http';
 import UserContext from './contexts/UserContext';
-import ResourceTypes from './pages/ResourceTypes';
-import AddResourceType from './crud/AddResourceType';
-import EditResourceType from './crud/EditResourceType';
+
+import ResourceTypes from './pages/resources/ResourceTypes';
+import AddResourceType from './pages/resources/AddResourceType';
+import EditResourceType from './pages/resources/EditResourceType';
+import AddResource from './pages/resources/AddResource';
+import Resources from './pages/resources/Resources';
+import EditResource from './pages/resources/EditResource';
+
+import AddPolicy from './pages/policies/AddPolicy';
+import EditPolicy from './pages/policies/EditPolicy';
+import Policies from './pages/policies/Policies';
+
+import AddAttribute from './pages/attributes/AddAttribute';
+import EditAttribute from './pages/attributes/EditAttribute';
+import Attributes from './pages/attributes/Attributes';
+import AddUserAttribute from './pages/attributes/AddUserAttribute'
+import EditUserAttribute from './pages/attributes/EditUserAttribute';
+import UserAttributes from './pages/attributes/UserAttributes';
+
 import Home from './pages/Home';
-import AddResource from './crud/AddResource';
-import Resources from './pages/Resources';
-import EditResource from './crud/EditResource';
-import AddPolicy from './crud/AddPolicy';
-import EditPolicy from './crud/EditPolicy';
-import Policies from './pages/Policies';
-import AddAttribute from './crud/AddAttribute';
-import EditAttribute from './crud/EditAttribute';
-import Attributes from './pages/Attributes';
-import AddUserAttribute from './crud/AddUserAttribute';
-import EditUserAttribute from './crud/EditUserAttribute';
-import UserAttributes from './pages/UserAttributes';
 import Report from './pages/Report';
 import Error from './pages/Error';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -97,7 +102,7 @@ function App() {
             </ul>
             {user && (
               <ul>
-                {/* TODO: Have this redirect to settings */}
+                {/* TODO: Add something to redirect to settings */}
                 <li>{user.name}</li>
                 <li><button onClick={logout}>Logout</button></li>
               </ul>

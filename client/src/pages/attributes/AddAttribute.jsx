@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import * as yup from 'yup';
-import http from '../http';
+import http from '../../http';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { Box } from "@mui/material";
