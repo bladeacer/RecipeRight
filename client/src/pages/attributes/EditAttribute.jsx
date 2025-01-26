@@ -82,7 +82,7 @@ export default function EditAttribute() {
                     <Box component="form" onSubmit={formik.handleSubmit}>
 
                         <label>
-                            Resource Name
+                            Attribute Name
                             <input type="textarea"
                                 id='attributeName'
                                 name="attributeName"
@@ -120,7 +120,7 @@ export default function EditAttribute() {
             <dialog open={open} onClose={handleClose}>
                 <article>
                     <header>
-                        <h5> Delete Resource Type </h5>
+                        <h5> Delete Attribute</h5>
                     </header>
                     <p> Are you sure you want to delete this attribute?  </p>
                     <footer>

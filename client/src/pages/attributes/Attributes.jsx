@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Grid2 as Grid } from '@mui/material';
 import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../../http';
@@ -86,7 +86,7 @@ export default function Attributes() {
                                         </ul>
                                         <ul>
                                             <li style={{ marginTop: '-2rem' }}>
-                                                <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editattribute/${attr.attributeId}`)}>
+                                                <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/editattribute/${attr.attributesId}`)}>
                                                     <Edit />
                                                 </button>
                                             </li>

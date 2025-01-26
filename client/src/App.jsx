@@ -16,8 +16,8 @@ import EditResource from './pages/resources/EditResource';
 import AddPolicy from './pages/policies/AddPolicy';
 import EditPolicy from './pages/policies/EditPolicy';
 import Policies from './pages/policies/Policies';
-
 import AddAttribute from './pages/attributes/AddAttribute';
+
 import EditAttribute from './pages/attributes/EditAttribute';
 import Attributes from './pages/attributes/Attributes';
 import AddUserAttribute from './pages/attributes/AddUserAttribute'
@@ -246,5 +246,4 @@ function App() {
     </UserContext.Provider>
   );
 }
-
 export default App;

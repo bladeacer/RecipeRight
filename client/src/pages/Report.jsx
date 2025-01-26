@@ -11,6 +11,7 @@ export default function Report() {
     const [loading, setLoading] = useState(true);
     const [resList, setReslist] = useState([]);
     const [rtList, setRtlist] = useState([]);
+    const [attributes, setAttributes] = useState([]);
     const date = new Date();
     const getRes = () => {
         http.get("/resource").then((res) => {
@@ -18,12 +19,19 @@ export default function Report() {
         }).catch(function (err) {
             toast.error(`${err.response.data.message}`);
         });
-
-        ;
     };
     const getRTs = () => {
         http.get("/resourcetype").then((res) => {
             setRtlist(res.data);
+        }).catch(function (err) {
+            toast.error(`${err.response.data.message}`);
+        });
+    };
+    const getAttributes = () => {
+        http.get("/attributes").then((res) => {
+            setAttributes(res.data);
+        }).catch(function (err) {
+            toast.error(`${err.response.data.message}`);
         });
     };
     // Create styles
@@ -44,19 +52,18 @@ export default function Report() {
             <Document>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.section}>
-                        <Text style={{ textAlign: 'center', fontSize: '2.5rem', paddingTop: '40vh', fontWeight: 'extrabold' }}>System snapshot</Text>
+                        <Text style={{ textAlign: 'center', fontSize: '2.5rem', paddingTop: '40vh', fontWeight: 'extraultrabold' }}>System snapshot</Text>
                         <Text>&nbsp;</Text>
                         <Text style={{ textAlign: 'center', fontSize: '0.8rem' }}>Updated on: {dayjs(date).format(global.datetimeFormat)}</Text>
                     </View>
                 </Page>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.section}>
-                        <Text style={{ fontWeight: 'bold', fontSize: '1.1rem', textDecoration: 'underline' }}>
-                            Resources</Text>
+                        <Text style={{ fontSize: '1.1rem' }}>Resources</Text>
                         {resList.reverse().map(x => (
                             <div key={x.resourceId}>
                                 <Text>
-                                    ID: {x.resourceId.toString()}
+                                    ID: {x.resourceId}
                                 </Text>
                                 <Text>
                                     Name: {x.resourceName}
@@ -78,12 +85,11 @@ export default function Report() {
                 </Page>
                 <Page style={styles.page}>
                     <View style={styles.section}>
-                        <Text style={{ fontWeight: 'bold', fontSize: '1.1rem', textDecoration: 'underline' }}>
-                            Resource Types</Text>
+                        <Text style={{ fontSize: '1.1rem' }}>Resource Types</Text>
                         {rtList.reverse().map(x => (
                             <div key={x.resourceTypeId}>
                                 <Text>
-                                    ID: {x.resourceTypeId.toString()}
+                                    ID: {x.resourceTypeId}
                                 </Text>
                                 <Text>
                                     Resource Type: {x.typeName}
@@ -100,6 +106,29 @@ export default function Report() {
                         <Text>Number of Resource Types: {rtList.length}</Text>
                     </View>
                 </Page>
+                <Page style={styles.page}>
+                    <View style={styles.section}>
+                        <Text style={{ fontSize: '1.1rem' }}>Attributes</Text>
+                        {attributes.reverse().map(x => (
+                            <div key={x.attributesId}>
+                                <Text>
+                                    ID: {x.attributesId}
+                                </Text>
+                                <Text>
+                                    Name: {x.attributeName}
+                                </Text>
+                                <Text>
+                                    Description: {x.attributeDescription}
+                                </Text>
+                                <Text>
+                                    Created at: {dayjs(x.createdAt).format(global.datetimeFormat)}
+                                </Text>
+                                <Text>&nbsp;</Text>
+                            </div>
+                        ))}
+                        <Text>Number of Attributes: {attributes.length}</Text>
+                    </View>
+                </Page>
             </Document>
         );
     }
@@ -107,6 +136,7 @@ export default function Report() {
     useEffect(() => {
         getRes();
         getRTs();
+        getAttributes();
         setLoading(false);
     }, []);
 
