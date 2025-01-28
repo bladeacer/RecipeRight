@@ -1,0 +1,67 @@
+﻿@LearningAPI_HostAddress = https://localhost:7004
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIyIiwidW5pcXVlX25hbWUiOiJMaSBIYWl5dW4iLCJlbWFpbCI6ImxpX2hhaXl1bkBueXAuZWR1LnNnIiwibmJmIjoxNzMxNTg0MDQ1LCJleHAiOjE3MzQxNzYwNDUsImlhdCI6MTczMTU4NDA0NX0.-7oqL5bSYY3A9odsRTYfTeN1Iuk8aGzTYxb1Ib5oAug
+
+GET {{LearningAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{LearningAPI_HostAddress}}/tutorial?search=hello
+
+###
+
+GET {{LearningAPI_HostAddress}}/tutorial/1
+
+###
+
+POST {{LearningAPI_HostAddress}}/user/register
+Content-Type: application/json
+
+{
+ "name": "Li Haiyun",
+ "email": "li_haiyun@nyp.edu.sg",
+ "password": "password123"
+}
+
+###
+
+POST {{LearningAPI_HostAddress}}/user/login
+Content-Type: application/json
+
+{
+ "email": "li_haiyun@nyp.edu.sg",
+ "password": "password123"
+}
+
+###
+
+GET {{LearningAPI_HostAddress}}/user/auth
+Authorization: Bearer {{token}}
+
+###
+POST {{LearningAPI_HostAddress}}/tutorial
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+ "title": "Web API",
+ "description": "Happy coding :)"
+}
+
+###
+
+PUT {{LearningAPI_HostAddress}}/tutorial/2
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+ "title": "My Story",
+ "description": "Your Song ❤"
+}
+
+###
+
+DELETE {{LearningAPI_HostAddress}}/tutorial/2
+Authorization: Bearer {{token}}
+
+###
