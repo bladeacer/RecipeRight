@@ -39,7 +39,6 @@ function AddTutorial() {
                 });
         }
     });
-
     const onFileChange = (e) => {
         let file = e.target.files[0];
         if (file) {

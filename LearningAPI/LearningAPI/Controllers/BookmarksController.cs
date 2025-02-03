@@ -19,7 +19,6 @@ namespace LearningAPI.Controllers
         {
             _context = context;
         }
-
         [HttpPost("add")]
         public async Task<IActionResult> AddBookmark(AddBookmarkRequest request)
         {
@@ -44,7 +43,6 @@ namespace LearningAPI.Controllers
             {
                 return BadRequest(new { message = "Recipe is already bookmarked in this folder." });
             }
-
             folder.Recipes.Add(new BookmarkRecipe
             {
                 RecipeId = request.RecipeId,
