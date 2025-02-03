@@ -1,0 +1,175 @@
+/* ============================================
+   General Container Styles
+   ============================================ */
+   .fridge-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Arial", sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  /* ============================================
+     Header and Title Styles
+     ============================================ */
+  .fridge-container h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #333;
+  }
+  
+  /* ============================================
+     Error and Status Message Styles
+     ============================================ */
+  .fridge-container p {
+    font-size: 1rem;
+  }
+  
+  /* ============================================
+     Fridge Form Styles
+     ============================================ */
+  .fridge-form {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .fridge-form div {
+    margin-bottom: 10px;
+  }
+  
+  .fridge-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .fridge-form input[type="text"],
+  .fridge-form input[type="number"],
+  .fridge-form input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+  
+  .fridge-form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .fridge-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* ============================================
+     Fridge Items List Styles
+     ============================================ */
+  .fridge-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .fridge-list li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .fridge-list li button {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .fridge-list li button:hover {
+    background-color: #c82333;
+  }
+  
+  /* ============================================
+     Bookmarked Recipes Section Styles
+     ============================================ */
+  .bookmarked-recipes {
+    margin-top: 40px;
+  }
+  
+  .bookmarked-recipes h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* ============================================
+     Recipe Card Styles for Bookmarked Recipes
+     ============================================ */
+  .recipe-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .recipe-card img {
+    width: 120px;
+    height: auto;
+    margin-right: 15px;
+    border-radius: 3px;
+  }
+  
+  .recipe-details {
+    flex: 1;
+  }
+  
+  .recipe-details h3 {
+    margin: 0 0 10px;
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  .recipe-details p {
+    margin: 0 0 10px;
+    color: #666;
+  }
+  
+  /* ============================================
+     "Cook It!" Button Styles
+     ============================================ */
+  .cook-button {
+    background-color: #28a745;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .cook-button:hover {
+    background-color: #218838;
+  }
+  

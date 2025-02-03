@@ -10,7 +10,9 @@ const RecipeDetails = () => {
     const [loading, setLoading] = useState(true);
     const [folders, setFolders] = useState([]); // Stores available folders
     const [selectedFolder, setSelectedFolder] = useState(""); // Selected folder that user chose
-    const [newFolderName, setNewFolderName] = useState(""); //  name input for new folder
+    const [newFolderName, setNewFolderName] = useState(""); // Name input for new folder
+    const [cookError, setCookError] = useState(""); // Error message for cook process
+    const [cookMessage, setCookMessage] = useState(""); // Status message for cook process
 
     useEffect(() => {
         const fetchRecipeDetails = async () => {
@@ -37,6 +39,9 @@ const RecipeDetails = () => {
         fetchFolders();
     }, [id]);
 
+    /**
+     * Adds the current recipe to bookmarks.
+     */
     const addBookmark = async () => {
         if (!selectedFolder && !newFolderName.trim()) {
             alert("Please select an existing folder or enter a new folder name.");
@@ -58,6 +63,75 @@ const RecipeDetails = () => {
         } catch (error) {
             console.error("Error adding bookmark:", error);
             alert("Failed to add bookmark.");
+        }
+    };
+
+    /**
+     * Initiates the cooking process for the recipe.
+     * This function fetches the user's fridge items, checks if all required
+     * ingredients are available, displays the cooking instructions, and then
+     * removes the used ingredients from the fridge.
+     */
+    const cookRecipe = async () => {
+        try {
+            // Reset previous messages.
+            setCookError("");
+            setCookMessage("");
+
+            // Fetch the user's current fridge items.
+            const fridgeResponse = await http.get("/api/Fridge");
+            const fridgeItems = fridgeResponse.data;
+
+            if (!Array.isArray(fridgeItems)) {
+                setCookError("Unexpected response for fridge items.");
+                return;
+            }
+
+            // Determine missing ingredients by comparing the recipe's ingredients
+            // with the fridge inventory (using case-insensitive matching).
+            const missingIngredients = recipeDetails.extendedIngredients.filter((ingredient) => {
+                // Assume ingredient object has a "name" property.
+                return !fridgeItems.some(
+                    (item) => item.ingredientName.toLowerCase() === ingredient.name.toLowerCase()
+                );
+            });
+
+            if (missingIngredients.length > 0) {
+                // Create a list of missing ingredient names.
+                const missingNames = missingIngredients.map((i) => i.name);
+                alert(`You are missing: ${missingNames.join(", ")}`);
+                return;
+            }
+
+            // If all ingredients are available, start cooking.
+            setCookMessage("Let's start cooking!");
+            // Display cooking instructions.
+            // If instructions are provided as HTML, we remove tags for alert display.
+            let instructionsText = "";
+            if (recipeDetails.instructions) {
+                // Remove HTML tags using DOMPurify's default sanitizer.
+                const sanitized = DOMPurify.sanitize(recipeDetails.instructions, { ALLOWED_TAGS: [] });
+                instructionsText = sanitized.replace(/\s+/g, " ").trim();
+            } else {
+                instructionsText = "No detailed instructions available. Please refer to the recipe details.";
+            }
+            alert(`Cooking Instructions:\n${instructionsText}`);
+
+            // Remove used ingredients from the fridge.
+            for (let ingredient of recipeDetails.extendedIngredients) {
+                // Find a matching fridge item (case-insensitive comparison).
+                const matchingItem = fridgeItems.find(
+                    (item) => item.ingredientName.toLowerCase() === ingredient.name.toLowerCase()
+                );
+                if (matchingItem && matchingItem.id) {
+                    await http.delete(`/api/Fridge/remove/${matchingItem.id}`);
+                }
+            }
+
+            alert("Cooking done! Ingredients used have been removed from your fridge.");
+        } catch (error) {
+            console.error("Error during cooking process:", error);
+            setCookError("An error occurred during the cooking process.");
         }
     };
 
@@ -115,6 +189,14 @@ const RecipeDetails = () => {
                     </div>
                 </div>
                 <button onClick={addBookmark}>Add Bookmark</button>
+            </div>
+
+            {/* --- Cook It! Section --- */}
+            <div className="cook-section">
+                <h3>Cook This Recipe</h3>
+                {cookError && <p style={{ color: "red" }}>{cookError}</p>}
+                {cookMessage && <p>{cookMessage}</p>}
+                <button onClick={cookRecipe}>Cook It!</button>
             </div>
         </div>
     );

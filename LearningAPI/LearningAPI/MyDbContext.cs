@@ -19,6 +19,7 @@ namespace LearningAPI
         public required DbSet<User> Users { get; set; }
         public required DbSet<BookmarkFolder> BookmarkFolders { get; set; }
         public required DbSet<BookmarkRecipe> BookmarkRecipes { get; set; }
+        public DbSet<Fridge> Fridges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

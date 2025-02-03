@@ -20,6 +20,7 @@ import ProtectedRoute from './pages/ProtectedRoute'; // Import ProtectedRoute co
 import Pantry from './pages/Pantry';
 import RecipeDetails from "./pages/RecipeDetails";
 import Bookmarks from "./pages/Bookmarks";
+import Fridge from "./pages/Fridge";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -83,6 +84,8 @@ function App() {
               <Route path={"/pantry"} element={<Pantry />} />
               <Route path={"/recipe/:id"} element={<RecipeDetails />} />
               <Route path={"/bookmarks"} element={<Bookmarks />} />
+              <Route path={"/fridge"} element={<Fridge />} />
+              
             </Routes>
           </Container>
         </ThemeProvider>
