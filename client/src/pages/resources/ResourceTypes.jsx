@@ -81,10 +81,12 @@ export default function ResourceTypes() {
                                             <ul>
                                                 <li>
                                                     <strong> {rt.typeName} </strong>
-                                                    <AccessTime sx={{ scale: "72.5%" }} />
-                                                    <small>
-                                                        {dayjs(rt.createdAt).format(global.datetimeFormat)}
-                                                    </small>
+                                                    <p>
+                                                        <AccessTime sx={{ scale: "72.5%" }} />
+                                                        <small>
+                                                            {dayjs(rt.createdAt).format(global.datetimeFormat)}
+                                                        </small>
+                                                    </p>
                                                 </li>
                                             </ul>
                                             <ul>

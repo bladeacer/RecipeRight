@@ -15,6 +15,28 @@ namespace LearningAPI.Controllers
     public class UserController(MyDbContext context, IConfiguration configuration, IMapper mapper,
         ILogger<UserController> logger) : ControllerBase
     {
+        [HttpGet, Authorize]
+        [ProducesResponseType(typeof(IEnumerable<UserDTO>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll(string? search)
+        {
+            try
+            {
+                IQueryable<User> result = context.Users;
+                if (search != null)
+                {
+                    result = result.Where(x => x.Name.Contains(search) || x.Email.Contains(search));
+                }
+                var list = await result.OrderByDescending(x => x.CreatedAt).ToListAsync();
+                IEnumerable<UserDTO> data = list.Select(mapper.Map<UserDTO>);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error when get all users");
+                return StatusCode(500);
+            }
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
@@ -26,7 +48,7 @@ namespace LearningAPI.Controllers
                 request.Password = request.Password.Trim();
 
                 // Check email
-                var foundUser = await context.Users.Where(x => x.Email == request.Email).FirstOrDefaultAsync();
+                var foundUser = await context.Users.Where(x => x.Email == request.Email || x.Name == request.Name).FirstOrDefaultAsync();
                 if (foundUser != null)
                 {
                     string message = "Email already exists.";

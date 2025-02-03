@@ -13,9 +13,6 @@ import AddResource from './pages/resources/AddResource';
 import Resources from './pages/resources/Resources';
 import EditResource from './pages/resources/EditResource';
 
-import AddPolicy from './pages/policies/AddPolicy';
-import EditPolicy from './pages/policies/EditPolicy';
-import Policies from './pages/policies/Policies';
 import AddAttribute from './pages/attributes/AddAttribute';
 
 import EditAttribute from './pages/attributes/EditAttribute';
@@ -98,7 +95,6 @@ function App() {
             </ul>
             {user && (
               <ul>
-                {/* TODO: Add something to redirect to settings */}
                 <li>{user.name}</li>
                 <li><button onClick={logout}>Logout</button></li>
               </ul>

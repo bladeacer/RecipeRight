@@ -1,5 +1,5 @@
-import { useEffect, useState} from 'react';
-import { Box, Grid2 as Grid} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Grid2 as Grid } from '@mui/material';
 import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../../http';
 import dayjs from 'dayjs';
@@ -81,10 +81,12 @@ export default function Resources() {
                                             <ul>
                                                 <li>
                                                     Name: <strong> {res.resourceName} </strong>
-                                                    <AccessTime sx={{ scale: "72.5%" }} />
-                                                    <small>
-                                                        {dayjs(res.createdAt).format(global.datetimeFormat)}
-                                                    </small>
+                                                    <p>
+                                                        <AccessTime sx={{ scale: "72.5%" }} />
+                                                        <small>
+                                                            {dayjs(res.createdAt).format(global.datetimeFormat)}
+                                                        </small>
+                                                    </p>
                                                 </li>
                                             </ul>
                                             <ul>

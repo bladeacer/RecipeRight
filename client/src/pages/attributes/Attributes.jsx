@@ -78,10 +78,12 @@ export default function Attributes() {
                                         <ul>
                                             <li>
                                                 <strong> {attr.attributeName} </strong>
-                                                <AccessTime sx={{ scale: "72.5%" }} />
-                                                <small>
-                                                    {dayjs(attr.createdAt).format(global.datetimeFormat)}
-                                                </small>
+                                                <p>
+                                                    <AccessTime sx={{ scale: "72.5%" }} />
+                                                    <small>
+                                                        {dayjs(attr.createdAt).format(global.datetimeFormat)}
+                                                    </small>
+                                                </p>
                                             </li>
                                         </ul>
                                         <ul>

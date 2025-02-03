@@ -23,7 +23,7 @@ export default function EditAttribute() {
         http.get(`/attributes/${id}`).then((res) => {
             setAttr(res.data);
             setLoading(false);
-        }).catch(function(err) {
+        }).catch(function (err) {
             toast.error(`${err.response.data.message}`)
         });
     }, [id, attr]);
@@ -63,7 +63,7 @@ export default function EditAttribute() {
         http.delete(`/attributes/${id}`).then((res) => {
             console.log(res.data);
             navigate("/attributes")
-        }).catch(function(err) {
+        }).catch(function (err) {
             toast.error(`${err.response.data.message}`)
         })
     };
@@ -77,45 +77,43 @@ export default function EditAttribute() {
         }}>
 
             <h5>Edit Attribute</h5>
-            {
-                !loading && !open && (
-                    <Box component="form" onSubmit={formik.handleSubmit}>
+            {!loading && !open && (
+                <Box component="form" onSubmit={formik.handleSubmit}>
 
-                        <label>
-                            Attribute Name
-                            <input type="textarea"
-                                id='attributeName'
-                                name="attributeName"
-                                value={formik.values.attributeName}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                aria-invalid={formik.touched.attributeName && formik.errors.attributeName ? 'true' : 'false'}
-                                autoComplete='off'
-                            />
-                            {formik.touched.attributeName && formik.errors.attributeName && <small>{formik.errors.attributeName}</small>}
-                        </label>
+                    <label>
+                        Attribute Name
+                        <input type="textarea"
+                            id='attributeName'
+                            name="attributeName"
+                            value={formik.values.attributeName}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            aria-invalid={formik.touched.attributeName && formik.errors.attributeName ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.attributeName && formik.errors.attributeName && <small>{formik.errors.attributeName}</small>}
+                    </label>
 
-                        <label>
-                            Description
-                            <input placeholder='Enter a description'
-                                id='attributeDescription'
-                                value={formik.values.attributeDescription}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                aria-invalid={formik.touched.attributeDescription && formik.errors.attributeDescription ? 'true' : 'false'}
-                                autoComplete='off'
-                            />
-                            {formik.touched.attributeDescription && formik.errors.attributeDescription && <small>{formik.errors.attributeDescription}</small>}
-                        </label>
-                        <button type="submit">Update</button>
-                        <button onClick={handleOpen} className='pico-background-red-500' style={{ width: '100%' }}>Delete</button>
-                    </Box>
-                )
+                    <label>
+                        Description
+                        <input placeholder='Enter a description'
+                            id='attributeDescription'
+                            value={formik.values.attributeDescription}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            aria-invalid={formik.touched.attributeDescription && formik.errors.attributeDescription ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.attributeDescription && formik.errors.attributeDescription && <small>{formik.errors.attributeDescription}</small>}
+                    </label>
+                    <button type="submit">Update</button>
+                    <button onClick={handleOpen} className='pico-background-red-500' style={{ width: '100%' }}>Delete</button>
+                </Box>
+            )
             }
-            {
-                loading && !open && (
-                    <h3 aria-busy="true"> Loading...  </h3>
-                )
+            {loading && !open && (
+                <h3 aria-busy="true"> Loading...  </h3>
+            )
             }
             <dialog open={open} onClose={handleClose}>
                 <article>

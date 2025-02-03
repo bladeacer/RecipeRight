@@ -12,6 +12,7 @@ export default function Report() {
     const [resList, setReslist] = useState([]);
     const [rtList, setRtlist] = useState([]);
     const [attributes, setAttributes] = useState([]);
+    const [userAttrs, setUserAttrs] = useState([]);
     const date = new Date();
     const getRes = () => {
         http.get("/resource").then((res) => {
@@ -30,6 +31,14 @@ export default function Report() {
     const getAttributes = () => {
         http.get("/attributes").then((res) => {
             setAttributes(res.data);
+        }).catch(function (err) {
+            toast.error(`${err.response.data.message}`);
+        });
+    };
+    const getUserAttrs = () => {
+        http.get("/userattributes").then((res) => {
+            setUserAttrs(res.data);
+            console.log(res.data);
         }).catch(function (err) {
             toast.error(`${err.response.data.message}`);
         });
@@ -129,6 +138,30 @@ export default function Report() {
                         <Text>Number of Attributes: {attributes.length}</Text>
                     </View>
                 </Page>
+
+                <Page style={styles.page}>
+                    <View style={styles.section}>
+                        <Text style={{ fontSize: '1.1rem' }}>User Attributes</Text>
+                        {userAttrs.reverse().map(x => (
+                            <div key={x.userAttributesId}>
+                                <Text>
+                                    ID: {x.userAttributesId}
+                                </Text>
+                                <Text>
+                                    Name: {x.userAttributeName}
+                                </Text>
+                                <Text>
+                                    Description: {x.userAttributeDescription}
+                                </Text>
+                                <Text>
+                                    Created at: {dayjs(x.createdAt).format(global.datetimeFormat)}
+                                </Text>
+                                <Text>&nbsp;</Text>
+                            </div>
+                        ))}
+                        <Text>Number of Attributes: {userAttrs.length}</Text>
+                    </View>
+                </Page>
             </Document>
         );
     }
@@ -137,6 +170,7 @@ export default function Report() {
         getRes();
         getRTs();
         getAttributes();
+        getUserAttrs();
         setLoading(false);
     }, []);
 

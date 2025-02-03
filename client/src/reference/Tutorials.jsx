@@ -135,4 +135,4 @@ function Tutorials() {
     );
 }
 
-export default Tutorials;
+// export default Tutorials;
