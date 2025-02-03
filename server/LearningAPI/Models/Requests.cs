@@ -85,4 +85,31 @@ namespace LearningAPI.Models
         [Required]
         public DateTime Deadline { get; set; } // Deadline for the goal
     }
+    public class SustainabilityBadgeRequest
+    {
+        [Required, MaxLength(255)]
+        public string BadgeName { get; set; } = string.Empty;
+
+        [MaxLength(255)]
+        public string BadgeDescription { get; set; } = string.Empty;
+
+        [Required]
+        public DateTime AwardedOn { get; set; }
+    }
+
+    public class FoodWasteEntryRequest
+    {
+        [Required]
+        public int IngredientId { get; set; }
+
+        [Required]
+        public int WasteAmount { get; set; }
+
+        [Required]
+        public DateTime LoggedOn { get; set; }
+
+        [MaxLength(255)]
+        public string WasteReason { get; set; } = string.Empty;
+    }
+
 }

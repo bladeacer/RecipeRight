@@ -25,6 +25,9 @@ namespace LearningAPI
         public required DbSet<UserAttributes> UserAttributes { get; set; }
         public required DbSet<SustainabilityGoal> SustainabilityGoals { get; set; }
 
+        public required DbSet<SustainabilityBadge> SustainabilityBadges { get; set; }
+        public required DbSet<FoodWasteEntry> FoodWasteEntries { get; set; }
+
 
 
 

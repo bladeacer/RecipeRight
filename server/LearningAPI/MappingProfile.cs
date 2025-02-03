@@ -17,6 +17,9 @@ namespace LearningAPI
             CreateMap<Attributes, AttributesDTO>();
             CreateMap<UserAttributes, UserAttributesDTO>();
             CreateMap<SustainabilityGoal, SustainabilityGoalDTO>();
+            CreateMap<SustainabilityBadge, SustainabilityBadgeDTO>();
+            CreateMap<FoodWasteEntry, FoodWasteEntryDTO>();
+
         }
     }
 }

@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Frontend\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

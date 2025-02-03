@@ -146,6 +146,49 @@ namespace LearningAPI.Models
 
         public User? User { get; set; } 
     }
+    public class SustainabilityBadge
+    {
+        [Key]
+        public int BadgeId { get; set; }
+
+        [ForeignKey("User")]
+        public int UserId { get; set; } // FK to User
+
+        [Required, MaxLength(255)]
+        public string BadgeName { get; set; } = string.Empty;
+
+        [MaxLength(255)]
+        public string BadgeDescription { get; set; } = string.Empty;
+
+        [Column(TypeName = "datetime")]
+        public DateTime AwardedOn { get; set; }
+
+        public User? User { get; set; } // Navigation property
+    }
+
+    public class FoodWasteEntry
+    {
+        [Key]
+        public int WasteId { get; set; }
+
+        [ForeignKey("User")]
+        public int UserId { get; set; } // FK to User
+
+        [ForeignKey("Ingredient")]
+        public int IngredientId { get; set; } // FK to Ingredients
+
+        [Required]
+        public int WasteAmount { get; set; } // Amount wasted
+
+        [Column(TypeName = "datetime")]
+        public DateTime LoggedOn { get; set; }
+
+        [MaxLength(255)]
+        public string WasteReason { get; set; } = string.Empty;
+
+        public User? User { get; set; } // Navigation property
+    }
+
 
 
 
