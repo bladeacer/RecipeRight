@@ -1,7 +1,5 @@
 using AutoMapper;
 using LearningAPI;
-using LearningAPI.Services; 
-using LearningAPI.Middleware; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -9,12 +7,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 builder.Services.AddDbContext<MyDbContext>();
 
-
-
-
+// Auto Mapper
 var mappingConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new MappingProfile());
@@ -22,6 +20,7 @@ var mappingConfig = new MapperConfiguration(mc =>
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+// Add CORS policy
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 if (allowedOrigins == null || allowedOrigins.Length == 0)
 {
@@ -38,6 +37,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+// Authentication
 var secret = builder.Configuration.GetValue<string>("Authentication:Secret");
 if (string.IsNullOrEmpty(secret))
 {
@@ -59,8 +59,7 @@ builder.Services
         };
     });
 
-builder.Services.AddSingleton<ITokenBlacklistService, TokenBlacklistService>();
-
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -87,6 +86,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -99,8 +99,6 @@ app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

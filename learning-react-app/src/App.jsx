@@ -10,13 +10,12 @@ import EditTutorial from './pages/EditTutorial';
 import MyForm from './pages/MyForm';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Profile from './pages/Profile'; // Import Profile component
 import http from './http';
 import UserContext from './contexts/UserContext';
-import EditProfile from './pages/EditProfile'; // Import EditProfile component
-import Security from './pages/Security'; // Import Security component
-import AdminDashboard from './pages/AdminDashboard'; // Import AdminDashboard component
-import ProtectedRoute from './pages/ProtectedRoute'; // Import ProtectedRoute component
+import Pantry from './pages/Pantry';
+import RecipeDetails from "./pages/RecipeDetails";
+import Bookmarks from "./pages/Bookmarks";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -38,23 +37,27 @@ function App() {
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <ThemeProvider theme={MyTheme}>
-          <AppBar position="static" className="AppBar" sx={{ backgroundColor: '#0f0e0f' }}>
+          <AppBar position="static" className="AppBar" sx={{ backgroundColor: 'brown' }}>
             <Container>
               <Toolbar disableGutters={true}>
-                <Link to="/">
+                <Link to="/pantry">
                   <Typography variant="h6" component="div">
                     RecipeRight
                   </Typography>
                 </Link>
+                <Link to="/pantry" ><Typography>Pantry</Typography></Link>
+                <Link to="/Bookmarks" ><Typography>Bookmarks</Typography></Link>
                 <Box sx={{ flexGrow: 1 }}></Box>
                 {user && (
                   <>
-                    <Link to="/profile"><Typography>{user.name}</Typography></Link>
+                    <Typography>{user.name}</Typography>
                     <Button onClick={logout}>Logout</Button>
                   </>
-                )}
+                )
+                }
                 {!user && (
                   <>
+                    <Link to="/register" ><Typography>Register</Typography></Link>
                     <Link to="/login" ><Typography>Login</Typography></Link>
                   </>
                 )}
@@ -71,11 +74,9 @@ function App() {
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
-              <Route path={"/profile"} element={<Profile />} /> 
-              <Route path={"/edit-profile"} element={<EditProfile />} /> 
-              <Route path={"/security"} element={<Security />} /> 
-              <Route path={"/admin/dashboard"} element={<ProtectedRoute role="Admin"><AdminDashboard /></ProtectedRoute>} />
-                
+              <Route path={"/pantry"} element={<Pantry />} />
+              <Route path={"/recipe/:id"} element={<RecipeDetails />} />
+              <Route path={"/bookmarks"} element={<Bookmarks />} />
             </Routes>
           </Container>
         </ThemeProvider>
