@@ -1,0 +1,81 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\26e1d0fe-0ba5-4dd2-b5aa-08b8ee5c06bf_MainAfter.jpg",
+      "PackagePath": "staticwebassets\\images\\26e1d0fe-0ba5-4dd2-b5aa-08b8ee5c06bf_MainAfter.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\30deb57b-e1d5-47d0-baa2-d2ba83b6055e_MainAfter.jpg",
+      "PackagePath": "staticwebassets\\images\\30deb57b-e1d5-47d0-baa2-d2ba83b6055e_MainAfter.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\31434dc9-df12-4e79-835e-ee83f3390505_image.jpg",
+      "PackagePath": "staticwebassets\\images\\31434dc9-df12-4e79-835e-ee83f3390505_image.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\60a9015a-b1a7-45d7-aa94-f19cfca62683_gratisography-augmented-reality-800x525.jpg",
+      "PackagePath": "staticwebassets\\images\\60a9015a-b1a7-45d7-aa94-f19cfca62683_gratisography-augmented-reality-800x525.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\68895027-149c-4890-9730-5af630d8dbd6_MainAfter.jpg",
+      "PackagePath": "staticwebassets\\images\\68895027-149c-4890-9730-5af630d8dbd6_MainAfter.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\85064f1b-7d87-4240-b4a4-129f3f3d6de7_MainAfter.jpg",
+      "PackagePath": "staticwebassets\\images\\85064f1b-7d87-4240-b4a4-129f3f3d6de7_MainAfter.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\90923219-77d8-43d6-a060-a87d3b82e620_MainAfter.jpg",
+      "PackagePath": "staticwebassets\\images\\90923219-77d8-43d6-a060-a87d3b82e620_MainAfter.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\a02f1304-48ac-49fd-a4db-b6bb6dcf15cc_MainAfter.jpg",
+      "PackagePath": "staticwebassets\\images\\a02f1304-48ac-49fd-a4db-b6bb6dcf15cc_MainAfter.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\ed65cfbe-0ff9-4c2a-a308-306d205666f6_jpeg_43-2.jpg",
+      "PackagePath": "staticwebassets\\images\\ed65cfbe-0ff9-4c2a-a308-306d205666f6_jpeg_43-2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\edd720dc-9c38-48cc-a818-3a96a0e36fc2_signature.png",
+      "PackagePath": "staticwebassets\\images\\edd720dc-9c38-48cc-a818-3a96a0e36fc2_signature.png"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\f635321a-453c-49ae-a05d-d63b391276d8_gratisography-augmented-reality-800x525.jpg",
+      "PackagePath": "staticwebassets\\images\\f635321a-453c-49ae-a05d-d63b391276d8_gratisography-augmented-reality-800x525.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\fcab4157-3e16-44ff-b158-977396975882_jpeg_43-2.jpg",
+      "PackagePath": "staticwebassets\\images\\fcab4157-3e16-44ff-b158-977396975882_jpeg_43-2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\febffad3-df70-48f5-9bbb-374a77f7415c_gratisography-augmented-reality-800x525.jpg",
+      "PackagePath": "staticwebassets\\images\\febffad3-df70-48f5-9bbb-374a77f7415c_gratisography-augmented-reality-800x525.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\image.jpg",
+      "PackagePath": "staticwebassets\\images\\image.jpg"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\uploads\\README.md",
+      "PackagePath": "staticwebassets\\uploads\\README.md"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.LearningAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.LearningAPI.props",
+      "PackagePath": "build\\LearningAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.LearningAPI.props",
+      "PackagePath": "buildMultiTargeting\\LearningAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.LearningAPI.props",
+      "PackagePath": "buildTransitive\\LearningAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
