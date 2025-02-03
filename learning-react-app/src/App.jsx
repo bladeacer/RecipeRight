@@ -21,6 +21,7 @@ import Pantry from './pages/Pantry';
 import RecipeDetails from "./pages/RecipeDetails";
 import Bookmarks from "./pages/Bookmarks";
 
+
 function App() {
   const [user, setUser] = useState(null);
 
@@ -52,15 +53,20 @@ function App() {
                 <Box sx={{ flexGrow: 1 }}></Box>
                 {user && (
                   <>
-                    <Link to="/pantry" ><Typography>Pantry</Typography></Link>
-                    <Link to="/Bookmarks" ><Typography>Bookmarks</Typography></Link>
-                    <Link to="/profile"><Typography>{user.name}</Typography></Link>
-                    <Button onClick={logout}>Logout</Button>
+                    <Link to="/pantry"> <Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Pantry</Typography></Link>
+                    <Link to="/Bookmarks"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Bookmarks</Typography></Link>
+                    <Link to="/profile"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>{user.name}</Typography></Link>
+                    <Button
+                      onClick={logout}
+                      sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}
+                    >
+                      Logout
+                    </Button>
                   </>
                 )}
                 {!user && (
                   <>
-                    <Link to="/login" ><Typography>Login</Typography></Link>
+                    <Link to="/login" sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}><Typography>Login</Typography></Link>
                   </>
                 )}
               </Toolbar>
@@ -76,9 +82,9 @@ function App() {
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
-              <Route path={"/profile"} element={<Profile />} /> 
-              <Route path={"/edit-profile"} element={<EditProfile />} /> 
-              <Route path={"/security"} element={<Security />} /> 
+              <Route path={"/profile"} element={<Profile />} />
+              <Route path={"/edit-profile"} element={<EditProfile />} />
+              <Route path={"/security"} element={<Security />} />
               <Route path={"/admin/dashboard"} element={<ProtectedRoute role="Admin"><AdminDashboard /></ProtectedRoute>} />
               <Route path={"/pantry"} element={<Pantry />} />
               <Route path={"/recipe/:id"} element={<RecipeDetails />} />
