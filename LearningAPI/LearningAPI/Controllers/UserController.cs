@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using LearningAPI.Models;
-using LearningAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,42 +12,28 @@ namespace LearningAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UserController(MyDbContext context, IConfiguration configuration, IMapper mapper,
+        ILogger<UserController> logger) : ControllerBase
     {
-        private readonly MyDbContext context;
-        private readonly IConfiguration configuration;
-        private readonly IMapper mapper;
-        private readonly ILogger<UserController> logger;
-
-        public UserController(MyDbContext context, IConfiguration configuration, IMapper mapper, ILogger<UserController> logger)
-        {
-            this.context = context;
-            this.configuration = configuration;
-            this.mapper = mapper;
-            this.logger = logger;
-        }
-
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
-                
+                // Trim string values
                 request.Name = request.Name.Trim();
                 request.Email = request.Email.Trim().ToLower();
                 request.Password = request.Password.Trim();
 
+                // Check email
                 var foundUser = await context.Users.Where(x => x.Email == request.Email).FirstOrDefaultAsync();
                 if (foundUser != null)
                 {
-                    return BadRequest(new { message = "Email already exists." });
+                    string message = "Email already exists.";
+                    return BadRequest(new { message });
                 }
 
+                // Create user object
                 var now = DateTime.Now;
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
                 var user = new User()
@@ -57,22 +42,10 @@ namespace LearningAPI.Controllers
                     Email = request.Email,
                     Password = passwordHash,
                     CreatedAt = now,
-                    UpdatedAt = now,
-                    Gender = request.Gender
+                    UpdatedAt = now
                 };
 
-                if (request.Image != null)
-                {
-                    var uniqueFileName = $"{Guid.NewGuid()}_{request.Image.FileName}";
-                    var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(imagePath)); 
-                    using (var stream = new FileStream(imagePath, FileMode.Create))
-                    {
-                        await request.Image.CopyToAsync(stream);
-                    }
-                    user.Image = uniqueFileName; 
-                }
-
+                // Add user
                 await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
                 return Ok();
@@ -80,7 +53,7 @@ namespace LearningAPI.Controllers
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error when user register");
-                return StatusCode(500, new { message = "An error occurred while registering the user." });
+                return StatusCode(500);
             }
         }
 
@@ -88,16 +61,13 @@ namespace LearningAPI.Controllers
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
+                // Trim string values
                 request.Email = request.Email.Trim().ToLower();
                 request.Password = request.Password.Trim();
 
+                // Check email and password
                 string message = "Email or password is not correct.";
                 var foundUser = await context.Users.Where(x => x.Email == request.Email).FirstOrDefaultAsync();
                 if (foundUser == null)
@@ -110,6 +80,7 @@ namespace LearningAPI.Controllers
                     return BadRequest(new { message });
                 }
 
+                // Return user info
                 UserDTO userDTO = mapper.Map<UserDTO>(foundUser);
                 string accessToken = CreateToken(foundUser);
                 LoginResponse response = new() { User = userDTO, AccessToken = accessToken };
@@ -118,18 +89,18 @@ namespace LearningAPI.Controllers
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error when user login");
-                return StatusCode(500, new { message = "An error occurred while logging in." });
+                return StatusCode(500);
             }
         }
 
         [HttpGet("auth"), Authorize]
         [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Auth()
+        public IActionResult Auth()
         {
             try
             {
                 var id = Convert.ToInt32(User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
-                    .Select(c => c.Value).SingleOrDefault());
+                .Select(c => c.Value).SingleOrDefault());
                 var name = User.Claims.Where(c => c.Type == ClaimTypes.Name)
                     .Select(c => c.Value).SingleOrDefault();
                 var email = User.Claims.Where(c => c.Type == ClaimTypes.Email)
@@ -137,24 +108,7 @@ namespace LearningAPI.Controllers
 
                 if (id != 0 && name != null && email != null)
                 {
-                    var user = await context.Users.FindAsync(id);
-                    if (user == null)
-                    {
-                        return Unauthorized();
-                    }
-
-                    string baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}";
-                    string? imageUrl = user.Image != null ? $"{baseUrl}/images/{user.Image}" : null;
-
-                    UserDTO userDTO = new()
-                    {
-                        Id = user.Id,
-                        Name = user.Name,
-                        Email = user.Email,
-                        Gender = user.Gender,
-                        Image = imageUrl
-                    };
-
+                    UserDTO userDTO = new() { Id = id, Name = name, Email = email };
                     AuthResponse response = new() { User = userDTO };
                     return Ok(response);
                 }
@@ -166,7 +120,7 @@ namespace LearningAPI.Controllers
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error when user auth");
-                return StatusCode(500, new { message = "An error occurred while authenticating the user." });
+                return StatusCode(500);
             }
         }
 
@@ -185,14 +139,12 @@ namespace LearningAPI.Controllers
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
+                Subject = new ClaimsIdentity(
+                [
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role) 
-
-                }),
+                    new Claim(ClaimTypes.Email, user.Email)
+                ]),
                 Expires = DateTime.UtcNow.AddDays(tokenExpiresDays),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -201,136 +153,5 @@ namespace LearningAPI.Controllers
 
             return token;
         }
-
-        [HttpPut("{id}")]
-        [Authorize]
-        public async Task<IActionResult> UpdateUser(int id, [FromForm] UpdateUserRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var user = await context.Users.FindAsync(id);
-                if (user == null)
-                {
-                    return NotFound(new { message = "User not found." });
-                }
-
-                user.Name = request.Name.Trim();
-                user.Gender = request.Gender;
-                user.UpdatedAt = DateTime.Now;
-
-                if (request.Image != null)
-                {
-                    var uniqueFileName = $"{Guid.NewGuid()}_{request.Image.FileName}";
-                    var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
-                    using (var stream = new FileStream(imagePath, FileMode.Create))
-                    {
-                        await request.Image.CopyToAsync(stream);
-                    }
-                    user.Image = uniqueFileName;
-                }
-
-                context.Users.Update(user);
-                await context.SaveChangesAsync();
-                return Ok(new { message = "User profile updated successfully." });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when updating user profile");
-                return StatusCode(500, new { message = "An error occurred while updating the user profile." });
-            }
-        }
-
-        [HttpPut("change-security")]
-        [Authorize]
-        public async Task<IActionResult> ChangeSecurity([FromForm] ChangeSecurityRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var userId = Convert.ToInt32(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
-                var user = await context.Users.FindAsync(userId);
-                if (user == null)
-                {
-                    return NotFound(new { message = "User not found." });
-                }
-
-                bool verified = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.Password);
-                if (!verified)
-                {
-                    return BadRequest(new { message = "Current password is incorrect." });
-                }
-
-                if (!string.IsNullOrEmpty(request.NewEmail))
-                {
-                    var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Email == request.NewEmail);
-                    if (existingUser != null)
-                    {
-                        return BadRequest(new { message = "New email is already in use." });
-                    }
-
-                    user.Email = request.NewEmail.Trim().ToLower();
-                }
-
-                if (!string.IsNullOrEmpty(request.NewPassword))
-                {
-                    if (BCrypt.Net.BCrypt.Verify(request.NewPassword, user.Password))
-                    {
-                        return BadRequest(new { message = "New password cannot be the same as the current password." });
-                    }
-
-                    user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-                }
-
-                user.UpdatedAt = DateTime.Now;
-                context.Users.Update(user);
-                await context.SaveChangesAsync();
-                return Ok(new { message = "Security settings updated successfully." });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when changing security settings");
-                return StatusCode(500, new { message = "An error occurred while updating security settings." });
-            }
-        }
-        [HttpPost("logout")]
-        [Authorize]
-        public IActionResult Logout()
-        {
-            return Ok(new { message = "User logged out successfully." });
-        }
-
-        [HttpDelete("{id}")]
-        [Authorize]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            try
-            {
-                var user = await context.Users.FindAsync(id);
-                if (user == null)
-                {
-                    return NotFound(new { message = "User not found." });
-                }
-
-                context.Users.Remove(user);
-                await context.SaveChangesAsync();
-                return Ok(new { message = "User deleted successfully." });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error when deleting user");
-                return StatusCode(500, new { message = "An error occurred while deleting the user." });
-            }
-        }
-        
     }
 }

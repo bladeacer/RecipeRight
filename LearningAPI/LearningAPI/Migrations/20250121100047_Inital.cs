@@ -5,7 +5,7 @@
 namespace LearningAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class q : Migration
+    public partial class Inital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -22,9 +22,4 @@
     <PackageReference Include="System.Text.Json" Version="8.0.*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

@@ -16,8 +16,53 @@ namespace LearningAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "8.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("LearningAPI.Models.BookmarkFolder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BookmarkFolders");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.BookmarkRecipe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BookmarkFolderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookmarkFolderId");
+
+                    b.ToTable("BookmarkRecipes");
+                });
 
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
                 {
@@ -69,14 +114,6 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -87,16 +124,20 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.BookmarkRecipe", b =>
+                {
+                    b.HasOne("LearningAPI.Models.BookmarkFolder", null)
+                        .WithMany("Recipes")
+                        .HasForeignKey("BookmarkFolderId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
@@ -108,6 +149,11 @@ namespace LearningAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.BookmarkFolder", b =>
+                {
+                    b.Navigation("Recipes");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.User", b =>

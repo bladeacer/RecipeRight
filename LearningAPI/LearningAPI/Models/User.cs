@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Claims;
 using System.Text.Json.Serialization;
 
 namespace LearningAPI.Models
@@ -25,14 +24,7 @@ namespace LearningAPI.Models
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
 
-        [MaxLength(10)]
-        public string Gender { get; set; } = string.Empty;
-
-        public string? Image { get; set; }
-        public string Role { get; set; } = "User"; 
-
-
-
+        // Navigation property to represent the one-to-many relationship
         [JsonIgnore]
         public List<Tutorial>? Tutorials { get; set; }
     }

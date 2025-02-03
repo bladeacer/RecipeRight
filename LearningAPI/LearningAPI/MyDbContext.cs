@@ -15,7 +15,27 @@ namespace LearningAPI
         }
 
         public required DbSet<Tutorial> Tutorials { get; set; }
-
         public required DbSet<User> Users { get; set; }
+
+        // Add DbSet properties for bookmarks
+        public required DbSet<BookmarkFolder> BookmarkFolders { get; set; }
+        public required DbSet<BookmarkRecipe> BookmarkRecipes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure BookmarkFolder and BookmarkRecipe relationships
+            modelBuilder.Entity<BookmarkFolder>()
+                .HasMany(f => f.Recipes)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BookmarkRecipe>()
+                .HasKey(r => r.Id);
+
+            modelBuilder.Entity<BookmarkFolder>()
+                .HasKey(f => f.Id);
+        }
     }
 }
