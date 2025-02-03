@@ -46,7 +46,6 @@ export default function Resources() {
         getRes();
     };
 
-
     return (
         <Box>
             <h5>Resources</h5>
@@ -73,7 +72,7 @@ export default function Resources() {
 
             <Grid container spacing={2}>
                 {
-                    resList.map((res, i) => {
+                    resList.map((res) => {
                         return (
                             <Grid size={{ xs: 12, md: 6, lg: 4 }} key={res.resourceId}>
                                 <article style={{ padding: '1rem' }}>

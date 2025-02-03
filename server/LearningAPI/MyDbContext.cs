@@ -20,7 +20,6 @@ namespace LearningAPI
         public required DbSet<User> Users { get; set; }
         public required DbSet<Resource> Resources { get; set; }
         public required DbSet<ResourceType> ResourceTypes { get; set; }
-        public required DbSet<Policies> Policies { get; set; }
         public required DbSet<Attributes> Attributes { get; set; }
         public required DbSet<UserAttributes> UserAttributes { get; set; }
 

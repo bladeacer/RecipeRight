@@ -76,10 +76,6 @@ function App() {
                   </li>
                   <li></li>
                   <li>
-                    <a href="/policies"> Policies </a>
-                  </li>
-                  <li></li>
-                  <li>
                     <details className="dropdown">
                       <summary>
                         Attributes
@@ -178,25 +174,6 @@ function App() {
               <Route path={"/editattribute/:id"} element={
                 <>
                   {user && (<EditAttribute />)}
-                  {!user && (<Error />)}
-                </>
-              } />
-
-              <Route path={"/policies"} element={
-                <>
-                  {user && (<Policies />)}
-                  {!user && (<Error />)}
-                </>
-              } />
-              <Route path={"/addpolicy"} element={
-                <>
-                  {user && (<AddPolicy />)}
-                  {!user && (<Error />)}
-                </>
-              } />
-              <Route path={"/editpolicy/:id"} element={
-                <>
-                  {user && (<EditPolicy />)}
                   {!user && (<Error />)}
                 </>
               } />

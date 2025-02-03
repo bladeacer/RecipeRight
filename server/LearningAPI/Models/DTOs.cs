@@ -30,19 +30,19 @@ namespace LearningAPI.Models
         public DateTime UpdatedAt { get; set; }
         public ResourceDTO? Resource { get; set; }
     }
-    public class PoliciesDTO
-    {
-        public int PoliciesId { get; set; }
-        public string PoliciesName { get; set; } = string.Empty;
-        public string PoliciesDescription { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+    //public class PoliciesDTO
+    //{
+    //    public int PoliciesId { get; set; }
+    //    public string PoliciesName { get; set; } = string.Empty;
+    //    public string PoliciesDescription { get; set; } = string.Empty;
+    //    public DateTime CreatedAt { get; set; }
+    //    public DateTime UpdatedAt { get; set; }
 
-        public int ResourceId { get; set; }
+    //    public int ResourceId { get; set; }
 
-        [JsonIgnore]
-        public List<AttributesDTO>? RequiredAttributes { get; set; }
-    }
+    //    [JsonIgnore]
+    //    public List<AttributesDTO>? RequiredAttributes { get; set; }
+    //}
     public class AttributesDTO
     {
         public int AttributesId { get; set; }
@@ -50,7 +50,6 @@ namespace LearningAPI.Models
         public string AttributeDescription {  get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public PoliciesDTO? Policies { get; set; }
     }
     public class UserAttributesDTO
     {

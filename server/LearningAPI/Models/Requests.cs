@@ -43,15 +43,6 @@ namespace LearningAPI.Models
         [MaxLength(500)]
         public string ResourceDescription { get; set; } = string.Empty;
     }
-    public class PolicyRequest
-    {
-        public int ResourceId { get; set; }
-        public List<Attributes>? RequiredAttributes { get; set; }
-        [Required, MinLength(3), MaxLength(50)]
-        public string PoliciesName { get; set; } = string.Empty;
-        [MaxLength(500)]
-        public string PoliciesDescription { get; set; } = string.Empty;
-    }
     public class AttributeRequest
     {
 

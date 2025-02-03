@@ -13,7 +13,6 @@ namespace LearningAPI
             CreateMap<User, UserDTO>();
             CreateMap<Resource, ResourceDTO>();
             CreateMap<ResourceType, ResourceTypeDTO>();
-            CreateMap<Policies, PoliciesDTO>();
             CreateMap<Attributes, AttributesDTO>();
             CreateMap<UserAttributes, UserAttributesDTO>();
         }

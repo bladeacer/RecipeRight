@@ -78,25 +78,6 @@ namespace LearningAPI.Models
 
     }
 
-    public class Policies
-    {
-        public int PoliciesId { get; set; }
-
-        [Required, MinLength(3), MaxLength(50)]
-        public string PoliciesName { get; set; } = string.Empty;
-        [MaxLength(500)]
-        public string PoliciesDescription { get; set; } = string.Empty;
-
-        [Column(TypeName = "datetime")]
-        public DateTime CreatedAt { get; set; }
-
-        [Column(TypeName = "datetime")]
-        public DateTime UpdatedAt { get; set; }
-        public int ResourceId { get; set; }
-        [Column(TypeName = "JSON"), JsonIgnore]
-        public List<Attributes>? RequiredAttributes { get; set; }
-        public Resource? Resource { get; set; }
-    }
     public class Attributes
     {
         public int AttributesId { get; set; }
@@ -109,8 +90,6 @@ namespace LearningAPI.Models
 
         [Column(TypeName = "datetime")]
         public DateTime UpdatedAt { get; set; }
-        public Policies? Policies { get; set; }
-
         public List<UserAttributes>? UserAttributes { get; set; }
     }
 

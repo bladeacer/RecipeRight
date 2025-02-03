@@ -38,49 +38,12 @@ namespace LearningAPI.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("PoliciesId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
                     b.HasKey("AttributesId");
 
-                    b.HasIndex("PoliciesId");
-
                     b.ToTable("Attributes");
-                });
-
-            modelBuilder.Entity("LearningAPI.Models.Policies", b =>
-                {
-                    b.Property<int>("PoliciesId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("PoliciesDescription")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<string>("PoliciesName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int>("ResourceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("PoliciesId");
-
-                    b.HasIndex("ResourceId");
-
-                    b.ToTable("Policies");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Resource", b =>
@@ -216,26 +179,6 @@ namespace LearningAPI.Migrations
                     b.ToTable("UserAttributes");
                 });
 
-            modelBuilder.Entity("LearningAPI.Models.Attributes", b =>
-                {
-                    b.HasOne("LearningAPI.Models.Policies", "Policies")
-                        .WithMany("RequiredAttributes")
-                        .HasForeignKey("PoliciesId");
-
-                    b.Navigation("Policies");
-                });
-
-            modelBuilder.Entity("LearningAPI.Models.Policies", b =>
-                {
-                    b.HasOne("LearningAPI.Models.Resource", "Resource")
-                        .WithMany()
-                        .HasForeignKey("ResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Resource");
-                });
-
             modelBuilder.Entity("LearningAPI.Models.Resource", b =>
                 {
                     b.HasOne("LearningAPI.Models.ResourceType", "ResourceType")
@@ -277,11 +220,6 @@ namespace LearningAPI.Migrations
             modelBuilder.Entity("LearningAPI.Models.Attributes", b =>
                 {
                     b.Navigation("UserAttributes");
-                });
-
-            modelBuilder.Entity("LearningAPI.Models.Policies", b =>
-                {
-                    b.Navigation("RequiredAttributes");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.ResourceType", b =>

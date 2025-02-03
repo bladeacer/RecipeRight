@@ -122,33 +122,3 @@ Content-Type: application/json
 }
 
 ###
-
-GET {{LearningAPI_HostAddress}}/policy?search={{search}}
-
-###
-
-POST {{LearningAPI_HostAddress}}/policy
-Content-Type: application/json
-
-{
-  //PolicyRequest
-}
-
-###
-
-DELETE {{LearningAPI_HostAddress}}/policy/{{id}}
-
-###
-
-GET {{LearningAPI_HostAddress}}/policy/{{id}}
-
-###
-
-PUT {{LearningAPI_HostAddress}}/policy/{{id}}
-Content-Type: application/json
-
-{
-  //PolicyRequest
-}
-
-###
