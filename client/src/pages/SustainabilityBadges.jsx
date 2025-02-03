@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Typography, Grid2 as Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
-import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
+import { AccessTime, Search, Clear } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
 import UserContext from '../contexts/UserContext';
 import global from '../global';
 
-export default function SustainabilityGoals() {
-    const [goalList, setGoalList] = useState([]);
+export default function SustainabilityBadges() {
+    const [badgeList, setBadgeList] = useState([]);
     const [search, setSearch] = useState("");
     const { user } = useContext(UserContext);
 
@@ -16,47 +16,45 @@ export default function SustainabilityGoals() {
         setSearch(e.target.value);
     };
 
-    const getGoals = () => {
-        http.get("/sustainabilityGoal").then((res) => {
-            setGoalList(res.data);
+    const getBadges = () => {
+        http.get("/sustainabilityBadge").then((res) => {
+            setBadgeList(res.data);
             console.log(res.data);
         });
     };
 
-    const searchGoals = () => {
-        http.get(`/sustainabilityGoal?search=${search}`).then((res) => {
-            setGoalList(res.data);
+    const searchBadges = () => {
+        http.get(`/sustainabilityBadge?search=${search}`).then((res) => {
+            setBadgeList(res.data);
         });
     };
 
     useEffect(() => {
-        getGoals();
+        getBadges();
     }, []);
 
     const onSearchKeyDown = (e) => {
         if (e.key === "Enter") {
-            searchGoals();
+            searchBadges();
         }
     };
 
     const onClickSearch = () => {
-        searchGoals();
+        searchBadges();
     };
 
     const onClickClear = () => {
         setSearch('');
-        getGoals();
+        getBadges();
     };
 
     return (
         <Box>
-            {/* Header Section with Navigation Buttons */}
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, pt: 1 }}>
                 <Typography variant="h5">
-                    Sustainability Goals
+                    Sustainability Badges
                 </Typography>
 
-                {/* Navigation Buttons for Sustainability Goals, Badges, and Food Waste Log */}
                 <Box sx={{ display: 'flex', gap: 2, paddingTop: '4px' }}>
                     <Link to="/sustainability-goals">
                         <Button variant="contained" sx={{ backgroundColor: "white", color: "black", border: "1px solid black" }}>
@@ -89,47 +87,29 @@ export default function SustainabilityGoals() {
                     <Clear />
                 </IconButton>
                 <Box sx={{ flexGrow: 1 }} />
-                {
-                    user && (
-                        <Link to="/add-sustainability-goal">
-                            <Button variant='contained'>
-                                Add
-                            </Button>
-                        </Link>
-                    )
-                }
             </Box>
 
             <Grid container spacing={2}>
                 {
-                    goalList.map((goal, i) => {
+                    badgeList.map((badge, i) => {
                         return (
-                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={goal.sustainabilityGoalId}>
+                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={badge.badgeId}>
                                 <Card>
                                     <CardContent>
                                         <Box sx={{ display: 'flex', mb: 1 }}>
                                             <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                                                {goal.goalName}
+                                                {badge.badgeName}
                                             </Typography>
-                                            {
-                                                user && (
-                                                    <Link to={`/edit-sustainability-goal/${goal.sustainabilityGoalId}`}>
-                                                        <IconButton color="primary" sx={{ padding: '4px' }}>
-                                                            <Edit />
-                                                        </IconButton>
-                                                    </Link>
-                                                )
-                                            }
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
                                             color="text.secondary">
                                             <AccessTime sx={{ mr: 1 }} />
                                             <Typography>
-                                                {dayjs(goal.createdOn).format(global.datetimeFormat)}
+                                                {dayjs(badge.awardedOn).format(global.datetimeFormat)}
                                             </Typography>
                                         </Box>
                                         <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                                            {goal.goalDescription}
+                                            {badge.badgeDescription}
                                         </Typography>
                                     </CardContent>
                                 </Card>

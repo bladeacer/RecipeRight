@@ -19,7 +19,7 @@ public class SustainabilityBadgeController(MyDbContext context, IMapper mapper, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error retrieving badges");
+            logger.LogError(ex, "Error retrieving sustainability badges");
             return StatusCode(500);
         }
     }
@@ -34,7 +34,7 @@ public class SustainabilityBadgeController(MyDbContext context, IMapper mapper, 
             {
                 BadgeName = request.BadgeName,
                 BadgeDescription = request.BadgeDescription,
-                AwardedOn = request.AwardedOn,
+                AwardedOn = DateTime.UtcNow,
                 UserId = userId
             };
             await context.SustainabilityBadges.AddAsync(badge);
@@ -43,7 +43,65 @@ public class SustainabilityBadgeController(MyDbContext context, IMapper mapper, 
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error adding badge");
+            logger.LogError(ex, "Error adding sustainability badge");
+            return StatusCode(500);
+        }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateBadge(int id, SustainabilityBadgeRequest request)
+    {
+        try
+        {
+            var badge = await context.SustainabilityBadges.FindAsync(id);
+            if (badge == null)
+            {
+                return NotFound();
+            }
+
+            int userId = GetUserId();
+            if (badge.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            badge.BadgeName = request.BadgeName;
+            badge.BadgeDescription = request.BadgeDescription;
+
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error updating sustainability badge");
+            return StatusCode(500);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteBadge(int id)
+    {
+        try
+        {
+            var badge = await context.SustainabilityBadges.FindAsync(id);
+            if (badge == null)
+            {
+                return NotFound();
+            }
+
+            int userId = GetUserId();
+            if (badge.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            context.SustainabilityBadges.Remove(badge);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error deleting sustainability badge");
             return StatusCode(500);
         }
     }

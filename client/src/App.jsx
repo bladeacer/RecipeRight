@@ -22,6 +22,12 @@ import EditResource from './crud/EditResource';
 import EditSustainabilityGoal from './crud/EditSustainabilityGoal';
 import AddSustainabilityGoal from './crud/AddSustainabilityGoal';
 import SustainabilityGoals from './pages/SustainabilityGoals';
+import SustainabilityBadges from './pages/SustainabilityBadges';
+import FoodWasteLogs from './pages/FoodWasteLogs';
+
+import EditSustainabilityBadge from './crud/EditSustainabilityBadge';
+import AddSustainabilityBadge from './crud/AddSustainabilityBadge';
+
 
 
 
@@ -61,7 +67,7 @@ function App() {
                     <Link to="/policide"><Typography>Policies</Typography></Link>
                     <Link to="/attributes"><Typography>Attributes</Typography></Link>
                     <Link to="/userattributes"><Typography>User Attributes</Typography></Link>
-                    <Link to="/sustainability-goals"><Typography>Sustainability Goals</Typography></Link>
+                    <Link to="/sustainability-goals"><Typography>Sustainability</Typography></Link>
                   </>
                 )}
                 {/* <Link to="/tutorials" ><Typography>Tutorials</Typography></Link> */}
@@ -97,6 +103,11 @@ function App() {
               <Route path={"/add-sustainability-goal"} element={<AddSustainabilityGoal />} /> 
               <Route path={"/edit-sustainability-goal/:id"} element={<EditSustainabilityGoal />} />
               <Route path="/sustainability-goals" element={<SustainabilityGoals />} />
+              <Route path="/sustainability-badges" element={<SustainabilityBadges />} />
+<Route path="/add-sustainability-badge" element={<AddSustainabilityBadge />} />
+<Route path="/edit-sustainability-badge/:id" element={<EditSustainabilityBadge />} />
+<Route path="/food-waste-logs" element={<FoodWasteLogs />} />
+              
 
 
 

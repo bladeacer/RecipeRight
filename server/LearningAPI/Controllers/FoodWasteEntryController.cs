@@ -49,6 +49,66 @@ public class FoodWasteEntryController(MyDbContext context, IMapper mapper, ILogg
         }
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateEntry(int id, FoodWasteEntryRequest request)
+    {
+        try
+        {
+            var entry = await context.FoodWasteEntries.FindAsync(id);
+            if (entry == null)
+            {
+                return NotFound();
+            }
+
+            int userId = GetUserId();
+            if (entry.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            entry.IngredientId = request.IngredientId;
+            entry.WasteAmount = request.WasteAmount;
+            entry.LoggedOn = request.LoggedOn;
+            entry.WasteReason = request.WasteReason;
+
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error updating food waste entry");
+            return StatusCode(500);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteEntry(int id)
+    {
+        try
+        {
+            var entry = await context.FoodWasteEntries.FindAsync(id);
+            if (entry == null)
+            {
+                return NotFound();
+            }
+
+            int userId = GetUserId();
+            if (entry.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            context.FoodWasteEntries.Remove(entry);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error deleting food waste entry");
+            return StatusCode(500);
+        }
+    }
+
     private int GetUserId()
     {
         return int.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
