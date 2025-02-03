@@ -1,5 +1,111 @@
 [
   {
+    "ContainingType": "LearningAPI.Controllers.BookmarksController",
+    "Method": "GetBookmarks",
+    "RelativePath": "api/Bookmarks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LearningAPI.Controllers.BookmarksController",
+    "Method": "AddBookmark",
+    "RelativePath": "api/Bookmarks/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LearningAPI.Models.AddBookmarkRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LearningAPI.Controllers.BookmarksController",
+    "Method": "EditBookmarkFolderName",
+    "RelativePath": "api/Bookmarks/edit",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LearningAPI.Models.EditFolderRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LearningAPI.Controllers.BookmarksController",
+    "Method": "DeleteFolder",
+    "RelativePath": "api/Bookmarks/folder",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LearningAPI.Models.DeleteFolderRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LearningAPI.Controllers.BookmarksController",
+    "Method": "RemoveBookmark",
+    "RelativePath": "api/Bookmarks/remove",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "LearningAPI.Models.RemoveBookmarkRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LearningAPI.Controllers.RecipeController",
+    "Method": "GetRecipeDetails",
+    "RelativePath": "api/Recipe/details/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LearningAPI.Controllers.RecipeController",
+    "Method": "SearchRecipes",
+    "RelativePath": "api/Recipe/search",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pantryRequest",
+        "Type": "LearningAPI.Models.PantryRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "LearningAPI.Controllers.FileController",
     "Method": "Upload",
     "RelativePath": "File/upload",

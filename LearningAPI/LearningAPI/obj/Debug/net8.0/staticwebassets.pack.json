@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\images\\31434dc9-df12-4e79-835e-ee83f3390505_image.jpg"
     },
     {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\57ff3852-2bbd-431f-9806-9872a5d91867_MainAfter.jpg",
+      "PackagePath": "staticwebassets\\images\\57ff3852-2bbd-431f-9806-9872a5d91867_MainAfter.jpg"
+    },
+    {
       "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\60a9015a-b1a7-45d7-aa94-f19cfca62683_gratisography-augmented-reality-800x525.jpg",
       "PackagePath": "staticwebassets\\images\\60a9015a-b1a7-45d7-aa94-f19cfca62683_gratisography-augmented-reality-800x525.jpg"
     },
@@ -59,6 +63,10 @@
     {
       "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\uploads\\README.md",
       "PackagePath": "staticwebassets\\uploads\\README.md"
+    },
+    {
+      "Id": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\uploads\\wDnXq9paza.jpg",
+      "PackagePath": "staticwebassets\\uploads\\wDnXq9paza.jpg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.LearningAPI.Microsoft.AspNetCore.StaticWebAssets.props",

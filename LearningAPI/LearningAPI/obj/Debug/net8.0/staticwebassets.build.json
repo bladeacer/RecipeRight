@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "73Xc0r0p+dnBkxYzJu2Q7b3NHDZwMyuqDFLlnVyUZFs=",
+  "Hash": "OlfGT4xIgFkETPmBqc++zh8mUGBhspQbAE2rmYsz/cs=",
   "Source": "LearningAPI",
   "BasePath": "_content/LearningAPI",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\31434dc9-df12-4e79-835e-ee83f3390505_image.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\57ff3852-2bbd-431f-9806-9872a5d91867_MainAfter.jpg",
+      "SourceId": "LearningAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\",
+      "BasePath": "_content/LearningAPI",
+      "RelativePath": "images/57ff3852-2bbd-431f-9806-9872a5d91867_MainAfter.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\57ff3852-2bbd-431f-9806-9872a5d91867_MainAfter.jpg"
     },
     {
       "Identity": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\images\\60a9015a-b1a7-45d7-aa94-f19cfca62683_gratisography-augmented-reality-800x525.jpg",
@@ -300,6 +319,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\README.md"
+    },
+    {
+      "Identity": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\uploads\\wDnXq9paza.jpg",
+      "SourceId": "LearningAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\ychin\\Desktop\\LearningAPI\\LearningAPI\\wwwroot\\",
+      "BasePath": "_content/LearningAPI",
+      "RelativePath": "uploads/wDnXq9paza.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\wDnXq9paza.jpg"
     }
   ]
 }
