@@ -21,6 +21,11 @@ namespace LearningAPI
         public required DbSet<BookmarkRecipe> BookmarkRecipes { get; set; }
         public DbSet<Fridge> Fridges { get; set; }
 
+        public required DbSet<SustainabilityGoal> SustainabilityGoals { get; set; }
+
+        public required DbSet<SustainabilityBadge> SustainabilityBadges { get; set; }
+        public required DbSet<FoodWasteEntry> FoodWasteEntries { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

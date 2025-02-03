@@ -21,6 +21,13 @@ import Pantry from './pages/Pantry';
 import RecipeDetails from "./pages/RecipeDetails";
 import Bookmarks from "./pages/Bookmarks";
 import Fridge from "./pages/Fridge";
+import EditSustainabilityGoal from './pages/EditSustainabilityGoal';
+import AddSustainabilityGoal from './pages/AddSustainabilityGoal';
+import SustainabilityGoals from './pages/SustainabilityGoals';
+import SustainabilityBadges from './pages/SustainabilityBadges';
+import FoodWasteLogs from './pages/FoodWasteLogs';
+import EditSustainabilityBadge from './pages/EditSustainabilityBadge';
+import AddSustainabilityBadge from './pages/AddSustainabilityBadge';
 
 
 function App() {
@@ -57,6 +64,7 @@ function App() {
                     <Link to="/pantry"> <Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Pantry</Typography></Link>
                     <Link to="/Bookmarks"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Bookmarks</Typography></Link>
                     <Link to="/profile"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>{user.name}</Typography></Link>
+                    <Link to="/sustainability-goals"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Sustainability</Typography></Link>
                     <Button
                       onClick={logout}
                       sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}
@@ -91,6 +99,15 @@ function App() {
               <Route path={"/recipe/:id"} element={<RecipeDetails />} />
               <Route path={"/bookmarks"} element={<Bookmarks />} />
               <Route path={"/fridge"} element={<Fridge />} />
+
+          
+              <Route path={"/add-sustainability-goal"} element={<AddSustainabilityGoal />} /> 
+              <Route path={"/edit-sustainability-goal/:id"} element={<EditSustainabilityGoal />} />
+              <Route path="/sustainability-goals" element={<SustainabilityGoals />} />
+              <Route path="/sustainability-badges" element={<SustainabilityBadges />} />
+              <Route path="/add-sustainability-badge" element={<AddSustainabilityBadge />} />
+              <Route path="/edit-sustainability-badge/:id" element={<EditSustainabilityBadge />} />
+              <Route path="/food-waste-logs" element={<FoodWasteLogs />} />
               
             </Routes>
           </Container>
