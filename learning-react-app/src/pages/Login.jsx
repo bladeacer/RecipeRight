@@ -123,7 +123,7 @@ function Login() {
                         <Typography
                             variant="body2"
                             sx={{ color: '#4169E1', cursor: 'pointer', textDecoration: 'underline' }}
-                        >
+                        onClick = {() => navigate('/forgot-password')}>
                             Forgot password?
                         </Typography>
                     </Box>

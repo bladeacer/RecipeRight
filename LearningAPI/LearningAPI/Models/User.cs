@@ -32,7 +32,6 @@ namespace LearningAPI.Models
         public string Role { get; set; } = "User"; // Default role
 
 
-
         [JsonIgnore]
         public List<Tutorial>? Tutorials { get; set; }
     }

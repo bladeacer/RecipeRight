@@ -10,7 +10,7 @@
         public string Gender { get; set; } = string.Empty;
         public string? Image { get; set; }
 
-        public string Role { get; set; } = string.Empty; // Add this property
+        public string Role { get; set; } = string.Empty; 
 
     }
 }
