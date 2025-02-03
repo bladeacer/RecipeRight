@@ -17,5 +17,8 @@ namespace LearningAPI.Models
 
         public string Gender { get; set; } = string.Empty;
         public IFormFile? Image { get; set; }
+
+        [Required(ErrorMessage = "Recaptcha token is required.")]
+        public string RecaptchaToken { get; set; } = string.Empty;
     }
 }

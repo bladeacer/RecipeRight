@@ -6,10 +6,12 @@ import * as yup from 'yup';
 import http from '../http';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 function Register() {
     const navigate = useNavigate();
     const [imagePreview, setImagePreview] = useState(null);
+    const [captchaToken, setCaptchaToken] = useState(null);
 
     const formik = useFormik({
         initialValues: {
@@ -42,12 +44,18 @@ function Register() {
             image: yup.mixed().required('Image is required'),
         }),
         onSubmit: (data) => {
+            // Check if the user completed the reCAPTCHA
+            if (!captchaToken) {
+                toast.error("Please complete the reCAPTCHA.");
+                return;
+            }
             const formData = new FormData();
             formData.append('name', data.name.trim());
             formData.append('email', data.email.trim().toLowerCase());
             formData.append('password', data.password.trim());
             formData.append('gender', data.gender);
             formData.append('image', data.image);
+            formData.append('recaptchaToken', captchaToken); // Append the reCAPTCHA token
 
             http.post('/user/register', formData, {
                 headers: {
@@ -77,17 +85,17 @@ function Register() {
 
     return (
         <Box
-        sx={{
-            position: 'absolute',
-        top: '64px', // Offset equal to the AppBar height
-        left: 0,
-        width: '100%', // Full width of the page
-        height: 'calc(100vh - 64px)', // Full height minus AppBar height
-        backgroundColor: '#6495ED', // Blue background
-        display: 'flex',
-        justifyContent: 'center', // Center horizontally
-        alignItems: 'center', // Center vertically
-        }}
+            sx={{
+                position: 'absolute',
+                top: '64px', // Offset equal to the AppBar height
+                left: 0,
+                width: '100%', // Full width of the page
+                height: 'calc(100vh - 64px)', // Full height minus AppBar height
+                backgroundColor: '#6495ED', // Blue background
+                display: 'flex',
+                justifyContent: 'center', // Center horizontally
+                alignItems: 'center', // Center vertically
+            }}
         >
             <Box
                 sx={{
@@ -212,6 +220,14 @@ function Register() {
                             />
                         </Box>
                     )}
+
+                    {/* ReCAPTCHA widget */}
+                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                        <ReCAPTCHA
+                            sitekey="6Ld9XcsqAAAAAHX1FrqvObDxjGc9_ooQMi2gkebU" 
+                            onChange={(value) => setCaptchaToken(value)}
+                        />
+                    </Box>
 
                     <Button
                         fullWidth

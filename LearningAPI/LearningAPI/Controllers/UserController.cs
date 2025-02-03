@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http; // Added for HttpClient
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace LearningAPI.Controllers
 {
@@ -35,6 +37,17 @@ namespace LearningAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            // --- reCAPTCHA validation ---
+            if (string.IsNullOrEmpty(request.RecaptchaToken))
+            {
+                return BadRequest(new { message = "Recaptcha token is missing." });
+            }
+            if (!await ValidateRecaptchaAsync(request.RecaptchaToken))
+            {
+                return BadRequest(new { message = "Recaptcha validation failed." });
+            }
+            // -----------------------------
 
             try
             {
@@ -98,6 +111,17 @@ namespace LearningAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            // --- reCAPTCHA validation for login ---
+            if (string.IsNullOrEmpty(request.RecaptchaToken))
+            {
+                return BadRequest(new { message = "Recaptcha token is missing." });
+            }
+            if (!await ValidateRecaptchaAsync(request.RecaptchaToken))
+            {
+                return BadRequest(new { message = "Recaptcha validation failed." });
+            }
+            // -----------------------------------------
+
             try
             {
                 request.Email = request.Email.Trim().ToLower();
@@ -126,6 +150,7 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, new { message = "An error occurred while logging in." });
             }
         }
+
 
         [HttpGet("auth"), Authorize]
         [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
@@ -195,8 +220,7 @@ namespace LearningAPI.Controllers
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role) 
-
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(tokenExpiresDays),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -310,6 +334,7 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, new { message = "An error occurred while updating security settings." });
             }
         }
+
         [HttpPost("logout")]
         [Authorize]
         public IActionResult Logout()
@@ -340,6 +365,30 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, new { message = "An error occurred while deleting the user." });
             }
         }
-        
+
+        // --- reCAPTCHA validation helper ---
+        private async Task<bool> ValidateRecaptchaAsync(string token)
+        {
+            var secret = configuration["Recaptcha:SecretKey"];
+            using (var client = new HttpClient())
+            {
+                var values = new Dictionary<string, string>
+                {
+                    { "secret", secret },
+                    { "response", token }
+                };
+
+                var content = new FormUrlEncodedContent(values);
+                var response = await client.PostAsync("https://www.google.com/recaptcha/api/siteverify", content);
+                var jsonString = await response.Content.ReadAsStringAsync();
+
+                using var doc = JsonDocument.Parse(jsonString);
+                if (doc.RootElement.TryGetProperty("success", out var successElement))
+                {
+                    return successElement.GetBoolean();
+                }
+                return false;
+            }
+        }
     }
 }

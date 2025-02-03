@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Typography, TextField, Button, FormControlLabel, Checkbox } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -7,10 +7,12 @@ import http from '../http';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 function Login() {
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
+    const [captchaToken, setCaptchaToken] = useState(null);
 
     const formik = useFormik({
         initialValues: {
@@ -32,8 +34,17 @@ function Login() {
                 .required('Password is required'),
         }),
         onSubmit: (data) => {
+            // Check if the user completed the reCAPTCHA
+            if (!captchaToken) {
+                toast.error("Please complete the reCAPTCHA.");
+                return;
+            }
+
             data.email = data.email.trim().toLowerCase();
             data.password = data.password.trim();
+            // Append the reCAPTCHA token to the request payload.
+            data.recaptchaToken = captchaToken;
+
             http.post('/user/login', data)
                 .then((res) => {
                     const { user, accessToken } = res.data;
@@ -59,14 +70,14 @@ function Login() {
         <Box
             sx={{
                 position: 'absolute',
-        top: '64px', // Offset equal to the AppBar height
-        left: 0,
-        width: '100%', // Full width of the page
-        height: 'calc(100vh - 64px)', // Full height minus AppBar height
-        backgroundColor: '#6495ED', // Blue background
-        display: 'flex',
-        justifyContent: 'center', // Center horizontally
-        alignItems: 'center', // Center vertically
+                top: '64px', // Offset equal to the AppBar height
+                left: 0,
+                width: '100%', // Full width of the page
+                height: 'calc(100vh - 64px)', // Full height minus AppBar height
+                backgroundColor: '#6495ED', // Blue background
+                display: 'flex',
+                justifyContent: 'center', // Center horizontally
+                alignItems: 'center', // Center vertically
             }}
         >
             <Box
@@ -97,7 +108,7 @@ function Login() {
                     <TextField
                         fullWidth
                         margin="dense"
-                        label="Confirm a password"
+                        label="Enter your password"
                         name="password"
                         type="password"
                         autoComplete="off"
@@ -116,6 +127,15 @@ function Login() {
                             Forgot password?
                         </Typography>
                     </Box>
+
+                    {/* ReCAPTCHA widget */}
+                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                        <ReCAPTCHA
+                            sitekey="6Ld9XcsqAAAAAHX1FrqvObDxjGc9_ooQMi2gkebU" // Replace with your actual site key
+                            onChange={(value) => setCaptchaToken(value)}
+                        />
+                    </Box>
+
                     <Button
                         fullWidth
                         variant="contained"

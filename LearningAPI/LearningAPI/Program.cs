@@ -14,7 +14,6 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<MyDbContext>();
 
 
-
 builder.Services.AddHttpClient();
 
 // Auto Mapper
