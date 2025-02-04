@@ -39,7 +39,7 @@ function App() {
       });
       Promise.all([
         http.get("/userattributes/attr?attribute=admin"),
-        http.get(`/userattributes/attr?attribute=view_report`)
+        http.get("/userattributes/attr?attribute=view_report")
       ]).then(([adminRes, viewReportRes]) => {
         if (adminRes.data == true) {
           setIsAllowedViewReport(true)

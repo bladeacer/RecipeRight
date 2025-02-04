@@ -43,12 +43,12 @@ namespace LearningAPI.Controllers
                 IQueryable<UserAttributes> result = context.UserAttributes;
                 if (attribute != null)
                 {
-                    result = context.UserAttributes.Where(x => x.UserAttributeName.Equals(attribute) && x.UserId == 0);
-                    Console.WriteLine("The code was here");
+                    result = context.UserAttributes.Where(x => x.UserAttributeName.Contains(attribute) && x.UserId == user_id);
                 }
                 var userAttrs = await result.OrderByDescending(x => x.CreatedAt).ToListAsync();
                 //IEnumerable<UserAttributesDTO> data = userAttrs.Select(mapper.Map<UserAttributesDTO>);
                 return Ok(userAttrs.Count > 0);
+                //return Ok(data);
             }
             catch (Exception ex)
             {
