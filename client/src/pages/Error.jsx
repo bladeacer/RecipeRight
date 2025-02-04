@@ -8,9 +8,8 @@ function delay(time) {
 export default function Error() {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        delay(1500).then(() => {
-            setLoading(false);
-        });
+        delay(1000);
+        setLoading(false);
     }, []);
     return (
         loading ?

@@ -31,6 +31,7 @@ namespace LearningAPI.Controllers
                 return StatusCode(500);
             }
         }
+
         [HttpGet("{id}"), Authorize]
         [ProducesResponseType(typeof(IEnumerable<AttributesDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAttribute(int id)

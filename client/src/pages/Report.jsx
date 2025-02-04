@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import global from '../global';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Error from './Error';
 
 export default function Report() {
 
@@ -13,6 +14,7 @@ export default function Report() {
     const [rtList, setRtlist] = useState([]);
     const [attributes, setAttributes] = useState([]);
     const [userAttrs, setUserAttrs] = useState([]);
+    const [isAllowed, setIsAllowed] = useState(false);
     const date = new Date();
     const getRes = () => {
         http.get("/resource").then((res) => {
@@ -43,6 +45,8 @@ export default function Report() {
             toast.error(`${err.response.data.message}`);
         });
     };
+
+
     // Create styles
     const styles = StyleSheet.create({
         page: {
@@ -138,7 +142,6 @@ export default function Report() {
                         <Text>Number of Attributes: {attributes.length}</Text>
                     </View>
                 </Page>
-
                 <Page style={styles.page}>
                     <View style={styles.section}>
                         <Text style={{ fontSize: '1.1rem' }}>User Attributes</Text>
@@ -162,31 +165,42 @@ export default function Report() {
                         <Text>Number of Attributes: {userAttrs.length}</Text>
                     </View>
                 </Page>
+
             </Document>
         );
     }
-    // Create Document Component
+
+    const getIsAllowed = () => {
+        http.get("/userattributes/attr", "View Report").then((res) => {
+            setIsAllowed(res.data);
+
+        })
+        http.get("/userattributes/attr", "Admin").then((res) => {
+            setIsAllowed(res.data || isAllowed);
+        })
+    }
     useEffect(() => {
         getRes();
         getRTs();
         getAttributes();
         getUserAttrs();
         setLoading(false);
-    }, []);
+    }, [getIsAllowed]);
 
     return (
         <>
             {loading && (
                 <span aria-busy="true"> Loading...  </span>
             )}
-            {!loading && (
-                <>
-                    <PDFViewer style={{ width: '106%', height: '82.5vh', marginLeft: '-3%' }}>
-                        <MyDocument />
-                    </PDFViewer>
-                    <ToastContainer />
-                </>
+            {!loading && !isAllowed && (
+                <Error />
             )}
+            {!loading && isAllowed && (
+                <PDFViewer style={{ width: '106%', height: '82.5vh', marginLeft: '-3%' }}>
+                    <MyDocument />
+                </PDFViewer>
+            )}
+            {/* <ToastContainer /> */}
         </>
     )
 }

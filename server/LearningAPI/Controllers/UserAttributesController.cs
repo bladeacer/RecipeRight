@@ -33,6 +33,30 @@ namespace LearningAPI.Controllers
             }
         }
 
+        [HttpGet("attr"), Authorize]
+        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
+        public async Task<IActionResult> HasAttribute(string? attribute)
+        {
+            try
+            {
+                var user_id = GetUserId();
+                IQueryable<UserAttributes> result = context.UserAttributes;
+                if (attribute != null)
+                {
+                    result = result.Where(x => x.UserAttributeName.Contains(attribute));
+                }
+                var userAttrs = await result.OrderByDescending(x => x.CreatedAt).ToListAsync();
+                //IEnumerable<UserAttributesDTO> data = userAttrs.Select(mapper.Map<UserAttributesDTO>);
+                return Ok(userAttrs.Count > 0);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error when get has attribute");
+                return StatusCode(500);
+            }
+        }
+
+
         [HttpGet("{id}"), Authorize]
         [ProducesResponseType(typeof(IEnumerable<UserAttributesDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUserAttribute(int id)
@@ -136,6 +160,12 @@ namespace LearningAPI.Controllers
                 logger.LogError(ex, "Error when delete user attribute");
                 return StatusCode(500);
             }
+        }
+        private int GetUserId()
+        {
+            return Convert.ToInt32(User.Claims
+                .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                .Select(c => c.Value).SingleOrDefault());
         }
 
     }

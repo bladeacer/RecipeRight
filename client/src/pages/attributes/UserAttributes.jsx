@@ -32,6 +32,9 @@ export default function UserAttributes() {
 
     useEffect(() => {
         getUserAttrs();
+        http.get('/userattributes/attr', 'View Report').then((res) => {
+            console.log(res.data);
+        });
     }, [])
 
     const onSearchKeyDown = (e) => {

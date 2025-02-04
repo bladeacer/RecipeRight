@@ -37,6 +37,7 @@ namespace LearningAPI.Controllers
             }
         }
 
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
@@ -175,5 +176,6 @@ namespace LearningAPI.Controllers
 
             return token;
         }
+
     }
 }
