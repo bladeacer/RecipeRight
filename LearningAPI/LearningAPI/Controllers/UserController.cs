@@ -2,6 +2,7 @@
 using LearningAPI.Models;
 using LearningAPI.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +11,10 @@ using System.Net.Http; // Added for HttpClient
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using ForgotPasswordRequest = LearningAPI.Models.ForgotPasswordRequest;
+using LoginRequest = LearningAPI.Models.LoginRequest;
+using RegisterRequest = LearningAPI.Models.RegisterRequest;
+using ResetPasswordRequest = LearningAPI.Models.ResetPasswordRequest;
 
 namespace LearningAPI.Controllers
 {
@@ -390,5 +395,87 @@ namespace LearningAPI.Controllers
                 return false;
             }
         }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email.Trim().ToLower());
+                if (user == null)
+                {
+                    return BadRequest(new { message = "Email not found." });
+                }
+
+                // Generate a secure reset token
+                var resetToken = Guid.NewGuid().ToString();
+                var tokenExpiration = DateTime.UtcNow.AddMinutes(15); // Token valid for 15 minutes
+
+                // Save the token and expiration in the database
+                user.ResetToken = resetToken;
+                user.TokenExpiration = tokenExpiration;
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+
+                // Generate a reset link (For now, logging it in the console)
+                string resetLink = $"http://localhost:3000/resetpassword?token={resetToken}";
+                logger.LogInformation($"Password reset link for {user.Email}: {resetLink}");
+
+                return Ok(new { message = "A password reset link has been generated and logged." });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error when processing forgot password request");
+                return StatusCode(500, new { message = "An error occurred while processing the request." });
+            }
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                // Find user by reset token
+                var user = await context.Users.FirstOrDefaultAsync(u => u.ResetToken == request.Token);
+                if (user == null)
+                {
+                    return BadRequest(new { message = "Invalid or expired token." });
+                }
+
+                // Check if the token has expired
+                if (user.TokenExpiration == null || user.TokenExpiration < DateTime.UtcNow)
+                {
+                    return BadRequest(new { message = "Token has expired. Please request a new password reset." });
+                }
+
+                // Hash and update the new password
+                user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+
+                // Clear the reset token and expiration
+                user.ResetToken = null;
+                user.TokenExpiration = null;
+
+                // Save changes
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+
+                return Ok(new { message = "Your password has been reset successfully. You can now log in." });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error when resetting password");
+                return StatusCode(500, new { message = "An error occurred while resetting the password." });
+            }
+        }
+
+
     }
 }

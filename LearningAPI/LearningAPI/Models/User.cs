@@ -31,6 +31,8 @@ namespace LearningAPI.Models
         public string? Image { get; set; }
         public string Role { get; set; } = "User"; // Default role
 
+        public string? ResetToken { get; set; }
+        public DateTime? TokenExpiration { get; set; }
 
         [JsonIgnore]
         public List<Tutorial>? Tutorials { get; set; }

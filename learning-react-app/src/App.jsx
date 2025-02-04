@@ -28,6 +28,10 @@ import SustainabilityBadges from './pages/SustainabilityBadges';
 import FoodWasteLogs from './pages/FoodWasteLogs';
 import EditSustainabilityBadge from './pages/EditSustainabilityBadge';
 import AddSustainabilityBadge from './pages/AddSustainabilityBadge';
+import ForgotPassword from "./pages/ForgotPassword"; 
+import ResetPassword from "./pages/ResetPassword"; // Import the new page
+
+
 
 
 function App() {
@@ -50,37 +54,74 @@ function App() {
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <ThemeProvider theme={MyTheme}>
-          <AppBar position="static" className="AppBar" sx={{ backgroundColor: '#0f0e0f' }}>
-            <Container>
-              <Toolbar disableGutters={true}>
-                <Link to="/">
-                  <Typography variant="h6" component="div">
-                    RecipeRight
-                  </Typography>
-                </Link>
-                <Box sx={{ flexGrow: 1 }}></Box>
-                {user && (
-                  <>
-                    <Link to="/pantry"> <Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Pantry</Typography></Link>
-                    <Link to="/Bookmarks"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Bookmarks</Typography></Link>
-                    <Link to="/profile"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>{user.name}</Typography></Link>
-                    <Link to="/sustainability-goals"><Typography sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}>Sustainability</Typography></Link>
-                    <Button
-                      onClick={logout}
-                      sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}
-                    >
-                      Logout
-                    </Button>
-                  </>
-                )}
-                {!user && (
-                  <>
-                    <Link to="/login" sx={{ color: 'white', textTransform: 'none', fontWeight: 'bold' }}><Typography>Login</Typography></Link>
-                  </>
-                )}
-              </Toolbar>
-            </Container>
-          </AppBar>
+        <AppBar position="static" className="AppBar" sx={{ backgroundColor: '#1a1a1a', padding: '0 1rem' }}>
+  <Container>
+    <Toolbar disableGutters={true} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      {/* Left side - Brand and Links */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <Typography variant="h6" component="div" sx={{ color: '#fff', fontWeight: 'bold', '&:hover': { color: '#f5ba13' } }}>
+            RecipeRight
+          </Typography>
+        </Link>
+        {user && (
+          <>
+            <Link to="/pantry" style={{ textDecoration: 'none' }}>
+              <Typography sx={{ color: '#fff', textTransform: 'none', fontWeight: 'bold', '&:hover': { textDecoration: 'underline' } }}>
+                Pantry
+              </Typography>
+            </Link>
+            <Link to="/bookmarks" style={{ textDecoration: 'none' }}>
+              <Typography sx={{ color: '#fff', textTransform: 'none', fontWeight: 'bold', '&:hover': { textDecoration: 'underline' } }}>
+                Bookmarks
+              </Typography>
+            </Link>
+            <Link to="/sustainability-goals" style={{ textDecoration: 'none' }}>
+              <Typography sx={{ color: '#fff', textTransform: 'none', fontWeight: 'bold', '&:hover': { textDecoration: 'underline' } }}>
+                Sustainability
+              </Typography>
+            </Link>
+          </>
+        )}
+      </Box>
+
+      {/* Right side - Profile and Logout */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+        {user && (
+          <>
+            <Link to="/profile" style={{ textDecoration: 'none' }}>
+              <Typography sx={{ color: '#fff', textTransform: 'none', fontWeight: 'bold', '&:hover': { textDecoration: 'underline' } }}>
+                {user.name}
+              </Typography>
+            </Link>
+            <Button
+              onClick={logout}
+              sx={{
+                color: '#fff',
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&:hover': {
+                  backgroundColor: '#f5ba13',
+                  color: '#1a1a1a',
+                },
+              }}
+            >
+              Logout
+            </Button>
+          </>
+        )}
+        {!user && (
+          <Link to="/login" style={{ textDecoration: 'none' }}>
+            <Typography sx={{ color: '#fff', textTransform: 'none', fontWeight: 'bold', '&:hover': { textDecoration: 'underline' } }}>
+              Login
+            </Typography>
+          </Link>
+        )}
+      </Box>
+    </Toolbar>
+  </Container>
+</AppBar>
+
 
           <Container>
             <Routes>
@@ -99,8 +140,9 @@ function App() {
               <Route path={"/recipe/:id"} element={<RecipeDetails />} />
               <Route path={"/bookmarks"} element={<Bookmarks />} />
               <Route path={"/fridge"} element={<Fridge />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              <Route path="/resetpassword" element={<ResetPassword />} />
 
-          
               <Route path={"/add-sustainability-goal"} element={<AddSustainabilityGoal />} /> 
               <Route path={"/edit-sustainability-goal/:id"} element={<EditSustainabilityGoal />} />
               <Route path="/sustainability-goals" element={<SustainabilityGoals />} />
