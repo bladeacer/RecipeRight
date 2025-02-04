@@ -32,36 +32,33 @@ function App() {
   const [isAllowedViewReport, setIsAllowedViewReport] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Ignore this error
-  const getIsAllowed = () => {
-    if (localStorage.getItem("accessToken")) {
-      http.get('/user/auth').then((res) => {
-        setUser(res.data.user);
-      });
-      http.get("/userattributes/attr", "View Report").then((res) => {
-        setIsAllowedViewReport(res.data);
-      });
-      http.get("/userattributes/attr", "Admin").then((res) => {
-        setIsAllowedViewReport(res.data || isAllowedViewReport);
-      });
-    }
-  };
-
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
       http.get('/user/auth').then((res) => {
         setUser(res.data.user);
       });
+      Promise.all([
+        http.get("/userattributes/attr?attribute=admin"),
+        http.get(`/userattributes/attr?attribute=view_report`)
+      ]).then(([adminRes, viewReportRes]) => {
+        if (adminRes.data == true) {
+          setIsAllowedViewReport(true)
+        }
+        else {
+          setIsAllowedViewReport(viewReportRes.data)
+        }
+        console.log(viewReportRes.data);
+        console.log(adminRes.data);
+      });
     }
-
     setLoading(false);
-  }, [getIsAllowed]);
+  }, []);
 
 
   const logout = () => {
     localStorage.clear();
     window.location = "/";
-  };
+  }
 
   return (
 
@@ -220,10 +217,11 @@ function App() {
                 } />
                 <Route path={"/report"} element={
                   <>
-                    {user && (<Report />)}
-                    {!user && (<Error />)}
+                    {user && isAllowedViewReport && (<Report />)}
+                    {(!user || !isAllowedViewReport) && (<Error />)}
                   </>
                 } />
+
 
                 <Route path={"/"} element={<Home />} />
                 <Route path={"/register"} element={

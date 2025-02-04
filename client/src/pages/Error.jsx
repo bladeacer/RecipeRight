@@ -26,6 +26,7 @@ export default function Error() {
             <div>
                 <h3>Unexpected Error</h3>
                 <p>You may not have permission to view this page.</p>
+                <p>Click <a href="/">here to </a> go back to home</p>
             </div>
     );
 }

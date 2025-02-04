@@ -14,7 +14,7 @@ export default function Report() {
     const [rtList, setRtlist] = useState([]);
     const [attributes, setAttributes] = useState([]);
     const [userAttrs, setUserAttrs] = useState([]);
-    const [isAllowed, setIsAllowed] = useState(false);
+    const [isAllowedViewReport, setIsAllowedViewReport] = useState(false);
     const date = new Date();
     const getRes = () => {
         http.get("/resource").then((res) => {
@@ -170,37 +170,43 @@ export default function Report() {
         );
     }
 
-    const getIsAllowed = () => {
-        http.get("/userattributes/attr", "View Report").then((res) => {
-            setIsAllowed(res.data);
 
-        })
-        http.get("/userattributes/attr", "Admin").then((res) => {
-            setIsAllowed(res.data || isAllowed);
-        })
-    }
     useEffect(() => {
+        Promise.all([
+            http.get("/userattributes/attr?attribute=admin"),
+            http.get(`/userattributes/attr?attribute=view_report`)
+        ]).then(([adminRes, viewReportRes]) => {
+            if (adminRes.data == true) {
+                setIsAllowedViewReport(true)
+            }
+            else {
+                setIsAllowedViewReport(viewReportRes.data)
+            }
+            console.log(viewReportRes.data);
+            console.log(adminRes.data);
+        });
         getRes();
         getRTs();
         getAttributes();
         getUserAttrs();
         setLoading(false);
-    }, [getIsAllowed]);
+    }, []);
 
     return (
         <>
             {loading && (
                 <span aria-busy="true"> Loading...  </span>
             )}
-            {!loading && !isAllowed && (
-                <Error />
-            )}
-            {!loading && isAllowed && (
+
+            {(!loading && isAllowedViewReport) && (
                 <PDFViewer style={{ width: '106%', height: '82.5vh', marginLeft: '-3%' }}>
                     <MyDocument />
                 </PDFViewer>
             )}
-            {/* <ToastContainer /> */}
+            {!loading && !isAllowedViewReport && (
+                <Error />
+            )}
+            <ToastContainer />
         </>
     )
 }
