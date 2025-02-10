@@ -22,12 +22,26 @@ function TwoFactorAuth() {
     }
 
     useEffect(() => {
-        // Start a countdown timer for the resend button
+        // Check if timer exists in localStorage (for refresh persistence)
+        const storedExpiry = localStorage.getItem("resendTimerExpiry");
+        if (storedExpiry) {
+            const remainingTime = Math.max(0, Math.floor((storedExpiry - Date.now()) / 1000));
+            setResendTimer(remainingTime);
+        }
+
+        // Start countdown timer
         const timer = setInterval(() => {
-            setResendTimer((prev) => (prev > 0 ? prev - 1 : 0));
+            setResendTimer((prev) => {
+                if (prev > 0) {
+                    return prev - 1;
+                } else {
+                    clearInterval(timer);
+                    return 0;
+                }
+            });
         }, 1000);
 
-        return () => clearInterval(timer); // Cleanup timer on unmount
+        return () => clearInterval(timer);
     }, []);
 
     const handleSubmit = async (event) => {
@@ -60,13 +74,17 @@ function TwoFactorAuth() {
     };
 
     const handleResend = async () => {
+        if (resendTimer > 0) return; // Prevent multiple clicks
         setResending(true);
         setError("");
 
         try {
             await http.post("/user/resend-2fa", { email });
             alert("A new OTP has been sent to your email.");
-            setResendTimer(60); // Reset the timer
+
+            // Reset timer and store expiry in localStorage
+            localStorage.setItem("resendTimerExpiry", Date.now() + 60000);
+            setResendTimer(60);
         } catch (err) {
             console.error("Error resending OTP:", err.response?.data || err);
             setError("Failed to resend OTP. Please try again.");

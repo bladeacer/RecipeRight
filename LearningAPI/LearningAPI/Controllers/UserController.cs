@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Net.Http; // Added for HttpClient
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -520,6 +522,79 @@ namespace LearningAPI.Controllers
             string accessToken = CreateToken(user);
             return Ok(new { accessToken });
         }
+        [HttpPost("resend-2fa")]
+        public async Task<IActionResult> ResendTwoFactor([FromBody] Models.TwoFactorRequest request)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request.Email))
+                {
+                    return BadRequest(new { message = "Email is required." });
+                }
+
+                // Find the user by email
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower());
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+
+                // Generate a new 6-digit OTP
+                var newOtp = new Random().Next(100000, 999999).ToString();
+
+                // Save the new OTP with expiration time
+                user.TwoFactorCode = newOtp;
+                user.TwoFactorExpiry = DateTime.UtcNow.AddMinutes(5); // OTP valid for 5 minutes
+                await context.SaveChangesAsync();
+
+                // Send OTP via email
+                var emailSent = await SendOtpEmailAsync(user.Email, newOtp);
+                if (!emailSent)
+                {
+                    return StatusCode(500, new { message = "Failed to send OTP email." });
+                }
+
+                return Ok(new { message = "OTP sent successfully." });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error resending OTP.");
+                return StatusCode(500, new { message = "An error occurred while resending the OTP." });
+            }
+        }
+
+        // Helper method to send OTP email
+        private async Task<bool> SendOtpEmailAsync(string email, string otp)
+        {
+            try
+            {
+                var smtpClient = new SmtpClient("smtp.your-email-provider.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("your-email@example.com", "your-email-password"),
+                    EnableSsl = true,
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("your-email@example.com"),
+                    Subject = "Your Two-Factor Authentication Code",
+                    Body = $"Your OTP code is: {otp}",
+                    IsBodyHtml = false,
+                };
+
+                mailMessage.To.Add(email);
+
+                await smtpClient.SendMailAsync(mailMessage);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error sending OTP email.");
+                return false;
+            }
+        }
+
 
 
     }
