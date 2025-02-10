@@ -41,10 +41,7 @@ namespace LearningAPI.Controllers
                 }
 
                 var content = await response.Content.ReadAsStringAsync();
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                };
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 var recipes = JsonSerializer.Deserialize<List<RecipeResponse>>(content, options);
 
                 return Ok(recipes);
@@ -54,6 +51,7 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, $"Request failed: {ex.Message}");
             }
         }
+
         [HttpGet("details/{id}")]
         public async Task<IActionResult> GetRecipeDetails(int id)
         {
@@ -75,6 +73,42 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, $"Request failed: {ex.Message}");
             }
         }
+
+
+        // Have yet to add this in front end
+
+        [HttpGet("random")]
+        public async Task<IActionResult> GetRandomRecipes([FromQuery] int number = 10, [FromQuery] string includeTags = "", [FromQuery] string excludeTags = "")
+        {
+            var url = $"{SpoonacularBaseUrl}/random?number={number}&apiKey={SpoonacularApiKey}";
+
+            if (!string.IsNullOrEmpty(includeTags))
+            {
+                url += $"&include-tags={includeTags}";
+            }
+
+            if (!string.IsNullOrEmpty(excludeTags))
+            {
+                url += $"&exclude-tags={excludeTags}";
+            }
+
+            try
+            {
+                var response = await _httpClient.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return StatusCode((int)response.StatusCode, "Error fetching random recipes from Spoonacular API.");
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                return Ok(content);
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Request failed: {ex.Message}");
+            }
+        }
+
 
     }
 }

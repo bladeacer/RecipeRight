@@ -29,7 +29,8 @@ import FoodWasteLogs from './pages/FoodWasteLogs';
 import EditSustainabilityBadge from './pages/EditSustainabilityBadge';
 import AddSustainabilityBadge from './pages/AddSustainabilityBadge';
 import ForgotPassword from "./pages/ForgotPassword"; 
-import ResetPassword from "./pages/ResetPassword"; // Import the new page
+import ResetPassword from "./pages/ResetPassword"; 
+import Chatbot from './pages/Chatbot';
 
 
 
@@ -150,6 +151,7 @@ function App() {
               <Route path="/add-sustainability-badge" element={<AddSustainabilityBadge />} />
               <Route path="/edit-sustainability-badge/:id" element={<EditSustainabilityBadge />} />
               <Route path="/food-waste-logs" element={<FoodWasteLogs />} />
+              <Route path="/chatbot" element={<Chatbot />} />
               
             </Routes>
           </Container>
