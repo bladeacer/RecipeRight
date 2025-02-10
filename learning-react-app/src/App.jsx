@@ -31,6 +31,7 @@ import AddSustainabilityBadge from './pages/AddSustainabilityBadge';
 import ForgotPassword from "./pages/ForgotPassword"; 
 import ResetPassword from "./pages/ResetPassword"; 
 import Chatbot from './pages/Chatbot';
+import TwoFactorAuth from './pages/TwoFactorAuth';
 
 
 
@@ -86,7 +87,6 @@ function App() {
         )}
       </Box>
 
-      {/* Right side - Profile and Logout */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
         {user && (
           <>
@@ -143,7 +143,7 @@ function App() {
               <Route path={"/fridge"} element={<Fridge />} />
               <Route path="/forgotpassword" element={<ForgotPassword />} />
               <Route path="/resetpassword" element={<ResetPassword />} />
-
+              <Route path="/verify-2fa" element={<TwoFactorAuth />} />
               <Route path={"/add-sustainability-goal"} element={<AddSustainabilityGoal />} /> 
               <Route path={"/edit-sustainability-goal/:id"} element={<EditSustainabilityGoal />} />
               <Route path="/sustainability-goals" element={<SustainabilityGoals />} />

@@ -1,4 +1,5 @@
-﻿namespace LearningAPI.Models
+﻿
+namespace LearningAPI.Models
 {
     public class UserDTO
     {
@@ -10,7 +11,9 @@
         public string Gender { get; set; } = string.Empty;
         public string? Image { get; set; }
 
-        public string Role { get; set; } = string.Empty; 
+        public string Role { get; set; } = string.Empty;
 
+        public bool IsTwoFactorEnabled { get; set; }
+       
     }
 }

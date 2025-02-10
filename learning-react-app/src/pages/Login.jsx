@@ -11,7 +11,7 @@ function Login() {
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
     const [captchaToken, setCaptchaToken] = useState(null);
-    const [loading, setLoading] = useState(false); // 🔹 State for loading animation
+    const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -42,20 +42,23 @@ function Login() {
             data.password = data.password.trim();
             data.recaptchaToken = captchaToken;
 
-            setLoading(true); // 🔹 Show loading spinner
+            setLoading(true);
 
             http.post("/user/login", data)
                 .then((res) => {
-                    const { user, accessToken } = res.data;
+                    if (res.data.requires2FA) {
+                        navigate(`/verify-2fa?email=${encodeURIComponent(data.email)}`);
+                    } else {
+                        // If 2FA is not enabled, log in normally
+                        const { user, accessToken } = res.data;
+                        localStorage.setItem("accessToken", accessToken);
+                        setUser(user);
 
-                    // Store token and user in context/local storage
-                    localStorage.setItem("accessToken", accessToken);
-                    setUser(user);
-
-                    setTimeout(() => {
-                        setLoading(false); // Hide spinner after delay
-                        navigate(user.role === "Admin" ? "/admin/dashboard" : "/tutorials"); // Redirect based on role
-                    }, 2000); // 🔹 Simulated delay for smooth transition
+                        setTimeout(() => {
+                            setLoading(false);
+                            navigate(user.role === "Admin" ? "/admin/dashboard" : "/pantry");
+                        }, 2000);
+                    }
                 })
                 .catch(() => {
                     setLoading(false);
@@ -76,8 +79,8 @@ function Login() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                transition: "opacity 0.5s ease-in-out", // 🔹 Smooth fade transition
-                opacity: loading ? 0.5 : 1, // Reduce opacity during loading
+                transition: "opacity 0.5s ease-in-out",
+                opacity: loading ? 0.5 : 1,
             }}
         >
             <Box
@@ -95,12 +98,10 @@ function Login() {
                 </Typography>
 
                 {loading ? (
-                    // 🔹 Show spinner while loading
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 100 }}>
                         <CircularProgress sx={{ color: "#4169E1" }} />
                     </Box>
                 ) : (
-                    // 🔹 Show login form when not loading
                     <Box component="form" onSubmit={formik.handleSubmit}>
                         <TextField
                             fullWidth
@@ -138,7 +139,6 @@ function Login() {
                             </Typography>
                         </Box>
 
-                        {/* ReCAPTCHA widget */}
                         <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
                             <ReCAPTCHA
                                 sitekey="6Ld9XcsqAAAAAHX1FrqvObDxjGc9_ooQMi2gkebU"
@@ -158,12 +158,12 @@ function Login() {
                                     bgcolor: "#2950A8",
                                 },
                             }}
-                            disabled={loading} // 🔹 Disable button while loading
+                            disabled={loading}
                         >
                             Login Now
                         </Button>
 
-                        <Typography variant="body2" sx={{ mt: 2}} >
+                        <Typography variant="body2" sx={{ mt: 2 }}>
                             Don't have an account?{" "}
                             <Typography
                                 component="span"

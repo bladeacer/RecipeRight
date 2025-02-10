@@ -136,6 +136,22 @@ namespace LearningAPI.Controllers
                     return BadRequest(new { message });
                 }
 
+                // --- Check if 2FA is enabled ---
+                if (foundUser.IsTwoFactorEnabled)
+                {
+                    var otpCode = new Random().Next(100000, 999999).ToString(); // Generate 6-digit OTP
+                    foundUser.TwoFactorCode = otpCode;
+                    foundUser.TwoFactorExpiry = DateTime.UtcNow.AddMinutes(10); // OTP valid for 10 mins
+                    await context.SaveChangesAsync();
+
+                    // Send OTP to user via email
+                    var emailService = HttpContext.RequestServices.GetRequiredService<EmailService>();
+                    await emailService.SendEmailAsync(foundUser.Email, "Your 2FA Code", $"Your 2FA code is: {otpCode}");
+
+                    return Ok(new { requires2FA = true, email = foundUser.Email });
+                }
+                // ---------------------------------
+
                 UserDTO userDTO = mapper.Map<UserDTO>(foundUser);
                 string accessToken = CreateToken(foundUser);
                 LoginResponse response = new() { User = userDTO, AccessToken = accessToken };
@@ -147,6 +163,7 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, new { message = "An error occurred while logging in." });
             }
         }
+
 
 
         [HttpGet("auth"), Authorize]
@@ -179,7 +196,8 @@ namespace LearningAPI.Controllers
                         Name = user.Name,
                         Email = user.Email,
                         Gender = user.Gender,
-                        Image = imageUrl
+                        Image = imageUrl,
+                        IsTwoFactorEnabled = user.IsTwoFactorEnabled // Include 2FA state
                     };
 
                     AuthResponse response = new() { User = userDTO };
@@ -196,6 +214,7 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, new { message = "An error occurred while authenticating the user." });
             }
         }
+
 
         private string CreateToken(User user)
         {
@@ -465,6 +484,42 @@ namespace LearningAPI.Controllers
             }
         }
 
+        [HttpPost("enable-2fa")]
+        [Authorize]
+        public async Task<IActionResult> EnableTwoFactor([FromBody] bool enable)
+        {
+            var userId = Convert.ToInt32(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var user = await context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+
+            user.IsTwoFactorEnabled = enable;
+            await context.SaveChangesAsync();
+
+            return Ok(new { message = enable ? "2FA enabled." : "2FA disabled." });
+        }
+        [HttpPost("verify-2fa")]
+        public async Task<IActionResult> VerifyTwoFactor([FromBody] Models.TwoFactorRequest request)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+
+            if (user == null || user.TwoFactorCode != request.Code || user.TwoFactorExpiry < DateTime.UtcNow)
+            {
+                return BadRequest(new { message = "Invalid or expired OTP." });
+            }
+
+            // Clear OTP after successful verification
+            user.TwoFactorCode = null;
+            user.TwoFactorExpiry = null;
+            await context.SaveChangesAsync();
+
+            // Generate JWT token and return
+            string accessToken = CreateToken(user);
+            return Ok(new { accessToken });
+        }
 
 
     }

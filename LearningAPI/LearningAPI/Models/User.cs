@@ -33,6 +33,9 @@ namespace LearningAPI.Models
 
         public string? ResetToken { get; set; }
         public DateTime? TokenExpiration { get; set; }
+        public bool IsTwoFactorEnabled { get; set; } = false; 
+        public string? TwoFactorCode { get; set; }            
+        public DateTime? TwoFactorExpiry { get; set; }        
 
         [JsonIgnore]
         public List<Tutorial>? Tutorials { get; set; }
