@@ -4,6 +4,7 @@ using LearningAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -40,35 +41,25 @@ namespace LearningAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
+                return BadRequest(new { message = "Validation Failed", errors });
             }
-
-            // --- reCAPTCHA validation ---
-            if (string.IsNullOrEmpty(request.RecaptchaToken))
-            {
-                return BadRequest(new { message = "Recaptcha token is missing." });
-            }
-            if (!await ValidateRecaptchaAsync(request.RecaptchaToken))
-            {
-                return BadRequest(new { message = "Recaptcha validation failed." });
-            }
-            // -----------------------------
 
             try
             {
-                // Trim string values
+                // Trim and process user inputs
                 request.Name = request.Name.Trim();
                 request.Email = request.Email.Trim().ToLower();
                 request.Password = request.Password.Trim();
 
-                // Check email
+                // Check if the email already exists
                 var foundUser = await context.Users.Where(x => x.Email == request.Email).FirstOrDefaultAsync();
                 if (foundUser != null)
                 {
                     return BadRequest(new { message = "Email already exists." });
                 }
 
-                // Create user object
+                // Hash password and create user object
                 var now = DateTime.Now;
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
                 var user = new User()
@@ -84,28 +75,29 @@ namespace LearningAPI.Controllers
                 // Handle image upload
                 if (request.Image != null)
                 {
-                    // Generate a unique file name
                     var uniqueFileName = $"{Guid.NewGuid()}_{request.Image.FileName}";
                     var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(imagePath)); // Ensure directory exists
+                    Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
                     using (var stream = new FileStream(imagePath, FileMode.Create))
                     {
                         await request.Image.CopyToAsync(stream);
                     }
-                    user.Image = uniqueFileName; // Store the unique file name in the database
+                    user.Image = uniqueFileName;
                 }
 
-                // Add user
+                // Save user to the database
                 await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
-                return Ok();
+
+                return Ok(new { message = "User registered successfully!" });
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error when user register");
+                logger.LogError(ex, "Error when registering user");
                 return StatusCode(500, new { message = "An error occurred while registering the user." });
             }
         }
+
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
@@ -411,28 +403,31 @@ namespace LearningAPI.Controllers
                     return BadRequest(new { message = "Email not found." });
                 }
 
-                // Generate a secure reset token
+                // Generate reset token and store it
                 var resetToken = Guid.NewGuid().ToString();
-                var tokenExpiration = DateTime.UtcNow.AddMinutes(15); // Token valid for 15 minutes
-
-                // Save the token and expiration in the database
                 user.ResetToken = resetToken;
-                user.TokenExpiration = tokenExpiration;
-                context.Users.Update(user);
+                user.TokenExpiration = DateTime.UtcNow.AddMinutes(15); // Token valid for 15 mins
                 await context.SaveChangesAsync();
 
-                // Generate a reset link (For now, logging it in the console)
-                string resetLink = $"http://localhost:3000/resetpassword?token={resetToken}";
-                logger.LogInformation($"Password reset link for {user.Email}: {resetLink}");
+                // Encode the email inside the link (so frontend doesn't need the token)
+                string encodedEmail = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(user.Email));
+                string resetLink = $"http://localhost:3000/resetpassword?email={encodedEmail}";
 
-                return Ok(new { message = "A password reset link has been generated and logged." });
+                // Send email
+                var emailService = HttpContext.RequestServices.GetRequiredService<EmailService>();
+                await emailService.SendEmailAsync(user.Email, "Reset Your Password",
+                    $"<p>Click <a href='{resetLink}'>here</a> to reset your password.</p>");
+
+                return Ok(new { message = "A password reset link has been sent to your email." });
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error when processing forgot password request");
+                logger.LogError(ex, "Error processing forgot password request");
                 return StatusCode(500, new { message = "An error occurred while processing the request." });
             }
         }
+
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
         {
@@ -443,38 +438,33 @@ namespace LearningAPI.Controllers
 
             try
             {
-                // Find user by reset token
-                var user = await context.Users.FirstOrDefaultAsync(u => u.ResetToken == request.Token);
-                if (user == null)
+                // Decode email from request
+                string decodedEmail = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Email));
+
+                // Find user by email
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Email == decodedEmail);
+                if (user == null || user.ResetToken == null || user.TokenExpiration < DateTime.UtcNow)
                 {
-                    return BadRequest(new { message = "Invalid or expired token." });
+                    return BadRequest(new { message = "Invalid or expired reset request." });
                 }
 
-                // Check if the token has expired
-                if (user.TokenExpiration == null || user.TokenExpiration < DateTime.UtcNow)
-                {
-                    return BadRequest(new { message = "Token has expired. Please request a new password reset." });
-                }
-
-                // Hash and update the new password
+                // Update password
                 user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-
-                // Clear the reset token and expiration
                 user.ResetToken = null;
                 user.TokenExpiration = null;
 
                 // Save changes
-                context.Users.Update(user);
                 await context.SaveChangesAsync();
 
                 return Ok(new { message = "Your password has been reset successfully. You can now log in." });
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error when resetting password");
+                logger.LogError(ex, "Error resetting password");
                 return StatusCode(500, new { message = "An error occurred while resetting the password." });
             }
         }
+
 
 
     }

@@ -9,21 +9,21 @@ import { CheckCircle } from "@mui/icons-material"; // ✔️ Success icon
 function ResetPassword() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const [token, setToken] = useState(null);
-    const [loading, setLoading] = useState(false); // 🔹 State for loading
-    const [success, setSuccess] = useState(false); // 🔹 State for success animation
+    const [email, setEmail] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
 
-    // Extract token from the URL
+    // Extract encoded email from the URL
     useEffect(() => {
-        const resetToken = searchParams.get("token");
-        if (resetToken) {
-            setToken(resetToken);
+        const encodedEmail = searchParams.get("email");
+        if (encodedEmail) {
+            setEmail(encodedEmail);
         } else {
-            navigate("/forgotpassword"); // Redirect if no token
+            navigate("/forgotpassword");
         }
     }, [searchParams, navigate]);
 
-    // 🔹 Password Validation Schema
+    // Password validation
     const validationSchema = yup.object({
         password: yup
             .string()
@@ -37,31 +37,25 @@ function ResetPassword() {
             .required("Confirm Password is required"),
     });
 
-    // 🔹 Form Handling
     const formik = useFormik({
         initialValues: { password: "", confirmPassword: "" },
         validationSchema,
         onSubmit: async (values) => {
-            setLoading(true); // Show spinner
+            setLoading(true);
 
-            setTimeout(async () => {
-                try {
-                    await http.post("/user/reset-password", {
-                        token,
-                        newPassword: values.password,
-                    });
+            try {
+                await http.post("/user/reset-password", {
+                    email, // Backend fetches token
+                    newPassword: values.password,
+                });
 
-                    setTimeout(() => {
-                        setLoading(false);
-                        setSuccess(true); // Show ✔️ after processing
-                    }, 2000); // Keep loading for 2 more seconds before success
-
-                    setTimeout(() => navigate("/login"), 4000); // Hold checkmark for 2 seconds before redirecting
-                } catch (err) {
-                    setLoading(false);
-                    setSuccess(false);
-                }
-            }, 2000); // Initial fake delay (2 seconds)
+                setLoading(false);
+                setSuccess(true);
+                setTimeout(() => navigate("/login"), 3000);
+            } catch (err) {
+                setLoading(false);
+                alert("Error resetting password.");
+            }
         },
     });
 
@@ -72,17 +66,14 @@ function ResetPassword() {
             </Typography>
 
             {loading ? (
-                // 🔹 Show spinner for at least 4 seconds before checkmark
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 100 }}>
                     <CircularProgress />
                 </Box>
             ) : success ? (
-                // ✅ Show green checkmark after success
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 100 }}>
                     <CheckCircle sx={{ fontSize: 60, color: "green" }} />
                 </Box>
             ) : (
-                // 🔹 Show form when not loading or successful
                 <form onSubmit={formik.handleSubmit}>
                     <TextField
                         fullWidth
@@ -108,13 +99,7 @@ function ResetPassword() {
                         error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
                         helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                     />
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        type="submit"
-                        sx={{ mt: 2, bgcolor: "#4169E1", py: 1.4, "&:hover": { bgcolor: "#2950A8" } }}
-                        disabled={loading || success} // Disable button while loading or after success
-                    >
+                    <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
                         Change Password
                     </Button>
                 </form>
