@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Typography, Grid2 as Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
-import { AccessTime, Search, Clear } from '@mui/icons-material';
+import { Box, Typography, Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
+import { AccessTime, Search, Clear, Edit, Add } from '@mui/icons-material';
 import http from '../http';
 import dayjs from 'dayjs';
 import UserContext from '../contexts/UserContext';
@@ -12,111 +12,80 @@ export default function FoodWasteLogs() {
     const [search, setSearch] = useState("");
     const { user } = useContext(UserContext);
 
-    const onSearchChange = (e) => {
-        setSearch(e.target.value);
-    };
+    const onSearchChange = (e) => setSearch(e.target.value);
 
-    const getWasteLogs = () => {
+    const getWasteEntries = () => {
         http.get("/foodWasteEntry").then((res) => {
+            console.log(res.data);  // Add this line
             setWasteList(res.data);
-            console.log(res.data);
         });
     };
 
-    const searchWasteLogs = () => {
-        http.get(`/foodWasteEntry?search=${search}`).then((res) => {
-            setWasteList(res.data);
-        });
+    const searchWasteEntries = () => {
+        http.get(`/foodWasteEntry?search=${search}`).then((res) => setWasteList(res.data));
     };
 
     useEffect(() => {
-        getWasteLogs();
+        getWasteEntries();
     }, []);
 
     const onSearchKeyDown = (e) => {
-        if (e.key === "Enter") {
-            searchWasteLogs();
-        }
+        if (e.key === "Enter") searchWasteEntries();
     };
 
-    const onClickSearch = () => {
-        searchWasteLogs();
-    };
-
+    const onClickSearch = () => searchWasteEntries();
     const onClickClear = () => {
         setSearch('');
-        getWasteLogs();
+        getWasteEntries();
     };
 
     return (
         <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, pt: 1 }}>
-                <Typography variant="h5">
-                    Food Waste Logs
-                </Typography>
+                <Typography variant="h5">Food Waste Logs</Typography>
 
-                <Box sx={{ display: 'flex', gap: 2, paddingTop: '4px' }}>
-                    <Link to="/sustainability-goals">
-                        <Button variant="contained" sx={{ backgroundColor: "white", color: "black", border: "1px solid black" }}>
-                            Sustainability Goals
-                        </Button>
-                    </Link>
-                    <Link to="/sustainability-badges">
-                        <Button variant="contained" sx={{ backgroundColor: "white", color: "black", border: "1px solid black" }}>
-                            Sustainability Badges
-                        </Button>
-                    </Link>
-                    <Link to="/food-waste-logs">
-                        <Button variant="contained" sx={{ backgroundColor: "white", color: "black", border: "1px solid black" }}>
-                            Food Waste Log
-                        </Button>
-                    </Link>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Link to="/sustainability-goals"><Button variant="outlined">Sustainability Goals</Button></Link>
+                    
+                    <Link to="/food-waste-logs"><Button variant="outlined">Food Waste Log</Button></Link>
                 </Box>
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search"
-                    onChange={onSearchChange}
-                    onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary"
-                    onClick={onClickSearch}>
-                    <Search />
-                </IconButton>
-                <IconButton color="primary"
-                    onClick={onClickClear}>
-                    <Clear />
-                </IconButton>
+                <Input value={search} placeholder="Search" onChange={onSearchChange} onKeyDown={onSearchKeyDown} />
+                <IconButton color="primary" onClick={onClickSearch}><Search /></IconButton>
+                <IconButton color="primary" onClick={onClickClear}><Clear /></IconButton>
                 <Box sx={{ flexGrow: 1 }} />
+                {user && <Link to="/add-food-waste-entry"><Button variant='contained' startIcon={<Add />}>Add Entry</Button></Link>}
             </Box>
 
             <Grid container spacing={2}>
-                {
-                    wasteList.map((waste, i) => {
-                        return (
-                            <Grid size={{ xs: 12, md: 6, lg: 4 }} key={waste.wasteId}>
-                                <Card>
-                                    <CardContent>
-                                        <Box sx={{ display: 'flex', mb: 1 }}>
-                                            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                                                {waste.wasteReason}
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-                                            color="text.secondary">
-                                            <AccessTime sx={{ mr: 1 }} />
-                                            <Typography>
-                                                {dayjs(waste.loggedOn).format(global.datetimeFormat)}
-                                            </Typography>
-                                        </Box>
-                                        <Typography sx={{ whiteSpace: 'pre-wrap' }}>
-                                            Waste Amount: {waste.wasteAmount}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        );
-                    })
-                }
+                {wasteList.map((entry) => (
+                    <Grid item xs={12} md={6} lg={4} key={entry.foodWasteEntryId}>
+                        <Card sx={{ border: '2px solid black', p: 2 }}>
+                            <CardContent>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Typography variant="h6">Waste Reason: {entry.wasteReason}</Typography>
+                                    {user && (
+                                        <Link to={`/edit-food-waste-entry/${entry.wasteId}`}>
+                                            <IconButton color="primary"><Edit /></IconButton>
+                                        </Link>
+                                    )}
+                                </Box>
+
+                                <Typography variant="body2" color="text.secondary">
+                                    Logged On: {dayjs(entry.loggedOn).format(global.datetimeFormat)}
+                                </Typography>
+
+                                <Typography variant="body1" sx={{ mt: 1 }}>
+                                    Waste Amount: {entry.wasteAmount} kg
+                                </Typography>
+
+                                
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
         </Box>
     );

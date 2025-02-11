@@ -16,11 +16,10 @@ export default function SustainabilityGoals() {
 
     const getGoals = () => {
         http.get("/sustainabilityGoal").then((res) => {
-            console.log(res.data);  // Add this line
+            console.log(res.data);
             setGoalList(res.data);
         });
     };
-    
 
     const searchGoals = () => {
         http.get(`/sustainabilityGoal?search=${search}`).then((res) => setGoalList(res.data));
@@ -47,7 +46,7 @@ export default function SustainabilityGoals() {
 
                 <Box sx={{ display: 'flex', gap: 2 }}>
                     <Link to="/sustainability-goals"><Button variant="outlined">Sustainability Goals</Button></Link>
-                    <Link to="/sustainability-badges"><Button variant="outlined">Sustainability Badges</Button></Link>
+                    
                     <Link to="/food-waste-logs"><Button variant="outlined">Food Waste Log</Button></Link>
                 </Box>
             </Box>
@@ -64,10 +63,9 @@ export default function SustainabilityGoals() {
                 {goalList.map((goal) => {
                     const progress = goal.targetValue > 0 ? (goal.currentValue / goal.targetValue) * 100 : 0;
 
-
                     return (
-                        <Grid item xs={12} md={6} lg={4} key={goal.sustainabilityGoalId}>
-                            <Card sx={{ border: '2px solid black', p: 2 }}>
+                        <Grid item xs={12} key={goal.sustainabilityGoalId}>
+                            <Card sx={{ border: '2px solid black', p: 2, width: '100%' }}>
                                 <CardContent>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Typography variant="h6">{goal.goalName}</Typography>

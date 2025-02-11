@@ -24,6 +24,25 @@ public class FoodWasteEntryController(MyDbContext context, IMapper mapper, ILogg
         }
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetEntry(int id)
+    {
+        try
+        {
+            var entry = await context.FoodWasteEntries.Include(f => f.User).FirstOrDefaultAsync(f => f.WasteId == id);
+            if (entry == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<FoodWasteEntryDTO>(entry));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error retrieving food waste entry by ID");
+            return StatusCode(500);
+        }
+    }
+
     [HttpPost]
     public async Task<IActionResult> AddEntry(FoodWasteEntryRequest request)
     {

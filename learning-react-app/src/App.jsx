@@ -26,6 +26,8 @@ import AddSustainabilityGoal from './pages/AddSustainabilityGoal';
 import SustainabilityGoals from './pages/SustainabilityGoals';
 import SustainabilityBadges from './pages/SustainabilityBadges';
 import FoodWasteLogs from './pages/FoodWasteLogs';
+import EditFoodWasteLogs from './pages/EditFoodWasteLog';
+import AddFoodWasteLogs from './pages/AddFoodWasteLog';
 import EditSustainabilityBadge from './pages/EditSustainabilityBadge';
 import AddSustainabilityBadge from './pages/AddSustainabilityBadge';
 import ForgotPassword from "./pages/ForgotPassword"; 
@@ -151,6 +153,8 @@ function App() {
               <Route path="/add-sustainability-badge" element={<AddSustainabilityBadge />} />
               <Route path="/edit-sustainability-badge/:id" element={<EditSustainabilityBadge />} />
               <Route path="/food-waste-logs" element={<FoodWasteLogs />} />
+              <Route path="/edit-food-waste-entry/:id" element={<EditFoodWasteLogs />} />
+              <Route path="/add-food-waste-entry" element={<AddFoodWasteLogs />} />
               <Route path="/chatbot" element={<Chatbot />} />
               
             </Routes>
