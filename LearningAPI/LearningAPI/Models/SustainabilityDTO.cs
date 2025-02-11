@@ -14,6 +14,9 @@ namespace LearningAPI.Models
         public int UserId { get; set; }
         public UserDTO? User { get; set; }
 
+        public int CurrentValue { get; set; }     
+        public int TargetValue { get; set; }      
+
 
     }
     public class SustainabilityBadgeDTO
