@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, TextField, Button } from '@mui/material';
+import { useState } from 'react';
+import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -9,7 +9,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
     const navigate = useNavigate();
-
+    const [users, setUser] = useState([]);
+    const [attributes, setAttributes] = useState([]);
+    const [isExistsAdmin, setIsExistsAdmin] = useState(false);
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -50,8 +52,43 @@ function Register() {
                 .catch(function (err) {
                     toast.error(`${err.response.data.message}`);
                 });
+            getUsers();
+            getAttributes();
+            // Make the first user admin :)
+            if (users.length == 1 && attributes.length == 0) {
+                http.get("/userattributes/attr?attribute=admin").then((res) => {
+                    setIsExistsAdmin(res.data);
+                });
+                if (!isExistsAdmin) {
+                    var default_attr = {
+                        attributeName: "admin group",
+                        attributeDescription: "users who have admin"
+                    }
+
+                    http.post("/attributes", default_attr);
+                    var default_user_attr = {
+                        userAttributeName: "admin",
+                        userAttributeDescription: "let users have admin",
+                        attributeId: 1,
+                        userId: 1
+                    }
+                    http.post("/userattributes", default_user_attr);
+                }
+            }
         }
-    });
+    })
+
+    const getUsers = () => {
+        http.get("/user").then((res) => {
+            console.log(res.data);
+            setUser(res.data);
+        })
+    }
+    const getAttributes = () => {
+        http.get("/attributes").then((res) => {
+            setAttributes(res.data);
+        });
+    };
 
     return (
         <Box sx={{

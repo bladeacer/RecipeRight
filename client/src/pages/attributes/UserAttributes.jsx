@@ -11,6 +11,7 @@ export default function UserAttributes() {
     const navigate = useNavigate();
     const [userAttrs, setUserAttrs] = useState([]);
     const [search, setSearch] = useState("");
+    const [isAllowedEdit, setIsAllowedEdit] = useState(false);
 
     const onSearchChange = (e) => {
         setSearch(e.target.value);
@@ -31,10 +32,10 @@ export default function UserAttributes() {
     }
 
     useEffect(() => {
-        getUserAttrs();
-        http.get('/userattributes/attr', 'View Report').then((res) => {
-            console.log(res.data);
+        http.get("/userattributes/attr?attribute=admin").then((res) => {
+            setIsAllowedEdit(res.data);
         });
+        getUserAttrs();
     }, [])
 
     const onSearchKeyDown = (e) => {
@@ -95,13 +96,15 @@ export default function UserAttributes() {
                                                 </p>
                                             </li>
                                         </ul>
-                                        <ul>
-                                            <li style={{ marginTop: '-2rem' }}>
-                                                <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/edituserattribute/${attr.userAttributesId}`)}>
-                                                    <Edit />
-                                                </button>
-                                            </li>
-                                        </ul>
+                                        {isAllowedEdit && (
+                                            <ul>
+                                                <li style={{ marginTop: '-2rem' }}>
+                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/edituserattribute/${attr.userAttributesId}`)}>
+                                                        <Edit />
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        )}
                                     </nav>
                                 </header>
                                 <section>

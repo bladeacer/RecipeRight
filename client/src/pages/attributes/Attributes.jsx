@@ -11,7 +11,6 @@ export default function Attributes() {
     const [attributes, setAttributes] = useState([]);
     const [search, setSearch] = useState("");
 
-
     const onSearchChange = (e) => {
         setSearch(e.target.value);
     };

@@ -14,9 +14,9 @@ import Resources from './pages/resources/Resources';
 import EditResource from './pages/resources/EditResource';
 
 import AddAttribute from './pages/attributes/AddAttribute';
-
 import EditAttribute from './pages/attributes/EditAttribute';
 import Attributes from './pages/attributes/Attributes';
+
 import AddUserAttribute from './pages/attributes/AddUserAttribute'
 import EditUserAttribute from './pages/attributes/EditUserAttribute';
 import UserAttributes from './pages/attributes/UserAttributes';
@@ -27,7 +27,7 @@ import Error from './pages/Error';
 import Register from './pages/Register';
 import Login from './pages/Login';
 
-function App() {
+export default function App() {
   const [user, setUser] = useState(null);
   const [isAllowedViewReport, setIsAllowedViewReport] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -222,7 +222,6 @@ function App() {
                   </>
                 } />
 
-
                 <Route path={"/"} element={<Home />} />
                 <Route path={"/register"} element={
                   <>
@@ -236,6 +235,7 @@ function App() {
                     {user && (<Error />)}
                   </>
                 } />
+                <Route path={"/*"} element={ <Error /> } />
               </Routes>
             </Container>
           </main>
@@ -245,4 +245,3 @@ function App() {
     </UserContext.Provider>
   );
 }
-export default App;

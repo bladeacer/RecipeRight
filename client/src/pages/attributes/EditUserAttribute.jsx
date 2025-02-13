@@ -6,12 +6,14 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Error from '../Error';
 export default function EditUserAttribute() {
 
     const { id } = useParams();
     const navigate = useNavigate();
     const [attributes, setAttributes] = useState([]);
     const [users, setUser] = useState([]);
+    const [isAllowedEdit, setIsAllowedEdit] = useState(false);
     const [attr, setAttr] = useState({
         userAttributesId: 0,
         userAttributeName: "",
@@ -38,6 +40,9 @@ export default function EditUserAttribute() {
         http.get(`/userattributes/${id}`).then((res) => {
             setAttr(res.data);
             setLoading(false);
+        });
+        http.get("/userattributes/attr?attribute=admin").then((res) => {
+            setIsAllowedEdit(res.data);
         });
     }, [id, attr]);
     const formik = useFormik({
@@ -94,7 +99,9 @@ export default function EditUserAttribute() {
         }}>
 
             <h5>Edit Attribute</h5>
-            {!loading && !open && (
+            {!loading && !open 
+            && isAllowedEdit 
+            && (
                 <Box component="form" onSubmit={formik.handleSubmit}>
                     <label>
                         User
@@ -162,26 +169,34 @@ export default function EditUserAttribute() {
                     <button onClick={handleOpen} className='pico-background-red-500' style={{ width: '100%' }}>Delete</button>
                 </Box>
             )}
-            {loading && !open && (
+            {loading && !open 
+            && isAllowedEdit
+             && (
                 <h3 aria-busy="true"> Loading ...</h3>
             )}
-            <dialog open={open} onClose={handleClose}>
-                <article>
-                    <header>
-                        <h5> Delete User Attribute</h5>
-                    </header>
-                    <p> Are you sure you want to delete this user attribute?  </p>
-                    <footer>
-                        <button onClick={handleClose}>
-                            Cancel
-                        </button>
-                        <button className='pico-background-red-500' onClick={deleteUserAttr}>
-                            Delete
-                        </button>
-                    </footer>
-                </article>
+            {isAllowedEdit && (
 
-            </dialog>
+                <dialog open={open} onClose={handleClose}>
+                    <article>
+                        <header>
+                            <h5> Delete User Attribute</h5>
+                        </header>
+                        <p> Are you sure you want to delete this user attribute?  </p>
+                        <footer>
+                            <button onClick={handleClose}>
+                                Cancel
+                            </button>
+                            <button className='pico-background-red-500' onClick={deleteUserAttr}>
+                                Delete
+                            </button>
+                        </footer>
+                    </article>
+
+                </dialog>
+            )}
+            {!isAllowedEdit && (
+                <Error />
+            )}
         </Box>
     )
 

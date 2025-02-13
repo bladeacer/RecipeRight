@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Box, Grid2 as Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import http from '../../http';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import Error from '../Error';
 export default function AddUserAttribute() {
     const [attributes, setAttributes] = useState([]);
     const [users, setUser] = useState([]);
+    const [isAllowedEdit, setIsAllowedEdit] = useState(false);
     const navigate = useNavigate();
     const getAttributes = () => {
         http.get("/attributes").then((res) => {
@@ -22,6 +24,9 @@ export default function AddUserAttribute() {
     useEffect(() => {
         getAttributes();
         getUsers();
+        http.get("/userattributes/attr?attribute=admin").then((res) => {
+            setIsAllowedEdit(res.data);
+        });
     }, []);
     const formik = useFormik({
         initialValues: {
@@ -57,7 +62,9 @@ export default function AddUserAttribute() {
 
     return (
         <>
-            {attributes.length > 0 && (
+            {attributes.length > 0 
+            && isAllowedEdit 
+            && (
                 <Box sx={{
                     marginTop: 4,
                     display: 'flex',
@@ -132,11 +139,16 @@ export default function AddUserAttribute() {
                     </Box>
                 </Box>
             )}
-            {attributes.length == 0 && (
+            {attributes.length == 0 
+            && isAllowedEdit 
+            && (
                 <div>
                     <h4 className='pico-color-red-500'>Warning</h4>
                     <p>No attributes have been made. Click <a href="/addattribute">here</a> to add an attribute.</p>
                 </div>
+            )}
+            {!isAllowedEdit && (
+                <Error />
             )}
         </>
     )
