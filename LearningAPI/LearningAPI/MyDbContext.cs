@@ -14,7 +14,6 @@ namespace LearningAPI
             }
         }
 
-        public required DbSet<Tutorial> Tutorials { get; set; }
 
         public required DbSet<User> Users { get; set; }
         public required DbSet<BookmarkFolder> BookmarkFolders { get; set; }

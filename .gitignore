@@ -1,1 +1,4 @@
 *.PNG
+./old_client
+./old_server
+
