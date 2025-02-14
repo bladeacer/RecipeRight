@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import http from "../../http"; 
 import DOMPurify from "dompurify"; // For HTML sanitisation
 import "../../themes/RecipeDetails.css";
+import ChatButton from "../../components/ChatButton";
 
 const RecipeDetails = () => {
     const { id } = useParams();
@@ -198,6 +199,7 @@ const RecipeDetails = () => {
                 {cookMessage && <p>{cookMessage}</p>}
                 <button onClick={cookRecipe}>Cook It!</button>
             </div>
+            <ChatButton />
         </div>
     );
 };

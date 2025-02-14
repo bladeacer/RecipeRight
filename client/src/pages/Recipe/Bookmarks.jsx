@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import http from "../../http";
 import "../../themes/Bookmarks.css";
+import ChatButton from "../../components/ChatButton";
 
 
 const Bookmarks = () => {
@@ -161,6 +162,7 @@ const Bookmarks = () => {
             ) : (
                 <p>No bookmarks found.</p>
             )}
+            <ChatButton />
         </div>
     );
 };

@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Grid2 as Grid } from '@mui/material';
+import { Box, Grid2 as Grid } from '@mui/material';
 import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../../http';
 import dayjs from 'dayjs';
 import UserContext from '../../contexts/UserContext';
 import global from '../../global';
+import ChatButton from '../../components/ChatButton';
 
 export default function SustainabilityGoals() {
     const [goalList, setGoalList] = useState([]);
@@ -111,6 +112,7 @@ export default function SustainabilityGoals() {
                     );
                 })}
             </Grid>
+            <ChatButton />
         </Box>
     );
 }

@@ -16,7 +16,6 @@ import Security from './pages/Accounts/Security'; // Import Security component
 import ForgotPassword from "./pages/Accounts/ForgotPassword";
 import ResetPassword from "./pages/Accounts/ResetPassword";
 import TwoFactorAuth from './pages/Accounts/TwoFactorAuth';
-import ProtectedRoute from './pages/Accounts/ProtectedRoute'; // Import ProtectedRoute component
 
 import Pantry from './pages/Recipe/Pantry';
 import RecipeDetails from "./pages/Recipe/RecipeDetails";

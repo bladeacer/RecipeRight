@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import http from "../../http";
 import "../../themes/Fridge.css";
+import ChatButton from "../../components/ChatButton";
 
 const Fridge = () => {
   // State for fridge ingredients
@@ -247,6 +248,7 @@ const Fridge = () => {
           </div>
         ))
       )}
+      <ChatButton />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import http from '../../http';
 import dayjs from 'dayjs';
 import UserContext from '../../contexts/UserContext';
 import global from '../../global';
+import ChatButton from '../../components/ChatButton';
 
 export default function FoodWasteLogs() {
     const [wasteList, setWasteList] = useState([]);
@@ -107,6 +108,7 @@ export default function FoodWasteLogs() {
                     </Grid>
                 ))}
             </Grid>
+            <ChatButton />
         </Box>
     );
 }

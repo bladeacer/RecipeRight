@@ -5,6 +5,7 @@ import { AccessTime, Search, Clear } from '@mui/icons-material';
 import http from '../../http';
 import dayjs from 'dayjs';
 import global from '../../global';
+import ChatButton from '../../components/ChatButton';
 
 export default function SustainabilityBadges() {
     const [badgeList, setBadgeList] = useState([]);
@@ -107,6 +108,7 @@ export default function SustainabilityBadges() {
                     })
                 }
             </Grid>
+            <ChatButton />
         </Box>
     );
 }
