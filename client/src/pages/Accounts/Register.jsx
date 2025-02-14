@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import {
-    Box, Typography, TextField, Button, MenuItem, Checkbox, FormControlLabel, CircularProgress
-} from "@mui/material";
+import { useState } from "react";
+import { Box } from "@mui/material";
 import { CheckCircle } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -157,8 +155,7 @@ function Register() {
             }} >
             <Box
                 sx={{
-                    width: 980,
-                    // width: 475,
+                    width: 920,
                     borderRadius: 4,
                     p: 4,
                     textAlign: "center",
@@ -260,14 +257,14 @@ function Register() {
                                 </div>
 
 
-                                <div style={{ marginLeft: 35, my: 4}}>
+                                <div style={{ marginLeft: 35, my: 10 }}>
                                     {imagePreview && (
                                         <>
                                             <h6>Image Preview </h6>
                                             <img src={imagePreview} alt="Preview" style={{ maxWidth: "100%", mt: 8, mb: 4, borderRadius: 4 }} />
                                         </>
                                     )}
-                                    <button className="secondary" style={{ width: "100%" }}>
+                                    <button className="secondary" style={{ marginTop: 35 }}>
                                         <label>
                                             Upload Image
                                             <input type="file" hidden accept="image/*" onChange={handleImageChange} />
@@ -276,21 +273,16 @@ function Register() {
 
 
 
-                                    <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "center" }}>
+                                    <footer style={{ marginTop: 2, paddingInline: 1.5 }}>
+                                        Already have an account?&nbsp;
+                                        <a href="/login" className="pico-color-indigo-600" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Login Now</a>
+                                    </footer>
+
+                                    <Box sx={{ mt: 4, mb: 4, display: "flex", justifyContent: "left" }}>
                                         <ReCAPTCHA sitekey="6Ld9XcsqAAAAAHX1FrqvObDxjGc9_ooQMi2gkebU" onChange={(value) => setCaptchaToken(value)} />
                                     </Box>
-
                                     <button type="submit">Register Now</button>
-
-                                    <footer style={{ marginTop: 2, paddingInline: 1.5, textAlign: 'center' }}>
-                                        Already have an account?&nbsp;
-                                        <a href="/login" style={{ cursor: 'pointer', textDecoration: 'underline' }}>Login Now</a>
-                                    </footer>
                                 </div>
-
-
-
-
                             </div>
 
                         </Box>

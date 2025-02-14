@@ -197,6 +197,7 @@ export default function EditUserAttribute() {
             {!isAllowedEdit && (
                 <Error />
             )}
+            <ToastContainer />
         </Box>
     )
 

@@ -66,54 +66,42 @@ function EditProfile() {
         >
             <IconButton
                 onClick={() => navigate(-1)}
-                sx={{ alignSelf: 'flex-start', mb: 2 }}
-            >
-                <ArrowBack />
+                sx={{ alignSelf: 'flex-start', mb: 2, color: "var(--pico-background-white-500)" }} >
+                <ArrowBack sx={{mt: 0.5}}/> Back 
             </IconButton>
             <Avatar
                 alt={user.name}
                 src={imagePreview || '/default-avatar.png'}
                 sx={{ width: 100, height: 100 }}
             />
-            <Button
-                variant="contained"
-                component="label"
-                sx={{ mt: 2 }}
-            >
-                Upload Image
+            <button className="secondary" style={{ mt: 2 }}>
+                <label>
+                    Upload Image
+                    <input type="file" hidden accept="image/*" onChange={handleImageChange} />
+                </label>
+            </button>
+
+            <label> Enter your name
                 <input
-                    type="file"
-                    hidden
-                    onChange={handleImageChange}
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={user.name}
+                    onChange={handleInputChange}
+                    autoComplete='off'
                 />
-            </Button>
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                name="name"
-                value={user.name}
-                onChange={handleInputChange}
-            />
-            <TextField
-                margin="normal"
-                fullWidth
-                id="gender"
-                label="Gender"
-                name="gender"
-                value={user.gender}
-                onChange={handleInputChange}
-            />
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-            >
-                Save Changes
-            </Button>
+            </label>
+            <label> Enter your gender
+                <input
+                    type="text"
+                    id="gender"
+                    value={user.gender}
+                    onChange={handleInputChange}
+                    autoComplete='off'
+                />
+            </label>
+
+            <button type="submit">Save changes</button>
         </Box>
     );
 }

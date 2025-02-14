@@ -19,28 +19,25 @@ function ForgotPassword() {
     };
 
     return (
-        <Box sx={{ width: 350, margin: "auto", padding: 4, bgcolor: "white", borderRadius: 3, boxShadow: 3, mt: 5 }}>
-            <Typography variant="h5" fontWeight="bold" mb={2} textAlign="center">
+        <Box sx={{ width: 350, margin: "auto", padding: 4, borderRadius: 3, boxShadow: 3, mt: 5 }}>
+
+            <h5 style={{ mb: 2, textAlign: "center" }}>
                 Forgot Password
-            </Typography>
+            </h5>
             <form onSubmit={handleSubmit}>
-                <TextField
-                    fullWidth
-                    margin="dense"
-                    label="Enter your email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-                <Button
-                    fullWidth
-                    variant="contained"
-                    type="submit"
-                    sx={{ mt: 2, bgcolor: "#4169E1", py: 1.4, "&:hover": { bgcolor: "#2950A8" } }}
-                >
+                <label> Enter your Email
+                    <input
+                        type="email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete='off'
+                        required
+                    />
+                </label>
+                <button type="submit">
                     Reset Password
-                </Button>
+                </button>
             </form>
             <ToastContainer />
         </Box>

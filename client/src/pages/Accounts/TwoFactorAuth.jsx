@@ -100,8 +100,6 @@ function TwoFactorAuth() {
                 top: "64px",
                 left: 0,
                 width: "100%",
-                height: "calc(100vh - 64px)",
-                backgroundColor: "#6495ED",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -112,65 +110,47 @@ function TwoFactorAuth() {
             <Box
                 sx={{
                     width: 350,
-                    bgcolor: "white",
                     borderRadius: 3,
                     p: 4,
                     boxShadow: 3,
                     textAlign: "center",
                 }}
             >
-                <Typography variant="h5" fontWeight="bold" mb={2}>
-                    Two-Factor Authentication
-                </Typography>
-                <Typography variant="body2" sx={{ mb: 3 }}>
-                    Please enter the 6-digit code sent to your email: <strong>{email}</strong>.
-                </Typography>
+                <h5>Two-Factor Authentication</h5>
+                <p>Please enter the 6-digit code sent to your email: <strong>{email}</strong></p>
 
                 {loading ? (
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 100 }}>
-                        <CircularProgress sx={{ color: "#4169E1" }} />
+                        <progress />
                     </Box>
                 ) : (
                     <Box component="form" onSubmit={handleSubmit}>
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            label="Enter OTP"
-                            name="otp"
-                            autoComplete="off"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
-                            error={Boolean(error)}
-                            helperText={error}
-                        />
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            type="submit"
-                            sx={{
-                                mt: 2,
-                                bgcolor: "#4169E1",
-                                py: 1.4,
-                                "&:hover": {
-                                    bgcolor: "#2950A8",
-                                },
-                            }}
-                            disabled={loading || otp.length !== 6}
-                        >
+                        <label>
+                            <input
+                                label="Enter OTP"
+                                name="otp"
+                                autoComplete="off"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                aria-invalid={Boolean(error)}
+                            />
+                            <small>{error}</small>
+                        </label>
+                        <button type="submit" disabled={loading || otp.length !== 6}>
                             Verify
-                        </Button>
+                        </button>
                     </Box>
                 )}
 
                 {/* Resend OTP Button with Countdown */}
                 <Box sx={{ mt: 2, textAlign: "center" }}>
-                    <Button
-                        variant="outlined"
+                    <button
+                        className="outlined"
                         onClick={handleResend}
                         disabled={resendTimer > 0 || resending}
-                        sx={{
+                        style={{
                             "&:disabled": {
-                                color: "gray",
+                                color: "var(--pico-color-gray-300)",
                                 borderColor: "gray",
                             },
                         }}
@@ -178,9 +158,9 @@ function TwoFactorAuth() {
                         {resending
                             ? "Resending..."
                             : resendTimer > 0
-                            ? `Resend OTP in ${resendTimer}s`
-                            : "Resend OTP"}
-                    </Button>
+                                ? `Resend OTP in ${resendTimer}s`
+                                : "Resend OTP"}
+                    </button>
                 </Box>
             </Box>
         </Box>

@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react";
 import {
     Box,
-    Typography,
     Avatar,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
 } from "@mui/material";
 import http from "../../http";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +29,7 @@ function Profile() {
     if (!user) {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
-                <Typography>Loading...</Typography>
+                <h3 aria-busy="true"> Loading...</h3>
             </Box>
         );
     }
@@ -56,155 +49,93 @@ function Profile() {
     };
 
     return (
-        <Box sx={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-            <Box
-                sx={{
-                    width: "100%",
-                    maxWidth: 400,
-                    textAlign: "center",
-                    bgcolor: "white",
-                    borderRadius: 4,
-                    boxShadow: 3,
-                    p: 4,
-                }}
-            >
-                <Avatar
-                    alt={user.name}
-                    src={user.image || "/default-avatar.png"}
-                    sx={{
-                        width: 120,
-                        height: 120,
-                        mx: "auto",
-                        mb: 3,
-                        boxShadow: 3,
-                    }}
-                />
-                <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
-                    {user.name}
-                </Typography>
-                <Typography variant="body1" sx={{ color: "gray", mb: 2 }}>
-                    Email: {user.email}
-                </Typography>
-                <Typography variant="body1" sx={{ color: "gray", mb: 4 }}>
-                    Gender: {user.gender}
-                </Typography>
+        <>
+            {!openConfirm && (
+                <Box sx={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                    <Box
+                        sx={{
+                            width: "100%",
+                            maxWidth: 450,
+                            textAlign: "center",
+                            borderRadius: 4,
+                            boxShadow: 3,
+                            p: 4,
+                        }}
+                    >
+                        <Avatar
+                            alt={user.name}
+                            src={user.image || "/default-avatar.png"}
+                            sx={{
+                                width: 120,
+                                height: 120,
+                                mx: "auto",
+                                mb: 3,
+                                boxShadow: 3,
+                            }}
+                        />
+                        <h5 style={{ mb: 2 }}>{user.name}</h5>
+                        <p style={{ mb: 2 }} className="pico-color-zinc-300">Email: {user.email}</p>
+                        <p style={{ mb: 4 }} className="pico-color-zinc-300">Gender: {user.gender}</p>
 
-                {/* Enable/Disable 2FA Buttons */}
-                {!isTwoFactorEnabled ? (
-                    <Button
-                        variant="contained"
-                        sx={{
-                            bgcolor: "#4caf50",
-                            color: "white",
-                            fontWeight: "bold",
-                            mb: 2,
-                            "&:hover": {
-                                bgcolor: "#388e3c",
-                            },
-                        }}
-                        onClick={() => {
-                            setAction("enable");
-                            setOpenConfirm(true);
-                        }}
-                    >
-                        Enable 2FA
-                    </Button>
-                ) : (
-                    <Button
-                        variant="contained"
-                        sx={{
-                            bgcolor: "#d32f2f",
-                            color: "white",
-                            fontWeight: "bold",
-                            mb: 2,
-                            "&:hover": {
-                                bgcolor: "#b71c1c",
-                            },
-                        }}
-                        onClick={() => {
-                            setAction("disable");
-                            setOpenConfirm(true);
-                        }}
-                    >
-                        Disable 2FA
-                    </Button>
-                )}
+                        {/* Enable/Disable 2FA Buttons */}
+                        {!isTwoFactorEnabled ? (
+                            <button className="outline secondary"
+                                onClick={() => {
+                                    setAction("enable");
+                                    setOpenConfirm(true);
+                                }}
+                            >Enable 2FA
+                            </button>
 
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Button
-                        variant="contained"
-                        sx={{
-                            bgcolor: "#2196F3",
-                            color: "white",
-                            fontWeight: "bold",
-                            "&:hover": {
-                                bgcolor: "#1976D2",
-                            },
-                        }}
-                        onClick={() => navigate("/edit-profile")}
-                    >
-                        Edit Profile
-                    </Button>
+                        ) : (
+                            <button className="outline pico-background-azure-250"
+                                onClick={() => {
+                                    setAction("disable");
+                                    setOpenConfirm(true);
+                                }}>Disable 2FA
+                            </button>
+                        )}
 
-                    {/* Change Security Button */}
-                    <Button
-                        variant="contained"
-                        sx={{
-                            bgcolor: "#FFC107",
-                            color: "white",
-                            fontWeight: "bold",
-                            "&:hover": {
-                                bgcolor: "#FFA000",
-                            },
-                        }}
-                        onClick={() => navigate("/security")}
-                    >
-                        Change Security
-                    </Button>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <button className="pico-background-azure-500"
+                                onClick={() => navigate("/change-password")}>
+                                Change Password
+                            </button>
 
-                    <Button
-                        variant="contained"
-                        sx={{
-                            bgcolor: "#f44336",
-                            color: "white",
-                            fontWeight: "bold",
-                            "&:hover": {
-                                bgcolor: "#d32f2f",
-                            },
-                        }}
-                        onClick={() => navigate("/delete-account")}
-                    >
-                        Delete Account
-                    </Button>
+                            {/* Change Security Button */}
+                            <button className="pico-color-slate-450" onClick={() => navigate("/security")}>
+                                Change Security
+                            </button>
+                            <button className="pico-color-orange-450" onClick={() => navigate("/delete-account")}>
+                                Delete Account
+                            </button>
+
+                        </Box>
+                    </Box>
+
+
                 </Box>
-            </Box>
+            )}
+            {openConfirm && (
+                <dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+                    <article>
+                        <header>
+                            <h5>{action === "enable" ? "Enable 2FA" : "Disable 2FA"}</h5>
+                        </header>
+                        <p>Are you sure you want to {action === "enable" ? "pico-color-green-500" : "pico-color-red-500"} Two-Factor Authentication?</p>
+                        <footer>
+                            <button onClick={() => setOpenConfirm(false)}>Cancel</button>
+                            <button className={action === "enable" ? "pico-background-azure-500" : "pico-background-red-500"} onClick={
+                                handleToggle2FA() && setOpenConfirm(false)
+                            }>
+                                {action === "enable" ? "Enable" : "Disable"}
+                            </button>
+                        </footer>
+                    </article>
+                </dialog>
+            )}
+        </>
 
-            {/* Confirmation Dialog for Enable/Disable 2FA */}
-            <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
-                <DialogTitle>{action === "enable" ? "Enable 2FA" : "Disable 2FA"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to {action === "enable" ? "enable" : "disable"} Two-Factor Authentication?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenConfirm(false)} sx={{ color: "#1976d2" }}>
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            handleToggle2FA();
-                            setOpenConfirm(false);
-                        }}
-                        sx={{
-                            color: action === "enable" ? "#4caf50" : "#d32f2f",
-                        }}
-                    >
-                        {action === "enable" ? "Enable" : "Disable"}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Box>
     );
 }
 

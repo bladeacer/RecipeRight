@@ -58,6 +58,7 @@ import UserAttributes from './pages/Admin/attributes/UserAttributes';
 function App() {
   const [user, setUser] = useState(null);
   const [isAllowedViewReport, setIsAllowedViewReport] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -70,6 +71,7 @@ function App() {
       http.get("/userattributes/attr?attribute=admin"),
       http.get("/userattributes/attr?attribute=view_report")
     ]).then(([adminRes, viewReportRes]) => {
+      setIsAdmin(adminRes.data);
       if (adminRes.data == true) {
         setIsAllowedViewReport(true)
       }
@@ -315,76 +317,76 @@ function App() {
 
             <Route path={"resourcetypes"} element={
               <>
-                {user && (<ResourceTypes />)}
+                {user && isAdmin && (<ResourceTypes />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"addresourcetype"} element={
               <>
-                {user && (<AddResourceType />)}
+                {user && isAdmin && (<AddResourceType />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"/editresourcetype/:id"} element={
               <>
-                {user && (<EditResourceType />)}
+                {user && isAdmin && (<EditResourceType />)}
                 {!user && (<Error />)}
               </>
             } />
 
             <Route path={"/resources"} element={
               <>
-                {user && (<Resources />)}
+                {user && isAdmin && (<Resources />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"/addresource"} element={
               <>
-                {user && (<AddResource />)}
+                {user && isAdmin && (<AddResource />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"/editresource/:id"} element={
               <>
-                {user && (<EditResource />)}
+                {user && isAdmin && (<EditResource />)}
                 {!user && (<Error />)}
               </>
             } />
 
             <Route path={"/attributes"} element={
               <>
-                {user && (<Attributes />)}
+                {user && isAdmin && (<Attributes />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"/addattribute"} element={
               <>
-                {user && (<AddAttribute />)}
+                {user && isAdmin && (<AddAttribute />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"/editattribute/:id"} element={
               <>
-                {user && (<EditAttribute />)}
+                {user && isAdmin && (<EditAttribute />)}
                 {!user && (<Error />)}
               </>
             } />
 
             <Route path={"/userattributes"} element={
               <>
-                {user && (<UserAttributes />)}
+                {user && isAdmin && (<UserAttributes />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"/adduserattribute"} element={
               <>
-                {user && (<AddUserAttribute />)}
+                {user && isAdmin && (<AddUserAttribute />)}
                 {!user && (<Error />)}
               </>
             } />
             <Route path={"/edituserattribute/:id"} element={
               <>
-                {user && (<EditUserAttribute />)}
+                {user && isAdmin && (<EditUserAttribute />)}
                 {!user && (<Error />)}
               </>
             } />
@@ -395,6 +397,7 @@ function App() {
               </>
             } />
 
+            <Route path="/" element={<Login />} />
             <Route path={"/*"} element={<Error />} />
 
           </Routes>

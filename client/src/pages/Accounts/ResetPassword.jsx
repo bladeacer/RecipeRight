@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box, Typography, TextField, Button, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import http from "../../http";
@@ -60,48 +60,50 @@ function ResetPassword() {
     });
 
     return (
-        <Box sx={{ width: 350, margin: "auto", padding: 4, bgcolor: "white", borderRadius: 3, boxShadow: 3, mt: 5 }}>
-            <Typography variant="h5" fontWeight="bold" mb={2} textAlign="center">
+        <Box sx={{ width: 350, margin: "auto", padding: 4, borderRadius: 3, boxShadow: 3, mt: 5 }}>
+            <h5 style={{ mb: 2, textAlign: "center" }}>
                 Reset Password
-            </Typography>
+            </h5>
 
             {loading ? (
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 100 }}>
-                    <CircularProgress />
+                    <progress />
                 </Box>
             ) : success ? (
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 100 }}>
-                    <CheckCircle sx={{ fontSize: 60, color: "green" }} />
+                    <CheckCircle className="pico-color-green-500" sx={{ fontSize: 60 }} />
                 </Box>
             ) : (
                 <form onSubmit={formik.handleSubmit}>
-                    <TextField
-                        fullWidth
-                        margin="dense"
-                        label="Enter new password"
-                        type="password"
-                        name="password"
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={formik.touched.password && Boolean(formik.errors.password)}
-                        helperText={formik.touched.password && formik.errors.password}
-                    />
-                    <TextField
-                        fullWidth
-                        margin="dense"
-                        label="Confirm new password"
-                        type="password"
-                        name="confirmPassword"
-                        value={formik.values.confirmPassword}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                        helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                    />
-                    <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
-                        Change Password
-                    </Button>
+
+                    <label> Create new Password
+                        <input
+                            type="password"
+                            name="password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className={formik.touched.password && formik.errors.password ? 'error' : ''}
+                            aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
+                    </label>
+
+                    <label> Confirm new Password
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={formik.values.confirmPassword}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'error' : ''}
+                            aria-invalid={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.confirmPassword && formik.errors.confirmPassword && <small>{formik.errors.confirmPassword}</small>}
+                    </label>
+                    <button type="submit">Change password</button>
                 </form>
             )}
         </Box>

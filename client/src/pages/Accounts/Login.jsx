@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
-import { Box, Typography, TextField, Button, FormControlLabel, Checkbox, CircularProgress } from "@mui/material";
+import  { useContext, useState } from "react";
+import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import http from "../../http";
 import UserContext from "../../contexts/UserContext";
 import ReCAPTCHA from "react-google-recaptcha";
+
 
 function Login() {
     const navigate = useNavigate();
@@ -74,8 +75,6 @@ function Login() {
                 top: "64px",
                 left: 0,
                 width: "100%",
-                height: "calc(100vh - 64px)",
-                backgroundColor: "#6495ED",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -85,94 +84,71 @@ function Login() {
         >
             <Box
                 sx={{
-                    width: 350,
-                    bgcolor: "white",
+                    width: 475,
                     borderRadius: 3,
                     p: 4,
                     boxShadow: 3,
                     textAlign: "center",
                 }}
             >
-                <Typography variant="h5" fontWeight="bold" mb={2}>
-                    Login
-                </Typography>
+                <h5>Login</h5>
+
 
                 {loading ? (
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 100 }}>
-                        <CircularProgress sx={{ color: "#4169E1" }} />
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 150 }}>
+                        <progress />
                     </Box>
                 ) : (
-                    <Box component="form" onSubmit={formik.handleSubmit}>
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            label="Enter your email"
-                            name="email"
-                            autoComplete="off"
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            label="Enter your password"
-                            name="password"
-                            type="password"
-                            autoComplete="off"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
-                        />
-                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2 }}>
-                            <FormControlLabel control={<Checkbox />} label="Remember me" />
-                            <Typography
-                                variant="body2"
-                                sx={{ color: "#4169E1", cursor: "pointer", textDecoration: "underline" }}
-                                onClick={() => navigate("/forgotpassword")}
-                            >
-                                Forgot password?
-                            </Typography>
-                        </Box>
+                    <Box component="form" onSubmit={formik.handleSubmit} style={{textAlign: 'left'}}>
 
-                        <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                        <label>
+                            Enter your Email
+                            <input
+                                type="email"
+                                name="email"
+                                value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={formik.touched.email && formik.errors.email ? 'error' : ''}
+                                aria-invalid={formik.touched.email && formik.errors.email ? 'true' : 'false'}
+                                autoComplete='off'
+                            />
+                            {formik.touched.email && formik.errors.email && <small>{formik.errors.email}</small>}
+                        </label>
+
+                        <label>
+                            Enter your Password
+                            <input
+                                type="password"
+                                name="password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={formik.touched.password && formik.errors.password ? 'error' : ''}
+                                aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                                autoComplete='off'
+                            />
+                            {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
+                        </label>
+                        <label>
+                            <input type="checkbox" />
+                            Remember me
+                        </label>
+                        <footer style={{ marginBlock: 10, paddingInline: 1.5, textAlign: 'left' }}>
+                            Forgot password?&nbsp;
+                            <a href="/forgotpassword" className="pico-color-indigo-600" style={{ textDecoration: 'underline' }}>Click here</a>
+                        </footer>
+                        <Box sx={{ my: 4, display: "flex", justifyContent: "left" }}>
                             <ReCAPTCHA
                                 sitekey="6Ld9XcsqAAAAAHX1FrqvObDxjGc9_ooQMi2gkebU"
                                 onChange={(value) => setCaptchaToken(value)}
                             />
                         </Box>
+                        <button type="submit" disabled={loading}>
+                            Login
+                        </button>
 
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            type="submit"
-                            sx={{
-                                mt: 2,
-                                bgcolor: "#4169E1",
-                                py: 1.4,
-                                "&:hover": {
-                                    bgcolor: "#2950A8",
-                                },
-                            }}
-                            disabled={loading}
-                        >
-                            Login Now
-                        </Button>
 
-                        <Typography variant="body2" sx={{ mt: 2 }}>
-                            Don't have an account?{" "}
-                            <Typography
-                                component="span"
-                                sx={{ color: "#4169E1", cursor: "pointer", textDecoration: "underline" }}
-                                onClick={() => navigate("/register")}
-                            >
-                                Signup now
-                            </Typography>
-                        </Typography>
                     </Box>
                 )}
             </Box>
