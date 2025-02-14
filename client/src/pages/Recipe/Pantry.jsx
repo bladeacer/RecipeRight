@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../../App.css";
 import http from "../../http";
 import { Link } from "react-router-dom";
@@ -20,7 +20,7 @@ const Pantry = () => {
         if (e.key === "Enter") {
             fetchRecipes();
         }
-    };    
+    };
 
     const fetchRandomRecipes = async () => {
         setLoading(true);
@@ -70,13 +70,13 @@ const Pantry = () => {
         <div className="pantry-page">
             <h1>Find Recipes Based on Your Pantry</h1>
             <div className="input-section">
-            <input
-    type="text"
-    value={pantryItems}
-    onChange={handleChange}
-    onKeyDown={handleKeyPress} // Listen for Enter key
-    placeholder="Enter items in your pantry (e.g., rice, chicken, butter)"
-/>
+                <input
+                    type="text"
+                    value={pantryItems}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyPress} // Listen for Enter key
+                    placeholder="Enter items in your pantry (e.g., rice, chicken, butter)"
+                />
 
                 <button onClick={fetchRecipes} disabled={loading}>
                     {loading ? "Searching..." : "Search Recipes"}
@@ -86,31 +86,31 @@ const Pantry = () => {
             <div className="recipes-section">
                 <h2>{pantryItems ? "Search Results" : "Popular Recipes"}</h2>
                 <div className="recipes-list">
-    {recipes
-        .filter(recipe => !invalidImages.has(recipe.id)) // Filter out broken images
-        .map(recipe => (
-            <div className="recipe-card" key={recipe.id}>
-                <Link to={`/recipe/${recipe.id}`}>
-                    <img 
-                        src={recipe.image} 
-                        alt={recipe.title} 
-                        className="recipe-image" 
-                        onError={() => setInvalidImages(prev => new Set([...prev, recipe.id]))} // Mark as broken
-                    />
-                    <div className="recipe-details">
-                        <h3>{recipe.title}</h3>
-                        {recipe.missedIngredients && recipe.missedIngredients.length > 0 ? (
-                            <p className="missing-ingredients">
-                                Missing: {recipe.missedIngredients.map(ing => ing.name).join(", ")}
-                            </p>
-                        ) : pantryItems ? null : (
-                            <p className="missing-ingredients"> </p>
-                        )}
-                    </div>
-                </Link>
-            </div>
-        ))}
-</div>
+                    {recipes
+                        .filter(recipe => !invalidImages.has(recipe.id)) // Filter out broken images
+                        .map(recipe => (
+                            <div className="recipe-card" key={recipe.id}>
+                                <Link to={`/recipe/${recipe.id}`}>
+                                    <img
+                                        src={recipe.image}
+                                        alt={recipe.title}
+                                        className="recipe-image"
+                                        onError={() => setInvalidImages(prev => new Set([...prev, recipe.id]))} // Mark as broken
+                                    />
+                                    <div className="recipe-details">
+                                        <h3>{recipe.title}</h3>
+                                        {recipe.missedIngredients && recipe.missedIngredients.length > 0 ? (
+                                            <p className="missing-ingredients">
+                                                Missing: {recipe.missedIngredients.map(ing => ing.name).join(", ")}
+                                            </p>
+                                        ) : pantryItems ? null : (
+                                            <p className="missing-ingredients"> </p>
+                                        )}
+                                    </div>
+                                </Link>
+                            </div>
+                        ))}
+                </div>
 
             </div>
 

@@ -72,86 +72,73 @@ function ChangeSecurity() {
         >
             <IconButton
                 onClick={() => navigate(-1)}
-                sx={{ alignSelf: 'flex-start', mb: 2 }}
-            >
-                <ArrowBack />
+                sx={{ alignSelf: 'flex-start', mb: 2, color: "var(--pico-background-white-500)" }} >
+                <ArrowBack sx={{ mt: 0.5 }} /> Back
             </IconButton>
-            <Typography variant="h4" component="h1" sx={{ mb: 4, textAlign: 'center' }}>
+            <h4 style={{ mb: 4, textAlign: 'center' }}>
                 Edit Security Information
-            </Typography>
+            </h4>
             {error && <Alert severity="error">{error}</Alert>}
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="currentPassword"
-                label="Current Password"
-                name="currentPassword"
-                type="password"
-                value={formik.values.currentPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.currentPassword && Boolean(formik.errors.currentPassword)}
-                helperText={formik.touched.currentPassword && formik.errors.currentPassword}
-            />
-            <TextField
-                margin="normal"
-                fullWidth
-                id="newEmail"
-                label="New Email"
-                name="newEmail"
-                value={formik.values.newEmail}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.newEmail && Boolean(formik.errors.newEmail)}
-                helperText={formik.touched.newEmail && formik.errors.newEmail}
-            />
-            <TextField
-                margin="normal"
-                fullWidth
-                id="confirmNewEmail"
-                label="Confirm New Email"
-                name="confirmNewEmail"
-                value={formik.values.confirmNewEmail}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.confirmNewEmail && Boolean(formik.errors.confirmNewEmail)}
-                helperText={formik.touched.confirmNewEmail && formik.errors.confirmNewEmail}
-            />
-            <TextField
-                margin="normal"
-                fullWidth
-                id="newPassword"
-                label="New Password"
-                name="newPassword"
-                type="password"
-                value={formik.values.newPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
-                helperText={formik.touched.newPassword && formik.errors.newPassword}
-            />
-            <TextField
-                margin="normal"
-                fullWidth
-                id="confirmNewPassword"
-                label="Confirm New Password"
-                name="confirmNewPassword"
-                type="password"
-                value={formik.values.confirmNewPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.confirmNewPassword && Boolean(formik.errors.confirmNewPassword)}
-                helperText={formik.touched.confirmNewPassword && formik.errors.confirmNewPassword}
-            />
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-            >
-                Change Security Settings
-            </Button>
+            <label> Current Password
+                <input
+                    required
+                    id="currentPassword"
+                    name="currentPassword"
+                    type="password"
+                    value={formik.values.currentPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    aria-invalid={formik.touched.currentPassword && formik.errors.currentPassword ? 'true' : 'false'}
+                />
+                {formik.touched.currentPassword && formik.errors.currentPassword && <small>{formik.errors.currentPassword}</small>}
+            </label>
+            <label>New Email
+                <input
+                    id="newEmail"
+                    name="newEmail"
+                    value={formik.values.newEmail}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    aria-invalid={formik.touched.newEmail && formik.errors.newEmail ? 'true' : 'false'}
+                />
+                {formik.touched.newEmail && formik.errors.newEmail && <small>{formik.errors.newEmail}</small>}
+            </label>
+            <label>Confirm New Email
+                <input
+                    id="confirmNewEmail"
+                    name="confirmNewEmail"
+                    value={formik.values.confirmNewEmail}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    aria-invalid={formik.touched.confirmNewEmail && formik.errors.confirmNewEmail ? 'true' : 'false'}
+                />
+                {formik.touched.confirmNewEmail && formik.errors.confirmNewEmail && <small>{formik.errors.confirmNewEmail}</small>}
+            </label>
+            <label> New Password
+                <input
+                    id="newPassword"
+                    name="newPassword"
+                    type="password"
+                    value={formik.values.newPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    aria-invalid={formik.touched.newPassword && formik.errors.newPassword ? 'true' : 'false'}
+                />
+                {formik.touched.newPassword && formik.errors.newPassword && <small>{formik.errors.newPassword}</small>}
+            </label>
+            <label>Confirm New Password
+                <input
+                    id="confirmNewPassword"
+                    name="confirmNewPassword"
+                    type="password"
+                    value={formik.values.confirmNewPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    aria-invalid={formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? 'true' : 'false'}
+                />
+                {formik.touched.confirmNewPassword && formik.errors.confirmNewPassword && <small>{formik.errors.confirmNewPassword}</small>}
+            </label>
+            <button type="submit">Change Security Settings</button>
         </Box>
     );
 }

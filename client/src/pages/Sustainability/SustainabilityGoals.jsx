@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Typography, Grid, Card, CardContent, Input, IconButton, Button, LinearProgress } from '@mui/material';
-import { AccessTime, Search, Clear, Edit, Add } from '@mui/icons-material';
+import { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Grid2 as Grid } from '@mui/material';
+import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../../http';
 import dayjs from 'dayjs';
 import UserContext from '../../contexts/UserContext';
@@ -11,6 +11,7 @@ export default function SustainabilityGoals() {
     const [goalList, setGoalList] = useState([]);
     const [search, setSearch] = useState("");
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const onSearchChange = (e) => setSearch(e.target.value);
 
@@ -42,22 +43,32 @@ export default function SustainabilityGoals() {
     return (
         <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, pt: 1 }}>
-                <Typography variant="h5">Sustainability Goals</Typography>
+                <h5>Sustainability Goals</h5>
 
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Link to="/sustainability-goals"><Button variant="outlined">Sustainability Goals</Button></Link>
-                    
-                    <Link to="/food-waste-logs"><Button variant="outlined">Food Waste Log</Button></Link>
+                    <button className="pico-background-azure-500" onClick={() => {navigate("/sustainability-goals")}}>
+                        Sustainability Goals</button>
+                    <button className="pico-background-cyan-500" onClick={() => {navigate("/food-waste-logs")}}>Food Waste Log</button>
                 </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search" onChange={onSearchChange} onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary" onClick={onClickSearch}><Search /></IconButton>
-                <IconButton color="primary" onClick={onClickClear}><Clear /></IconButton>
-                <Box sx={{ flexGrow: 1 }} />
-                {user && <Link to="/add-sustainability-goal"><Button variant='contained' startIcon={<Add />}>Add</Button></Link>}
-            </Box>
+            <section>
+                <div role='search'>
+                    <input value={search}
+                        placeholder="Search"
+                        onChange={onSearchChange}
+                        onKeyDown={onSearchKeyDown}
+                        style={{ scale: '104.5%', marginTop: '2.5px', marginLeft: '12px', marginRight: '14px' }}>
+                    </input>
+                    <button onClick={onClickSearch} >
+                        <Search />
+                    </button>
+                    <button onClick={onClickClear} >
+                        <Clear />
+                    </button>
+                    {user && <button className='outline'><a href="/add-sustinability-goal">Add</a></button>}
+                </div>
+            </section>
 
             <Grid container spacing={2}>
                 {goalList.map((goal) => {
@@ -65,29 +76,37 @@ export default function SustainabilityGoals() {
 
                     return (
                         <Grid item xs={12} key={goal.sustainabilityGoalId}>
-                            <Card sx={{ border: '2px solid black', p: 2, width: '100%' }}>
-                                <CardContent>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Typography variant="h6">{goal.goalName}</Typography>
+                            <article style={{ padding: '1rem' }}>
+                                <header>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <strong> {goal.goalName} </strong>
+                                                <p>
+                                                    <AccessTime sx={{ scale: "72.5%" }} />
+                                                    <small>
+                                                        Deadline: {dayjs(goal.createdOn).format(global.datetimeFormat)}
+                                                    </small>
+                                                </p>
+                                            </li>
+                                        </ul>
                                         {user && (
-                                            <Link to={`/edit-sustainability-goal/${goal.sustainabilityGoalId}`}>
-                                                <IconButton color="primary"><Edit /></IconButton>
-                                            </Link>
+                                            <ul>
+                                                <li style={{ marginTop: '-2rem' }}>
+                                                    <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/edit-sustainability-goal/${goal.sustainabilityGoalId}`)}>
+                                                        <Edit />
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         )}
-                                    </Box>
-
-                                    <Typography variant="body2" color="text.secondary">
-                                        Deadline: {dayjs(goal.createdOn).format(global.datetimeFormat)}
-                                    </Typography>
-
-                                    <LinearProgress variant="determinate" value={progress} sx={{ mt: 2, height: 10, backgroundColor: '#ddd' }} />
-                                    <Typography variant="h6" color="green" sx={{ textAlign: 'right', mt: 1 }}>
-                                        {progress.toFixed(0)}%
-                                    </Typography>
-
-                                    <Typography sx={{ mt: 2, whiteSpace: 'pre-wrap' }}>{goal.goalDescription}</Typography>
-                                </CardContent>
-                            </Card>
+   
+                                    </nav>
+                                </header>
+                                <section>
+                                    {goal.goalDescription}
+                                    <progress value={`${progress}`} max="100" />
+                                </section>
+                            </article>
                         </Grid>
                     );
                 })}

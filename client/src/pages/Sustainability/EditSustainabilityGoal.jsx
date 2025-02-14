@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, TextField, Button, Grid2 as Grid } from '@mui/material';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Box, Grid2 as Grid } from '@mui/material';
 import http from '../../http';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -41,7 +40,7 @@ export default function EditSustainabilityGoal() {
             setGoal(res.data);
         });
         setLoading(false);
-    }, []);
+    }, [id]);
 
     const formik = useFormik({
         initialValues: {
@@ -81,117 +80,106 @@ export default function EditSustainabilityGoal() {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Edit Sustainability Goal
-            </Typography>
-            {
-                !loading && (
-                    <Box component="form" onSubmit={formik.handleSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} md={6} lg={8}>
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    label="Goal Name"
-                                    name="goalName"
-                                    value={formik.values.goalName}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.goalName && Boolean(formik.errors.goalName)}
-                                    helperText={formik.touched.goalName && formik.errors.goalName}
-                                />
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    multiline
-                                    minRows={2}
-                                    label="Description"
-                                    name="goalDescription"
-                                    value={formik.values.goalDescription}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.goalDescription && Boolean(formik.errors.goalDescription)}
-                                    helperText={formik.touched.goalDescription && formik.errors.goalDescription}
-                                />
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    type="number"
-                                    label="Target Value"
-                                    name="targetValue"
-                                    value={formik.values.targetValue}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.targetValue && Boolean(formik.errors.targetValue)}
-                                    helperText={formik.touched.targetValue && formik.errors.targetValue}
-                                />
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    type="number"
-                                    label="Current Value"
-                                    name="currentValue"
-                                    value={formik.values.currentValue}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.currentValue && Boolean(formik.errors.currentValue)}
-                                    helperText={formik.touched.currentValue && formik.errors.currentValue}
-                                />
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    autoComplete="off"
-                                    type="datetime-local"
-                                    label="Deadline"
-                                    name="deadline"
-                                    value={formik.values.deadline}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.deadline && Boolean(formik.errors.deadline)}
-                                    helperText={formik.touched.deadline && formik.errors.deadline}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Box sx={{ mt: 2 }}>
-                            <Button variant="contained" type="submit">
-                                Update
-                            </Button>
-                            <Button variant="contained" sx={{ ml: 2 }} color="error"
-                                onClick={handleOpen}>
-                                Delete
-                            </Button>
-                        </Box>
-                    </Box>
-                )
+            <h5>Edit Sustainability Goal</h5>
+            {!loading && !open && (
+                <Box component="form" onSubmit={formik.handleSubmit}>
+
+                    <label>
+                        Goal Name
+                        <input type="textarea"
+                            id='goalName'
+                            name="goalName"
+                            value={formik.values.goalName}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            aria-invalid={formik.touched.goalName && formik.errors.goalName ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.goalName && formik.errors.goalName && <small>{formik.errors.goalName}</small>}
+                    </label>
+
+                    <label>
+                        Description
+                        <input placeholder='Enter a description'
+                            id='goalDescription'
+                            value={formik.values.goalDescription}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            aria-invalid={formik.touched.goalDescription && formik.errors.goalDescription ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.goalDescription && formik.errors.goalDescription && <small>{formik.errors.goalDescription}</small>}
+                    </label>
+
+                    <label>
+                        Target Value
+                        <input
+                            type="number"
+                            id='targetValue'
+                            value={formik.values.targetValue}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            aria-invalid={formik.touched.targetValue && formik.errors.targetValue ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.targetValue && formik.errors.targetValue && <small>{formik.errors.targetValue}</small>}
+                    </label>
+
+                    <label>
+                        Current Value
+                        <input
+                            type="number"
+                            id='currentValue'
+                            value={formik.values.currentValue}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            aria-invalid={formik.touched.currentValue && formik.errors.currentValue ? 'true' : 'false'}
+                            autoComplete='off'
+                        />
+                        {formik.touched.currentValue && formik.errors.currentValue && <small>{formik.errors.currentValue}</small>}
+                    </label>
+
+                    <label>
+                        <input
+                            autoComplete="off"
+                            type="datetime-local"
+                            label="Deadline"
+                            name="deadline"
+                            value={formik.values.deadline}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            aria-invalid={formik.touched.deadline && formik.errors.deadline ? 'true' : 'false'}
+                        />
+                        {formik.touched.deadline && formik.errors.deadline && <small>{formik.errors.deadline}</small>}
+                    </label>
+
+                    <button type="submit"> Update </button>
+                    <button className='pico-background-red-500' onClick={handleOpen}> Delete </button>
+                </Box>
+            )
             }
 
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>
-                    Delete Sustainability Goal
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to delete this goal?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="contained" color="inherit"
-                        onClick={handleClose}>
-                        Cancel
-                    </Button>
-                    <Button variant="contained" color="error"
-                        onClick={deleteGoal}>
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            {loading && !open && (
+                <h3 aria-busy="true"> Loading... </h3>
+            )}
+
+            <dialog open={open} onClose={handleClose}>
+                <article>
+                    <header>
+                        <h5> Delete Sustainability Goal</h5>
+                    </header>
+                    <p> Are you sure you want to delete this goal?  </p>
+                    <footer>
+                        <button onClick={handleClose}>
+                            Cancel
+                        </button>
+                        <button className='pico-background-red-500' onClick={deleteGoal}>
+                            Delete
+                        </button>
+                    </footer>
+                </article>
+            </dialog>
+
             <ToastContainer />
         </Box>
     );

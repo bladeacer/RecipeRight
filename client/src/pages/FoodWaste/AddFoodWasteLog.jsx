@@ -1,6 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, TextField, Button, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import http from '../../http';
@@ -38,19 +37,29 @@ export default function AddFoodWasteEntry() {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>Add Food Waste Entry</Typography>
+            <h5>Add Food Waste Entry</h5>
             <Box component="form" onSubmit={formik.handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField fullWidth margin="dense" label="Ingredient ID" name="ingredientId" value={formik.values.ingredientId} onChange={formik.handleChange} error={formik.touched.ingredientId && Boolean(formik.errors.ingredientId)} helperText={formik.touched.ingredientId && formik.errors.ingredientId} />
-                        <TextField fullWidth margin="dense" label="Waste Amount (kg)" name="wasteAmount" value={formik.values.wasteAmount} onChange={formik.handleChange} error={formik.touched.wasteAmount && Boolean(formik.errors.wasteAmount)} helperText={formik.touched.wasteAmount && formik.errors.wasteAmount} />
-                        <TextField fullWidth margin="dense" type="datetime-local" label="Logged On" name="loggedOn" value={formik.values.loggedOn} onChange={formik.handleChange} error={formik.touched.loggedOn && Boolean(formik.errors.loggedOn)} helperText={formik.touched.loggedOn && formik.errors.loggedOn} InputLabelProps={{ shrink: true }} />
-                        <TextField fullWidth margin="dense" label="Waste Reason" name="wasteReason" value={formik.values.wasteReason} onChange={formik.handleChange} error={formik.touched.wasteReason && Boolean(formik.errors.wasteReason)} helperText={formik.touched.wasteReason && formik.errors.wasteReason} />
-                    </Grid>
-                </Grid>
-                <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" type="submit" color="primary">Add Entry</Button>
-                </Box>
+                <label>Ingredient ID
+                    <input name="ingredientId" value={formik.values.ingredientId} onChange={formik.handleChange}
+                        aria-invalid={formik.touched.ingredientId && formik.errors.ingredientId ? 'true' : 'false'} />
+                    {formik.touched.ingredientId && formik.errors.ingredientId && <small>{formik.errors.ingredientId}</small>}
+                </label>
+                <label>Waste Amount (kg)
+                    <input name="wasteAmount" value={formik.values.wasteAmount} onChange={formik.handleChange}
+                        aria-invalid={formik.touched.wasteAmount && formik.errors.wasteAmount ? 'true' : 'false'} />
+                    {formik.touched.wasteAmount && formik.errors.wasteAmount && <small>{formik.errors.wasteAmount}</small>}
+                </label>
+                <label>Logged On
+                    <input type="datetime-local" name="loggedOn" value={formik.values.loggedOn} onChange={formik.handleChange}
+                        aria-invalid={formik.touched.loggedOn && formik.errors.loggedOn ? 'true' : 'false'} />
+                    {formik.touched.loggedOn && formik.errors.loggedOn && <small>{formik.errors.loggedOn}</small>}
+                </label>
+                <label>Waste Reason
+                    <input name="wasteReason" value={formik.values.wasteReason} onChange={formik.handleChange}
+                        aria-invalid={formik.touched.wasteReason && formik.errors.wasteReason ? 'true' : 'false'} />
+                    {formik.touched.wasteReason && formik.errors.wasteReason && <small>{formik.errors.wasteReason}</small>}
+                </label>
+                <button type="submit" >Add Entry</button>
             </Box>
             <ToastContainer />
         </Box>

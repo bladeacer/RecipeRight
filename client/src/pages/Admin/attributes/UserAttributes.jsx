@@ -65,8 +65,7 @@ export default function UserAttributes() {
                         onKeyDown={onSearchKeyDown}
                         style={{ scale: '104.5%', marginTop: '2.5px', marginLeft: '12px', marginRight: '14px' }}>
                     </input>
-                    <button onClick={onClickSearch}
-                    >
+                    <button onClick={onClickSearch} >
                         <Search />
                     </button>
                     <button onClick={onClickClear} >

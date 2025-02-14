@@ -38,6 +38,7 @@ import AddFoodWasteLogs from './pages/FoodWaste/AddFoodWasteLog';
 
 import Error from './pages/Others/Error';
 import Report from './pages/Others/Report';
+import AdminDashboard from './pages/Others/AdminDashboard';
 
 import ResourceTypes from './pages/Admin/resources/ResourceTypes';
 import AddResourceType from './pages/Admin/resources/AddResourceType';
@@ -226,7 +227,16 @@ function App() {
 
 
             {/* TODO: Add admin dashboard */}
-            {/* <Route path={"/admin/dashboard"} element={<ProtectedRoute role="Admin"><AdminDashboard /></ProtectedRoute>} /> */}
+            <Route path={"/admin/dashboard"} element={
+              <>
+                {user && isAdmin && (
+                  <AdminDashboard />
+                )}
+                {(!user || !isAdmin) && (
+                  <Error />
+                )}
+              </>
+          } />
 
 
             <Route path={"/pantry"} element={

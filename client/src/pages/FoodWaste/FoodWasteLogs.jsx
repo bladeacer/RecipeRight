@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Typography, Grid, Card, CardContent, Input, IconButton, Button } from '@mui/material';
-import { AccessTime, Search, Clear, Edit, Add } from '@mui/icons-material';
+import { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Grid2 as Grid, } from '@mui/material';
+import { AccessTime, Search, Clear, Edit } from '@mui/icons-material';
 import http from '../../http';
 import dayjs from 'dayjs';
 import UserContext from '../../contexts/UserContext';
@@ -11,6 +11,7 @@ export default function FoodWasteLogs() {
     const [wasteList, setWasteList] = useState([]);
     const [search, setSearch] = useState("");
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const onSearchChange = (e) => setSearch(e.target.value);
 
@@ -42,48 +43,67 @@ export default function FoodWasteLogs() {
     return (
         <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, pt: 1 }}>
-                <Typography variant="h5">Food Waste Logs</Typography>
+                <h5>Food Waste Logs</h5>
 
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Link to="/sustainability-goals"><Button variant="outlined">Sustainability Goals</Button></Link>
-                    
-                    <Link to="/food-waste-logs"><Button variant="outlined">Food Waste Log</Button></Link>
+                    <button className="pico-background-azure-500" onClick={() => { navigate("/sustainability-goals") }}>
+                        Sustainability Goals</button>
+                    <button className="pico-background-cyan-500" onClick={() => { navigate("/food-waste-logs") }}>Food Waste Log</button>
                 </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <Input value={search} placeholder="Search" onChange={onSearchChange} onKeyDown={onSearchKeyDown} />
-                <IconButton color="primary" onClick={onClickSearch}><Search /></IconButton>
-                <IconButton color="primary" onClick={onClickClear}><Clear /></IconButton>
-                <Box sx={{ flexGrow: 1 }} />
-                {user && <Link to="/add-food-waste-entry"><Button variant='contained' startIcon={<Add />}>Add Entry</Button></Link>}
-            </Box>
+            <section>
+                <div role="search">
+                    <input value={search}
+                        placeholder="Search"
+                        onChange={onSearchChange}
+                        onKeyDown={onSearchKeyDown}
+                        style={{ scale: '104.5%', marginTop: '2.5px', marginLeft: '12px', marginRight: '14px' }}>
+                    </input>
+                    <button onClick={onClickSearch} >
+                        <Search />
+                    </button>
+                    <button onClick={onClickClear} >
+                        <Clear />
+                    </button>
+                    {user && <a href="/add-food-waste-entry"><button>Add Entry</button></a>}
+                </div>
+            </section>
 
             <Grid container spacing={2}>
                 {wasteList.map((entry) => (
                     <Grid item xs={12} md={6} lg={4} key={entry.foodWasteEntryId}>
-                        <Card sx={{ border: '2px solid black', p: 2 }}>
-                            <CardContent>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography variant="h6">Waste Reason: {entry.wasteReason}</Typography>
+
+                        <article style={{ padding: '1rem' }}>
+                            <header>
+                                <nav>
+                                    <ul>
+                                        <li>
+                                            <strong> Waste Reason: {entry.wasteReason} </strong>
+                                            <p>
+                                                <AccessTime sx={{ scale: "72.5%" }} />
+                                                <small>
+                                                    Logged On: {dayjs(entry.loggedOn).format(global.datetimeFormat)}
+                                                </small>
+                                            </p>
+                                        </li>
+                                    </ul>
                                     {user && (
-                                        <Link to={`/edit-food-waste-entry/${entry.wasteId}`}>
-                                            <IconButton color="primary"><Edit /></IconButton>
-                                        </Link>
+                                        <ul>
+                                            <li style={{ marginTop: '-2rem' }}>
+                                                <button className="secondary" data-tooltip="Edit" onClick={() => navigate(`/edit-food-waste-entry/${entry.wasteId}`)}>
+                                                    <Edit />
+                                                </button>
+                                            </li>
+                                        </ul>
                                     )}
-                                </Box>
 
-                                <Typography variant="body2" color="text.secondary">
-                                    Logged On: {dayjs(entry.loggedOn).format(global.datetimeFormat)}
-                                </Typography>
-
-                                <Typography variant="body1" sx={{ mt: 1 }}>
-                                    Waste Amount: {entry.wasteAmount} kg
-                                </Typography>
-
-                                
-                            </CardContent>
-                        </Card>
+                                </nav>
+                            </header>
+                            <section>
+                                Waste Amount: {entry.wasteAmount} kg
+                            </section>
+                        </article>
                     </Grid>
                 ))}
             </Grid>

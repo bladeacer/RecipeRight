@@ -55,84 +55,65 @@ export default function AddSustainabilityGoal() {
 
     return (
         <Box>
-            <Typography variant="h5" sx={{ my: 2 }}>
-                Add Sustainability Goal
-            </Typography>
+            <h5>Add Sustainability Goal</h5>
             <Box component="form" onSubmit={formik.handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            label="Goal Name"
-                            name="goalName"
-                            value={formik.values.goalName}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.goalName && Boolean(formik.errors.goalName)}
-                            helperText={formik.touched.goalName && formik.errors.goalName}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            multiline
-                            minRows={2}
-                            label="Goal Description"
-                            name="goalDescription"
-                            value={formik.values.goalDescription}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.goalDescription && Boolean(formik.errors.goalDescription)}
-                            helperText={formik.touched.goalDescription && formik.errors.goalDescription}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            label="Target Value"
-                            name="targetValue"
-                            value={formik.values.targetValue}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.targetValue && Boolean(formik.errors.targetValue)}
-                            helperText={formik.touched.targetValue && formik.errors.targetValue}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            autoComplete="off"
-                            label="Current Value"
-                            name="currentValue"
-                            value={formik.values.currentValue}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.currentValue && Boolean(formik.errors.currentValue)}
-                            helperText={formik.touched.currentValue && formik.errors.currentValue}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="dense"
-                            type="datetime-local"
-                            label="Deadline"
-                            name="deadline"
-                            value={formik.values.deadline}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.deadline && Boolean(formik.errors.deadline)}
-                            helperText={formik.touched.deadline && formik.errors.deadline}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-                <Box sx={{ mt: 2 }}>
-                    <Button variant="contained" type="submit" color="primary">
-                        Add Goal
-                    </Button>
-                </Box>
+
+                <label>
+                    Goal Name
+                    <input type="textarea"
+                        id='goalName'
+                        name="goalName"
+                        value={formik.values.goalName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.goalName && formik.errors.goalName ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.goalName && formik.errors.goalName && <small>{formik.errors.goalName}</small>}
+                </label>
+
+                <label>
+                    Description
+                    <input placeholder='Enter a description'
+                        id='goalDescription'
+                        value={formik.values.goalDescription}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.goalDescription && formik.errors.goalDescription ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.goalDescription && formik.errors.goalDescription && <small>{formik.errors.goalDescription}</small>}
+                </label>
+
+                <label>
+                    Target Value
+                    <input
+                        type="number"
+                        id='targetValue'
+                        value={formik.values.targetValue}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.targetValue && formik.errors.targetValue ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.targetValue && formik.errors.targetValue && <small>{formik.errors.targetValue}</small>}
+                </label>
+
+                <label>
+                    Current Value
+                    <input
+                        type="number"
+                        id='currentValue'
+                        value={formik.values.currentValue}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        aria-invalid={formik.touched.currentValue && formik.errors.currentValue ? 'true' : 'false'}
+                        autoComplete='off'
+                    />
+                    {formik.touched.currentValue && formik.errors.currentValue && <small>{formik.errors.currentValue}</small>}
+                </label>
+
+                <button type="submit" > Add Goal </button>
             </Box>
 
             <ToastContainer />

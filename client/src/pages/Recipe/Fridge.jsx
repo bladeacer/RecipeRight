@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import http from "../../http";
 import "../../themes/Fridge.css";
 
@@ -58,12 +58,12 @@ const Fridge = () => {
   // Add an ingredient to the fridge
   const handleAddItem = async (event) => {
     event.preventDefault();
-  
+
     if (!newItem.ingredientName.trim() || newItem.quantity <= 0 || !newItem.unit.trim()) {
       setError("Please fill out all fields except expiry date.");
       return;
     }
-  
+
     setError("");
     try {
       const payload = {
@@ -71,14 +71,14 @@ const Fridge = () => {
         quantity: newItem.quantity,
         unit: newItem.unit,
       };
-  
+
       if (newItem.expiryDate.trim()) {
         payload.expiryDate = newItem.expiryDate;
       }
-  
+
       const response = await http.post("/api/Fridge/add", payload);
       setFridgeItems((prev) => [...prev, response.data]);
-  
+
       setNewItem({ ingredientName: "", quantity: 0, unit: "", expiryDate: "" });
     } catch (err) {
       console.error("Error adding fridge item:", err);
@@ -172,40 +172,40 @@ const Fridge = () => {
 
       {/* Form to add an ingredient */}
       <form className="fridge-form" onSubmit={handleAddItem}>
-  <input
-    type="text"
-    placeholder="Ingredient Name"
-    name="ingredientName"
-    value={newItem.ingredientName}
-    onChange={handleInputChange}
-    required
-  />
-  <input
-    type="number"
-    placeholder="Quantity"
-    name="quantity"
-    value={newItem.quantity}
-    onChange={handleInputChange}
-    min="0"
-    step="0.01"
-    required
-  />
-  <input
-    type="text"
-    placeholder="Unit (e.g., g, ml, pcs)"
-    name="unit"
-    value={newItem.unit}
-    onChange={handleInputChange}
-    required
-  />
-  <input
-    type="date"
-    name="expiryDate"
-    value={newItem.expiryDate}
-    onChange={handleInputChange}
-  />
-  <button type="submit">Add Ingredient</button>
-</form>
+        <input
+          type="text"
+          placeholder="Ingredient Name"
+          name="ingredientName"
+          value={newItem.ingredientName}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="number"
+          placeholder="Quantity"
+          name="quantity"
+          value={newItem.quantity}
+          onChange={handleInputChange}
+          min="0"
+          step="0.01"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Unit (e.g., g, ml, pcs)"
+          name="unit"
+          value={newItem.unit}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="date"
+          name="expiryDate"
+          value={newItem.expiryDate}
+          onChange={handleInputChange}
+        />
+        <button type="submit">Add Ingredient</button>
+      </form>
 
       {/* List of fridge items */}
       <ul className="fridge-list">
