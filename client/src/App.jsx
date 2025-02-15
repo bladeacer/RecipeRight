@@ -62,7 +62,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken") && window.location.pathname !== "/login" && window.location.pathname !== "/register") {
+    if (localStorage.getItem("accessToken")) {
       http.get('/user/auth').then((res) => {
         setUser(res.data.user);
       });
@@ -85,7 +85,6 @@ function App() {
   }, []);
 
   const logout = () => {
-    setUser(null)
     localStorage.clear();
     window.location.href = "/";
   };

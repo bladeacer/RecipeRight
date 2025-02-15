@@ -48,9 +48,7 @@ function Login() {
                         navigate(`/verify-2fa?email=${encodeURIComponent(data.email)}`);
                     } else {
                         // If 2FA is not enabled, log in normally
-                        const { user, accessToken } = res.data;
-                        localStorage.setItem("accessToken", accessToken);
-                        setUser(user);
+                        localStorage.setItem("accessToken", res.data.accessToken);
                         navigate("/pantry");
                     }
                 })
