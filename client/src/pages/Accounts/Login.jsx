@@ -57,7 +57,7 @@ function Login() {
 
                         setTimeout(() => {
                             setLoading(false);
-                            navigate(user.role === "Admin" ? "/admin/dashboard" : "/pantry");
+                            navigate("/pantry");
                         }, 2000);
                     }
                 })
