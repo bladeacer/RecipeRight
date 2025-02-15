@@ -4,6 +4,7 @@ import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // import { ThemeProvider } from '@mui/material/styles';
 // import MyTheme from './themes/MyTheme';
+import { useNavigate } from 'react-router-dom';
 
 import http from './http';
 import UserContext from './contexts/UserContext';
@@ -85,8 +86,9 @@ function App() {
   }, []);
 
   const logout = () => {
+    setUser(null)
     localStorage.clear();
-    window.location = "/";
+    navigate("/login");
   };
 
   return (
@@ -406,8 +408,12 @@ function App() {
               </>
             } />
 
-            <Route path="/" element={<Login />} />
-            <Route path={"/*"} element={<Error />} />
+            <Route path="/" element={
+              <>
+              {!user && (<Login />)}
+              {user && (<Error />)}
+              </>
+              } />
 
           </Routes>
         </Container>
