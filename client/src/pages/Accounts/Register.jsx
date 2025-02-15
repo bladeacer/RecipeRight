@@ -111,14 +111,11 @@ function Register() {
                 },
             })
                 .then(() => {
-                    setTimeout(() => {
-                        setLoading(false);
-                        setSuccess(true);
-                    }, 1500);
-                    setTimeout(() => {
-                        setFadeOut(true);
-                    }, 3000);
-                    setTimeout(() => navigate("/login"), 4000);
+
+                    setLoading(false);
+                    setSuccess(true);
+                    setFadeOut(true);
+                    navigate("/login");
                 })
                 .catch(() => {
                     setLoading(false);

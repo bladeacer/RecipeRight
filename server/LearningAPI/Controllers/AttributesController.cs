@@ -9,7 +9,7 @@ namespace LearningAPI.Controllers
     [Route("[controller]")]
     public class AttributesController(MyDbContext context, IMapper mapper, ILogger<ResourceController> logger) : ControllerBase
     {
-        [HttpGet, Authorize]
+        [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<AttributesDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(string? search)
         {
@@ -32,7 +32,7 @@ namespace LearningAPI.Controllers
             }
         }
 
-        [HttpGet("{id}"), Authorize]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(IEnumerable<AttributesDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAttribute(int id)
         {
