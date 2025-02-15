@@ -61,6 +61,7 @@ function App() {
   const [isAllowedViewReport, setIsAllowedViewReport] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
@@ -411,7 +412,7 @@ function App() {
             <Route path="/" element={
               <>
               {!user && (<Login />)}
-              {user && (<Error />)}
+              {user && (<Pantry />)}
               </>
               } />
 
