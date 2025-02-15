@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
 import { Box } from '@mui/material';
 
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-}
 
 export default function Error() {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        delay(1000);
         setLoading(false);
     }, []);
     return (
