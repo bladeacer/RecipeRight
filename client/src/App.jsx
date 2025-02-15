@@ -4,7 +4,6 @@ import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // import { ThemeProvider } from '@mui/material/styles';
 // import MyTheme from './themes/MyTheme';
-import { useNavigate } from 'react-router-dom';
 
 import http from './http';
 import UserContext from './contexts/UserContext';
@@ -61,10 +60,9 @@ function App() {
   const [isAllowedViewReport, setIsAllowedViewReport] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
+    if (localStorage.getItem("accessToken") && window.location.pathname !== "/login" && window.location.pathname !== "/register") {
       http.get('/user/auth').then((res) => {
         setUser(res.data.user);
       });
@@ -89,7 +87,7 @@ function App() {
   const logout = () => {
     setUser(null)
     localStorage.clear();
-    navigate("/login");
+    window.location.href = "/";
   };
 
   return (

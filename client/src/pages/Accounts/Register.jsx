@@ -111,7 +111,6 @@ function Register() {
                 },
             })
                 .then(() => {
-
                     setLoading(false);
                     setSuccess(true);
                     setFadeOut(true);

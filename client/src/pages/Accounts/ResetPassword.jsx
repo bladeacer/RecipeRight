@@ -51,7 +51,7 @@ function ResetPassword() {
 
                 setLoading(false);
                 setSuccess(true);
-                setTimeout(() => navigate("/login"), 3000);
+                navigate("/login");
             } catch (err) {
                 setLoading(false);
                 alert("Error resetting password.");
