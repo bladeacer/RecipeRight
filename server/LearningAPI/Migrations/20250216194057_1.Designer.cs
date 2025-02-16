@@ -11,16 +11,43 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20250204094516_AddResetToken")]
-    partial class AddResetToken
+    [Migration("20250216194057_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.12")
+                .HasAnnotation("ProductVersion", "8.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("LearningAPI.Models.Attributes", b =>
+                {
+                    b.Property<int>("AttributesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AttributeDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("AttributeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("AttributesId");
+
+                    b.ToTable("Attributes");
+                });
 
             modelBuilder.Entity("LearningAPI.Models.BookmarkFolder", b =>
                 {
@@ -125,6 +152,70 @@ namespace LearningAPI.Migrations
                     b.ToTable("Fridges");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.Resource", b =>
+                {
+                    b.Property<int>("ResourceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ResourceDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("ResourceName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("ResourceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ResourceId");
+
+                    b.HasIndex("ResourceTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Resources");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.ResourceType", b =>
+                {
+                    b.Property<int>("ResourceTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ResourceTypeDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("ResourceTypeId");
+
+                    b.ToTable("ResourceTypes");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.SustainabilityBadge", b =>
                 {
                     b.Property<int>("BadgeId")
@@ -190,47 +281,14 @@ namespace LearningAPI.Migrations
                     b.ToTable("SustainabilityGoals");
                 });
 
-            modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<string>("ImageFile")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tutorials");
-                });
-
             modelBuilder.Entity("LearningAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<bool>("CompleteProfile")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
@@ -245,8 +303,14 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
+                    b.Property<string>("GoogleId")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsTwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -261,11 +325,13 @@ namespace LearningAPI.Migrations
                     b.Property<string>("ResetToken")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
+                    b.Property<DateTime?>("TokenExpiration")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TwoFactorCode")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("TokenExpiration")
+                    b.Property<DateTime?>("TwoFactorExpiry")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -274,6 +340,43 @@ namespace LearningAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.UserAttributes", b =>
+                {
+                    b.Property<int>("UserAttributesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AttributeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("UserAttributeDescription")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("UserAttributeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserAttributesId");
+
+                    b.HasIndex("AttributeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAttributes");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.BookmarkRecipe", b =>
@@ -291,6 +394,25 @@ namespace LearningAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Resource", b =>
+                {
+                    b.HasOne("LearningAPI.Models.ResourceType", "ResourceType")
+                        .WithMany("Resource")
+                        .HasForeignKey("ResourceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LearningAPI.Models.User", "User")
+                        .WithMany("Resource")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ResourceType");
 
                     b.Navigation("User");
                 });
@@ -317,15 +439,28 @@ namespace LearningAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LearningAPI.Models.Tutorial", b =>
+            modelBuilder.Entity("LearningAPI.Models.UserAttributes", b =>
                 {
+                    b.HasOne("LearningAPI.Models.Attributes", "Attribute")
+                        .WithMany("UserAttributes")
+                        .HasForeignKey("AttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LearningAPI.Models.User", "User")
-                        .WithMany("Tutorials")
+                        .WithMany("UserAttributes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Attribute");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Attributes", b =>
+                {
+                    b.Navigation("UserAttributes");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.BookmarkFolder", b =>
@@ -333,9 +468,16 @@ namespace LearningAPI.Migrations
                     b.Navigation("Recipes");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.ResourceType", b =>
+                {
+                    b.Navigation("Resource");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.User", b =>
                 {
-                    b.Navigation("Tutorials");
+                    b.Navigation("Resource");
+
+                    b.Navigation("UserAttributes");
                 });
 #pragma warning restore 612, 618
         }

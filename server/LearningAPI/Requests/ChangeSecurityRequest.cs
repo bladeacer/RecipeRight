@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 
-
 public class ChangeSecurityRequest
 {
     [Required(ErrorMessage = "Current password is required.")]
@@ -8,20 +7,8 @@ public class ChangeSecurityRequest
     public string CurrentPassword { get; set; }
 
     [Required(ErrorMessage = "Please fill this in")]
-    [EmailAddress, MaxLength(50)]
-    public string? NewEmail { get; set; }
-
-    [Required(ErrorMessage = "Please fill this in")]
-    [EmailAddress, MaxLength(50)]
-    [Compare("NewEmail", ErrorMessage = "New emails do not match.")]
-    public string? ConfirmNewEmail { get; set; }
-
-
-
-    [Required(ErrorMessage = "Please fill this in")]
     [MinLength(8), MaxLength(50)]
     public string? NewPassword { get; set; }
-
 
     [Required(ErrorMessage = "Please fill this in")]
     [MinLength(8), MaxLength(50)]

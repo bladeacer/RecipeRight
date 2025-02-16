@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Net.Http; // Added for HttpClient
+using System.Net.Http; 
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
@@ -19,7 +19,7 @@ using ForgotPasswordRequest = LearningAPI.Models.ForgotPasswordRequest;
 using LoginRequest = LearningAPI.Models.LoginRequest;
 using RegisterRequest = LearningAPI.Models.RegisterRequest;
 using ResetPasswordRequest = LearningAPI.Models.ResetPasswordRequest;
-
+using Google.Apis.Auth; 
 namespace LearningAPI.Controllers
 {
     [ApiController]
@@ -339,18 +339,6 @@ namespace LearningAPI.Controllers
                     return BadRequest(new { message = "Current password is incorrect." });
                 }
 
-                // Change email
-                if (!string.IsNullOrEmpty(request.NewEmail))
-                {
-                    var existingUser = await context.Users.FirstOrDefaultAsync(u => u.Email == request.NewEmail);
-                    if (existingUser != null)
-                    {
-                        return BadRequest(new { message = "New email is already in use." });
-                    }
-
-                    user.Email = request.NewEmail.Trim().ToLower();
-                }
-
                 // Change password
                 if (!string.IsNullOrEmpty(request.NewPassword))
                 {
@@ -593,6 +581,96 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, new { message = "An error occurred while resending the OTP." });
             }
         }
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin([FromBody] Requests.GoogleLoginRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Token))
+            {
+                return BadRequest(new { message = "Token is required." });
+            }
+
+            GoogleJsonWebSignature.Payload payload;
+            try
+            {
+                payload = await GoogleJsonWebSignature.ValidateAsync(request.Token, new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new[] { configuration["Google:ClientId"] }
+                });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Google token validation failed.");
+                return BadRequest(new { message = "Invalid Google token." });
+            }
+
+            string email = payload.Email;
+            // Check if the user already exists
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                // Create new user with an incomplete profile (password is not needed for Google login)
+                user = new User()
+                {
+                    Email = email,
+                    Name = payload.Name ?? string.Empty,
+                    GoogleId = payload.Subject, // (if you have a GoogleId field in your User model)
+                    CompleteProfile = false, // mark as incomplete by default
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                context.Users.Add(user);
+                await context.SaveChangesAsync();
+            }
+
+            // Determine if the profile is complete.
+            // For example, here we assume that if both Name and Gender are provided then the profile is complete.
+            bool completeProfile = !string.IsNullOrWhiteSpace(user.Name) && !string.IsNullOrWhiteSpace(user.Gender);
+
+            // Generate JWT token using your existing CreateToken method.
+            string accessToken = CreateToken(user);
+
+            return Ok(new { accessToken, completeProfile, user = mapper.Map<UserDTO>(user) });
+        }
+        [HttpPost("complete-profile")]
+        [Authorize]
+        public async Task<IActionResult> CompleteProfile([FromForm] Requests.CompleteProfileRequest request)
+        {
+            int userId = Convert.ToInt32(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var user = await context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "User not found." });
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Gender))
+            {
+                return BadRequest(new { message = "Name and gender are required." });
+            }
+
+            user.Name = request.Name.Trim();
+            user.Gender = request.Gender;
+            user.CompleteProfile = true;
+            user.UpdatedAt = DateTime.Now;
+
+            if (request.Image != null)
+            {
+                // Generate a unique file name and save the image file.
+                var uniqueFileName = $"{Guid.NewGuid()}_{request.Image.FileName}";
+                var imagePath = Path.Combine("wwwroot/images", uniqueFileName);
+                Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
+                user.Image = uniqueFileName;
+            }
+
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
+
+            return Ok(new { message = "Profile completed successfully.", user = mapper.Map<UserDTO>(user) });
+        }
+
 
     }
 }

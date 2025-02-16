@@ -307,6 +307,9 @@ namespace LearningAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<bool>("CompleteProfile")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
@@ -319,6 +322,9 @@ namespace LearningAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
+
+                    b.Property<string>("GoogleId")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Image")
                         .HasColumnType("longtext");

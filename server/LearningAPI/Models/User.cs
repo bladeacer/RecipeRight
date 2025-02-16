@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Claims;
 using System.Text.Json.Serialization;
 
 namespace LearningAPI.Models
@@ -33,11 +31,16 @@ namespace LearningAPI.Models
         public DateTime? TokenExpiration { get; set; }
         public bool IsTwoFactorEnabled { get; set; } = false; 
         public string? TwoFactorCode { get; set; }            
-        public DateTime? TwoFactorExpiry { get; set; }        
+        public DateTime? TwoFactorExpiry { get; set; }
+
+        // For Google login – store GoogleId (optional)
+        public string? GoogleId { get; set; }
+
+        // Indicates if the user has completed their profile (for Google users, they might need to fill in missing fields)
+        public bool CompleteProfile { get; set; } = false;
+
         [JsonIgnore]
         public List<UserAttributes>? UserAttributes { get; set; }
-        // One user to one Resource
         public List<Resource>? Resource { get; set; }
-
     }
 }
