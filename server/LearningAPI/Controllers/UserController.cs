@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LearningAPI.Models;
+using LearningAPI.Requests;
 using LearningAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
@@ -543,79 +544,44 @@ namespace LearningAPI.Controllers
             return Ok(new { accessToken });
         }
         [HttpPost("resend-2fa")]
-        public async Task<IActionResult> ResendTwoFactor([FromBody] Models.TwoFactorRequest request)
+        public async Task<IActionResult> ResendTwoFactor([FromBody] ResendTwoFactorRequest request)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(request.Email))
                 {
-                    return BadRequest(new { message = "Email is required." });
+                    logger.LogWarning("⚠ Email is missing in the request.");
+                    return BadRequest(new { message = "Email is required for resending OTP." });
                 }
 
-                // Find the user by email
                 var user = await context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower());
                 if (user == null)
                 {
-                    return NotFound(new { message = "User not found." });
+                    return NotFound(new { message = "User not found or 2FA is not enabled." });
                 }
 
-                // Generate a new 6-digit OTP
+                // Generate a new OTP
                 var newOtp = new Random().Next(100000, 999999).ToString();
+                logger.LogInformation($"✅ Generated new OTP: {newOtp} for {request.Email}");
 
-                // Save the new OTP with expiration time
+                // Save new OTP to database
                 user.TwoFactorCode = newOtp;
-                user.TwoFactorExpiry = DateTime.UtcNow.AddMinutes(5); // OTP valid for 5 minutes
+                user.TwoFactorExpiry = DateTime.UtcNow.AddMinutes(5);
                 await context.SaveChangesAsync();
+                logger.LogInformation($"✅ OTP updated in DB: {user.TwoFactorCode}, New Expiry: {user.TwoFactorExpiry}");
 
-                // Send OTP via email
-                var emailSent = await SendOtpEmailAsync(user.Email, newOtp);
-                if (!emailSent)
-                {
-                    return StatusCode(500, new { message = "Failed to send OTP email." });
-                }
+                // ✅ Use the same email service as login
+                var emailService = HttpContext.RequestServices.GetRequiredService<EmailService>();
+                await emailService.SendEmailAsync(user.Email, "Your 2FA Code", $"Your new OTP code is: {newOtp}");
 
                 return Ok(new { message = "OTP sent successfully." });
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error resending OTP.");
+                logger.LogError(ex, "❌ Error resending OTP.");
                 return StatusCode(500, new { message = "An error occurred while resending the OTP." });
             }
         }
-
-        // Helper method to send OTP email
-        private async Task<bool> SendOtpEmailAsync(string email, string otp)
-        {
-            try
-            {
-                var smtpClient = new SmtpClient("smtp.your-email-provider.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("your-email@example.com", "your-email-password"),
-                    EnableSsl = true,
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("your-email@example.com"),
-                    Subject = "Your Two-Factor Authentication Code",
-                    Body = $"Your OTP code is: {otp}",
-                    IsBodyHtml = false,
-                };
-
-                mailMessage.To.Add(email);
-
-                await smtpClient.SendMailAsync(mailMessage);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error sending OTP email.");
-                return false;
-            }
-        }
-
-
 
     }
 }

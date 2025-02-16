@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box } from "@mui/material";
-import { CheckCircle } from "@mui/icons-material";
+import { CheckCircle, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -16,6 +16,18 @@ function Register() {
     const [fadeOut, setFadeOut] = useState(false);
     const [attributes, setAttributes] = useState([]);
     const [isExistsAdmin, setIsExistsAdmin] = useState(false);
+    const [users, setUser] = useState([]);
+    const [passwordStrength, setPasswordStrength] = useState({ color: "red", text: "Weak", width: "25%" });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const getUsers = () => {
+        http.get("/user").then((res) => {
+            console.log(res.data);
+            setUser(res.data);
+        })
+    }
+
 
     const getAttributes = () => {
         http.get("/attributes").then((res) => {
@@ -128,7 +140,30 @@ function Register() {
                 });
         },
     });
+    const checkPasswordStrength = (password) => {
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[!@#$%^&*]/.test(password)) score++;
+        if (/[A-Z]/.test(password)) score++;
 
+        if (score === 1) {
+            setPasswordStrength({ color: "red", text: "Weak", width: "25%" });
+        } else if (score === 2) {
+            setPasswordStrength({ color: "orange", text: "Medium", width: "50%" });
+        } else if (score === 3) {
+            setPasswordStrength({ color: "green", text: "Strong", width: "75%" });
+        } else if (score === 4) {
+            setPasswordStrength({ color: "darkgreen", text: "Very Strong", width: "100%" });
+        } else {
+            setPasswordStrength({ color: "red", text: "Weak", width: "25%" });
+        }
+    };
+
+    const handlePasswordChange = (e) => {
+        formik.handleChange(e);
+        checkPasswordStrength(e.target.value);
+    };
     const handleImageChange = (event) => {
         const file = event.currentTarget.files[0];
         if (file) {
@@ -148,8 +183,6 @@ function Register() {
                 top: "64px",
                 left: 0,
                 width: "100%",
-                // height: "calc(100vh - 64px)",
-                // backgroundColor: "#6495ED",
                 display: "flex",
                 justifyContent: "center",
                 opacity: fadeOut ? 0 : 1,
@@ -211,32 +244,92 @@ function Register() {
                                     </label>
 
                                     <label> Create a Password
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            value={formik.values.password}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            className={formik.touched.password && formik.errors.password ? 'error' : ''}
-                                            aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
-                                            autoComplete='off'
-                                        />
+                                        <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                                            <input
+                                                type={showPassword ? "text" : "password"}  // Toggle visibility
+                                                name="password"
+                                                value={formik.values.password}
+                                                onChange={handlePasswordChange}
+                                                onBlur={formik.handleBlur}
+                                                className={formik.touched.password && formik.errors.password ? 'error' : ''}
+                                                aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                                                autoComplete="off"
+                                                style={{ flex: 1, paddingRight: "35px" }}  // Space for the toggle button
+                                            />
+
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}  // Toggle state
+                                                style={{
+                                                    position: "absolute",
+                                                    right: "25px",
+                                                    background: "none",
+                                                    border: "none",
+                                                    cursor: "pointer",
+                                                    fontSize: "14px",
+                                                    color: "#333",
+                                                }}
+                                            >
+                                                {showPassword ? <Visibility /> : <VisibilityOff />} {/* Eye icons */}
+                                            </button>
+                                        </div>
                                         {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
                                     </label>
 
+                                    <div style={{
+                                        height: "8px",
+                                        width: "100%",
+                                        backgroundColor: "#ddd",
+                                        borderRadius: "5px",
+                                        marginTop: "5px",
+                                        position: "relative"
+                                    }}>
+                                        <div style={{
+                                            height: "100%",
+                                            width: passwordStrength.width,
+                                            backgroundColor: passwordStrength.color,
+                                            borderRadius: "5px",
+                                            transition: "width 0.3s ease-in-out"
+                                        }}></div>
+                                    </div>
+                                    <p style={{ color: passwordStrength.color, fontWeight: "bold", fontSize: "14px", marginTop: "5px" }}>
+                                        {passwordStrength.text}
+                                    </p>
+
                                     <label> Confirm Password
-                                        <input
-                                            type="password"
-                                            name="confirmPassword"
-                                            value={formik.values.confirmPassword}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            className={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'error' : ''}
-                                            aria-invalid={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'true' : 'false'}
-                                            autoComplete='off'
-                                        />
+                                        <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                                            <input
+                                                type={showConfirmPassword ? "text" : "password"}  // Toggle visibility
+                                                name="confirmPassword"
+                                                value={formik.values.confirmPassword}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                className={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'error' : ''}
+                                                aria-invalid={formik.touched.confirmPassword && formik.errors.confirmPassword ? 'true' : 'false'}
+                                                autoComplete="off"
+                                                style={{ flex: 1, paddingRight: "35px" }}  // Space for the toggle button
+                                            />
+
+                                            
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}  // Toggle state
+                                                style={{
+                                                    position: "absolute",
+                                                    right: "25px",
+                                                    background: "none",
+                                                    border: "none",
+                                                    cursor: "pointer",
+                                                    fontSize: "14px",
+                                                    color: "#333",
+                                                }}
+                                            >
+                                                {showConfirmPassword ? <Visibility /> : <VisibilityOff />} {/* Eye icons */}
+                                            </button>
+                                        </div>
                                         {formik.touched.confirmPassword && formik.errors.confirmPassword && <small>{formik.errors.confirmPassword}</small>}
                                     </label>
+
 
                                     <label> Gender
                                         <select

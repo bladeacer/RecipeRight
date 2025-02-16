@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import http from "../../http";
@@ -12,6 +13,7 @@ function Login() {
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
     const [captchaToken, setCaptchaToken] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -66,8 +68,8 @@ function Login() {
                 left: 0,
                 width: "100%",
                 display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                justifyContent: "center",
+                alignItems: "center",
                 transition: "opacity 0.5s ease-in-out",
             }}
         >
@@ -103,22 +105,40 @@ function Login() {
 
                     <label>
                         Enter your Password
-                        <input
-                            type="password"
-                            name="password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className={formik.touched.password && formik.errors.password ? 'error' : ''}
-                            aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
-                            autoComplete='off'
-                        />
+                        <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                            <input
+                                type={showPassword ? "text" : "password"}  // Toggle visibility
+                                name="password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                className={formik.touched.password && formik.errors.password ? 'error' : ''}
+                                aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
+                                autoComplete="off"
+                                style={{ flex: 1, paddingRight: "35px" }}  // Space for the toggle button
+                            />
+
+                            {/* Show/Hide Password Button */}
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}  // Toggle state
+                                style={{
+                                    position: "absolute",
+                                    right: "20px",
+                                    background: "none",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    fontSize: "14px",
+                                    color: "#333",
+                                }}
+                            >
+                                {showPassword ? <Visibility /> : <VisibilityOff />} {/* Eye icons */}
+                            </button>
+                        </div>
                         {formik.touched.password && formik.errors.password && <small>{formik.errors.password}</small>}
                     </label>
-                    <label>
-                        <input type="checkbox" />
-                        Remember me
-                    </label>
+
+
                     <footer style={{ marginBlock: 10, paddingInline: 1.5, textAlign: 'left' }}>
                         Forgot password?&nbsp;
                         <a href="/forgotpassword" className="pico-color-indigo-600" style={{ textDecoration: 'underline' }}>Click here</a>

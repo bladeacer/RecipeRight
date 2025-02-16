@@ -3,6 +3,7 @@ import { Box, Avatar, IconButton } from '@mui/material';
 import http from '../../http';
 import { useNavigate } from 'react-router-dom';
 import { ArrowBack } from '@mui/icons-material';
+
 function EditProfile() {
     const [user, setUser] = useState({
         name: '',
@@ -31,8 +32,10 @@ function EditProfile() {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        setUser({ ...user, image: file });
-        setImagePreview(URL.createObjectURL(file));
+        if (file) {
+            setUser({ ...user, image: file });
+            setImagePreview(URL.createObjectURL(file));
+        }
     };
 
     const handleSubmit = (e) => {
@@ -66,22 +69,26 @@ function EditProfile() {
         >
             <IconButton
                 onClick={() => navigate(-1)}
-                sx={{ alignSelf: 'flex-start', mb: 2, color: "var(--pico-background-white-500)" }} >
-                <ArrowBack sx={{mt: 0.5}}/> Back 
+                sx={{ alignSelf: 'flex-start', mb: 2, color: "var(--pico-background-white-500)" }}
+            >
+                <ArrowBack sx={{ mt: 0.5 }} /> Back
             </IconButton>
             <Avatar
                 alt={user.name}
                 src={imagePreview || '/default-avatar.png'}
                 sx={{ width: 100, height: 100 }}
             />
-            <button className="secondary" style={{ mt: 2 }}>
+            
+            {/* Upload Image Button Fix */}
+            <button type="button" className="secondary" style={{ marginTop: 10 }}>
                 <label>
                     Upload Image
                     <input type="file" hidden accept="image/*" onChange={handleImageChange} />
                 </label>
             </button>
 
-            <label> Enter your name
+            <label>
+                Enter your name
                 <input
                     type="text"
                     name="name"
@@ -91,14 +98,16 @@ function EditProfile() {
                     autoComplete='off'
                 />
             </label>
-            <label> Enter your gender
-                <input
-                    type="text"
-                    id="gender"
-                    value={user.gender}
-                    onChange={handleInputChange}
-                    autoComplete='off'
-                />
+
+            {/* Change Gender Input to a Dropdown */}
+            <label>
+                Select your gender
+                <select name="gender" value={user.gender} onChange={handleInputChange}>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
             </label>
 
             <button type="submit">Save changes</button>
