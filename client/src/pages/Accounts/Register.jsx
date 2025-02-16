@@ -27,6 +27,8 @@ function Register() {
             setUser(res.data);
         })
     }
+
+
     const getAttributes = () => {
         http.get("/attributes").then((res) => {
             setAttributes(res.data);
@@ -85,12 +87,11 @@ function Register() {
             formData.append("image", data.image);
             formData.append("recaptchaToken", captchaToken);
 
-            getUsers();
             getAttributes();
             // Make the first user admin :)
-            if (users.length == 1 && attributes.length == 0) {
+            if (attributes.length == 0) {
                 http.get("/userattributes/attr?attribute=admin").then((res) => {
-                    setIsExistsAdmin(res.data);
+                    setIsExistsAdmin(Object.keys(res.data).length == 0);
                 });
                 if (!isExistsAdmin) {
                     var default_attr = {
@@ -106,6 +107,19 @@ function Register() {
                         userId: 1
                     }
                     http.post("/userattributes", default_user_attr);
+                    var default_attr2 = {
+                        attributeName: "view report group",
+                        attributeDescription: "users who can view report"
+                    }
+
+                    http.post("/attributes", default_attr2);
+                    var default_user_attr2 = {
+                        userAttributeName: "view_report",
+                        userAttributeDescription: "let users view report",
+                        attributeId: 2,
+                        userId: 1
+                    }
+                    http.post("/userattributes", default_user_attr2);
                 }
             }
 
