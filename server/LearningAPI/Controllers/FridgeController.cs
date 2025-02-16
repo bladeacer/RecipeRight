@@ -9,9 +9,7 @@ using LearningAPI.Models;
 
 namespace LearningAPI.Controllers
 {
-    /// <summary>
     /// API controller for managing fridge items.
-    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize] // Ensures all actions require authentication
@@ -19,19 +17,15 @@ namespace LearningAPI.Controllers
     {
         private readonly MyDbContext _context;
 
-        /// <summary>
+
         /// Initializes a new instance of the <see cref="FridgeController"/> class.
-        /// </summary>
-        /// <param name="context">The database context for accessing fridge items.</param>
         public FridgeController(MyDbContext context)
         {
             _context = context;
         }
 
-        /// <summary>
+
         /// Retrieves all fridge items for the authenticated user.
-        /// </summary>
-        /// <returns>A list of fridge items if successful; otherwise, an error response.</returns>
         [HttpGet]
         public async Task<IActionResult> GetFridgeItems()
         {
@@ -53,11 +47,7 @@ namespace LearningAPI.Controllers
             }
         }
 
-        /// <summary>
         /// Adds a new ingredient to the authenticated user's fridge.
-        /// </summary>
-        /// <param name="newItem">The fridge item to add.</param>
-        /// <returns>The added fridge item if successful; otherwise, an error response.</returns>
         [HttpPost("add")]
         public async Task<IActionResult> AddFridgeItem([FromBody] Fridge newItem)
         {
@@ -89,11 +79,7 @@ namespace LearningAPI.Controllers
         }
 
 
-        /// <summary>
         /// Removes an ingredient from the authenticated user's fridge by its ID.
-        /// </summary>
-        /// <param name="id">The ID of the fridge item to remove.</param>
-        /// <returns>A status message indicating the result of the removal.</returns>
         [HttpDelete("remove/{id}")]
         public async Task<IActionResult> RemoveFridgeItem(int id)
         {
@@ -118,5 +104,32 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, "An error occurred while removing the fridge item.");
             }
         }
+        /// Removes all fridge items for the authenticated user.
+        [HttpDelete("removeAll")]
+        public async Task<IActionResult> RemoveAllFridgeItems()
+        {
+            var userId = int.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            try
+            {
+                // Get all fridge items for the user
+                var items = await _context.Fridges.Where(f => f.UserId == userId).ToListAsync();
+
+                if (!items.Any())
+                {
+                    return NotFound("No fridge items to remove.");
+                }
+
+                _context.Fridges.RemoveRange(items);
+                await _context.SaveChangesAsync();
+
+                return Ok("All fridge items removed successfully.");
+            }
+            catch
+            {
+                return StatusCode(500, "An error occurred while removing all fridge items.");
+            }
+        }
+
     }
 }

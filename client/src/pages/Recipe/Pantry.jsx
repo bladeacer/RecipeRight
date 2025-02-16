@@ -4,21 +4,26 @@ import http from "../../http";
 import { Link } from "react-router-dom";
 import "../../themes/Pantry.css";
 import ChatButton from "../../components/ChatButton";
+
 const Pantry = () => {
     const [pantryItems, setPantryItems] = useState("");
+    const [fridgeItems, setFridgeItems] = useState([]);
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [invalidImages, setInvalidImages] = useState(new Set());
 
-
-    // Fetch random recipes on page load
+    // Fetch fridge ingredients on page load
     useEffect(() => {
+        fetchFridgeItems();
         fetchRandomRecipes();
     }, []);
 
-    const handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-            fetchRecipes();
+    const fetchFridgeItems = async () => {
+        try {
+            const response = await http.get("https://localhost:7004/api/Fridge");
+            setFridgeItems(response.data.map(item => item.ingredientName));
+        } catch (error) {
+            console.error("Error fetching fridge ingredients:", error);
         }
     };
 
@@ -29,7 +34,7 @@ const Pantry = () => {
             const data = response.data;
 
             if (data && data.recipes) {
-                setRecipes(data.recipes); // Extract 'recipes' array from API response
+                setRecipes(data.recipes);
             } else {
                 console.error("Invalid response format:", data);
                 setRecipes([]);
@@ -42,13 +47,9 @@ const Pantry = () => {
         }
     };
 
-    const handleChange = (e) => {
-        setPantryItems(e.target.value);
-    };
-
     const fetchRecipes = async () => {
         if (!pantryItems.trim()) {
-            alert("Please enter items in your pantry before searching.");
+            alert("Please enter items in your pantry or use fridge ingredients.");
             return;
         }
 
@@ -66,28 +67,44 @@ const Pantry = () => {
         }
     };
 
+    // Autofill pantry input with fridge ingredients
+    const useFridgeIngredients = () => {
+        if (fridgeItems.length === 0) {
+            alert("No ingredients found in the fridge.");
+            return;
+        }
+        setPantryItems(fridgeItems.join(", "));
+    };
+
     return (
         <div className="pantry-page">
-            <h1>Find Recipes Based on Your Pantry</h1>
+            <h1>Find Recipes Based on Your Pantry & Fridge</h1>
+            <p className="page-description">
+                Enter the ingredients you have in your pantry or use items from your fridge to find matching recipes.
+            </p>
+
             <div className="input-section">
                 <input
                     type="text"
                     value={pantryItems}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyPress} // Listen for Enter key
-                    placeholder="Enter items in your pantry (e.g., rice, chicken, butter)"
+                    onChange={(e) => setPantryItems(e.target.value)}
+                    placeholder="Enter pantry items (e.g., rice, chicken, butter)"
                 />
-
-                <button onClick={fetchRecipes} disabled={loading}>
-                    {loading ? "Searching..." : "Search Recipes"}
-                </button>
+                <div className="button-group">
+                    <button onClick={fetchRecipes} disabled={loading}>
+                        {loading ? "Searching..." : "Search Recipes"}
+                    </button>
+                    <button onClick={useFridgeIngredients} className="fridge-button">
+                        Import Fridge Ingredients
+                    </button>
+                </div>
             </div>
 
             <div className="recipes-section">
                 <h2>{pantryItems ? "Search Results" : "Popular Recipes"}</h2>
                 <div className="recipes-list">
                     {recipes
-                        .filter(recipe => !invalidImages.has(recipe.id)) // Filter out broken images
+                        .filter(recipe => !invalidImages.has(recipe.id))
                         .map(recipe => (
                             <div className="recipe-card" key={recipe.id}>
                                 <Link to={`/recipe/${recipe.id}`}>
@@ -95,7 +112,7 @@ const Pantry = () => {
                                         src={recipe.image}
                                         alt={recipe.title}
                                         className="recipe-image"
-                                        onError={() => setInvalidImages(prev => new Set([...prev, recipe.id]))} // Mark as broken
+                                        onError={() => setInvalidImages(prev => new Set([...prev, recipe.id]))}
                                     />
                                     <div className="recipe-details">
                                         <h3>{recipe.title}</h3>
@@ -103,18 +120,15 @@ const Pantry = () => {
                                             <p className="missing-ingredients">
                                                 Missing: {recipe.missedIngredients.map(ing => ing.name).join(", ")}
                                             </p>
-                                        ) : pantryItems ? null : (
-                                            <p className="missing-ingredients"> </p>
-                                        )}
+                                        ) : null}
                                     </div>
                                 </Link>
                             </div>
                         ))}
                 </div>
-
             </div>
 
-            {/* Add Chat Button */}
+            {/* Chat Button */}
             <ChatButton />
         </div>
     );

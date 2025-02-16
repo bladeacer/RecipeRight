@@ -28,6 +28,8 @@ namespace LearningAPI
         public required DbSet<ResourceType> ResourceTypes { get; set; }
         public required DbSet<Attributes> Attributes { get; set; }
         public required DbSet<UserAttributes> UserAttributes { get; set; }
+        public required DbSet<MealPlan> MealPlans { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
