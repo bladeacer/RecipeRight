@@ -10,7 +10,7 @@ namespace LearningAPI.Controllers
     [Route("[controller]")]
     public class UserAttributesController(MyDbContext context, IMapper mapper, ILogger<ResourceController> logger) : ControllerBase
     {
-        [HttpGet, Authorize]
+        [HttpGet]
         [ProducesResponseType(typeof(UserAttributesDTO), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(string? search)
         {
@@ -33,7 +33,7 @@ namespace LearningAPI.Controllers
             }
         }
 
-        [HttpGet("attr"), Authorize]
+        [HttpGet("attr")]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
         public async Task<IActionResult> HasAttribute(string? attribute)
         {
