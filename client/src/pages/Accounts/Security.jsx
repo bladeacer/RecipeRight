@@ -15,7 +15,7 @@ function ChangeSecurity() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
-  // Password strength state (using the same style as your Register page)
+  // Password strength state
   const [passwordStrength, setPasswordStrength] = useState({ color: "red", text: "Weak", width: "25%" });
 
   const checkPasswordStrength = (password) => {
@@ -41,26 +41,34 @@ function ChangeSecurity() {
   const formik = useFormik({
     initialValues: {
       currentPassword: '',
-      newEmail: '',
-      confirmNewEmail: '',
       newPassword: '',
       confirmNewPassword: ''
     },
     validationSchema: yup.object({
       currentPassword: yup.string().trim().required('Current password is required'),
-      newEmail: yup.string().trim().email('Enter a valid email').nullable(),
-      confirmNewEmail: yup.string().trim().oneOf([yup.ref('newEmail')], 'New emails do not match').nullable(),
-      newPassword: yup.string().trim().min(8, 'New password must be at least 8 characters').max(50, 'New password must be at most 50 characters').nullable(),
-      confirmNewPassword: yup.string().trim().oneOf([yup.ref('newPassword')], 'New passwords do not match').nullable()
+      newPassword: yup
+        .string()
+        .trim()
+        .min(8, 'New password must be at least 8 characters')
+        .max(50, 'New password must be at most 50 characters')
+        .nullable(),
+      confirmNewPassword: yup
+        .string()
+        .trim()
+        .oneOf([yup.ref('newPassword')], 'New passwords do not match')
+        .nullable()
     }),
     onSubmit: async (data) => {
       setError('');
+      
+      // If newPassword is null/empty, assume this is a Google login account
+      if (!data.newPassword) {
+        setError("Google logins are not able to change password.");
+        return;
+      }
+      
       const formData = new FormData();
       formData.append('CurrentPassword', data.currentPassword.trim());
-      if (data.newEmail) {
-        formData.append('NewEmail', data.newEmail.trim().toLowerCase());
-        formData.append('ConfirmNewEmail', data.confirmNewEmail.trim().toLowerCase());
-      }
       if (data.newPassword) {
         formData.append('NewPassword', data.newPassword.trim());
         formData.append('ConfirmNewPassword', data.confirmNewPassword.trim());
@@ -75,7 +83,6 @@ function ChangeSecurity() {
     }
   });
 
-  // Handle New Password changes by updating formik and checking strength
   const handleNewPasswordChange = (e) => {
     formik.handleChange(e);
     checkPasswordStrength(e.target.value);
@@ -101,7 +108,7 @@ function ChangeSecurity() {
       <h4 style={{ mb: 4, textAlign: 'center' }}>Edit Security Information</h4>
       {error && <Alert severity="error">{error}</Alert>}
       
-      <label> Current Password
+      <label>Current Password
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <input
             required
@@ -121,31 +128,7 @@ function ChangeSecurity() {
         {formik.touched.currentPassword && formik.errors.currentPassword && <small>{formik.errors.currentPassword}</small>}
       </label>
       
-      <label>New Email
-        <input
-          id="newEmail"
-          name="newEmail"
-          value={formik.values.newEmail}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          aria-invalid={formik.touched.newEmail && formik.errors.newEmail ? 'true' : 'false'}
-        />
-        {formik.touched.newEmail && formik.errors.newEmail && <small>{formik.errors.newEmail}</small>}
-      </label>
-      
-      <label>Confirm New Email
-        <input
-          id="confirmNewEmail"
-          name="confirmNewEmail"
-          value={formik.values.confirmNewEmail}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          aria-invalid={formik.touched.confirmNewEmail && formik.errors.confirmNewEmail ? 'true' : 'false'}
-        />
-        {formik.touched.confirmNewEmail && formik.errors.confirmNewEmail && <small>{formik.errors.confirmNewEmail}</small>}
-      </label>
-      
-      <label> New Password
+      <label>New Password
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <input
             id="newPassword"
@@ -162,7 +145,6 @@ function ChangeSecurity() {
           </IconButton>
         </Box>
         {formik.touched.newPassword && formik.errors.newPassword && <small>{formik.errors.newPassword}</small>}
-        {/* Custom slider from your Register page */}
         <div style={{
           height: "8px",
           width: "100%",
