@@ -507,10 +507,20 @@ namespace LearningAPI.Controllers
             }
         }
 
+        public class TwoFactorToggleRequest
+        {
+            public bool Enable { get; set; }
+        }
+
         [HttpPost("enable-2fa")]
         [Authorize]
-        public async Task<IActionResult> EnableTwoFactor([FromBody] bool enable)
+        public async Task<IActionResult> EnableTwoFactor([FromBody] TwoFactorToggleRequest request)
         {
+            if (request == null)
+            {
+                return BadRequest(new { message = "Invalid request." });
+            }
+
             var userId = Convert.ToInt32(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var user = await context.Users.FindAsync(userId);
 
@@ -519,11 +529,12 @@ namespace LearningAPI.Controllers
                 return NotFound(new { message = "User not found." });
             }
 
-            user.IsTwoFactorEnabled = enable;
+            user.IsTwoFactorEnabled = request.Enable;
             await context.SaveChangesAsync();
 
-            return Ok(new { message = enable ? "2FA enabled." : "2FA disabled." });
+            return Ok(new { message = request.Enable ? "2FA enabled." : "2FA disabled." });
         }
+
         [HttpPost("verify-2fa")]
         public async Task<IActionResult> VerifyTwoFactor([FromBody] Models.TwoFactorRequest request)
         {

@@ -34,7 +34,7 @@ function Profile() {
         try {
             await http.delete(`/user/${user.id}`); // API call to delete user
             alert("Your account has been deleted successfully.");
-            
+
             localStorage.clear();
             sessionStorage.clear();
             navigate("/login", { replace: true }); // Redirect to login
@@ -42,6 +42,20 @@ function Profile() {
             console.error("Error deleting account:", error.response?.data || error);
             alert(error.response?.data?.message || "Failed to delete account.");
         }
+    };
+    const handleTwoFactorToggle = async () => {
+        try {
+            const response = await http.post("/user/enable-2fa", { enable: !isTwoFactorEnabled });
+
+            if (response.status === 200) {
+                setTwoFactorEnabled(!isTwoFactorEnabled);
+                alert(response.data.message);
+            }
+        } catch (error) {
+            console.error("Error updating 2FA:", error.response?.data || error);
+            alert(error.response?.data?.message || "Failed to update 2FA.");
+        }
+        setOpenConfirm(false);
     };
 
     return (
@@ -72,9 +86,8 @@ function Profile() {
                     <p className="pico-color-zinc-300">Email: {user.email}</p>
                     <p className="pico-color-zinc-300">Gender: {user.gender}</p>
 
-                    
+
                     <button
-                        className="outline"
                         style={{
                             backgroundColor: isTwoFactorEnabled ? "#dc3545" : "#28a745",
                             color: "#fff",
@@ -85,14 +98,13 @@ function Profile() {
                             marginBottom: "15px",
                             cursor: "pointer"
                         }}
-                        onClick={() => {
-                            setOpenConfirm(true);
-                        }}
+                        onClick={() => setOpenConfirm(true)}
                     >
                         {isTwoFactorEnabled ? "Disable 2FA" : "Enable 2FA"}
                     </button>
 
-                    
+
+
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                         <button className="pico-background-azure-500" onClick={() => navigate("/edit-profile")}>
                             Edit Profile
@@ -102,7 +114,7 @@ function Profile() {
                             Change Security
                         </button>
 
-                        
+
                         <button
                             style={{
                                 backgroundColor: "#dc3545",
@@ -125,6 +137,33 @@ function Profile() {
                     </Box>
                 </Box>
             </Box>
+            {openConfirm && (
+                <dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+                    <article>
+                        <header>
+                            <h5>{isTwoFactorEnabled ? "Disable 2FA" : "Enable 2FA"}</h5>
+                        </header>
+                        <p>Are you sure you want to {isTwoFactorEnabled ? "disable" : "enable"} Two-Factor Authentication?</p>
+                        <footer>
+                            <button onClick={() => setOpenConfirm(false)}>Cancel</button>
+                            <button
+                                style={{
+                                    backgroundColor: isTwoFactorEnabled ? "#dc3545" : "#28a745",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "10px 15px",
+                                    fontSize: "16px",
+                                    borderRadius: "5px",
+                                    cursor: "pointer"
+                                }}
+                                onClick={handleTwoFactorToggle}
+                            >
+                                Confirm
+                            </button>
+                        </footer>
+                    </article>
+                </dialog>
+            )}
 
             {/* DELETE ACCOUNT CONFIRMATION POPUP */}
             {openDeleteConfirm && (

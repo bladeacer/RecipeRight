@@ -2,8 +2,6 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { Container } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// import { ThemeProvider } from '@mui/material/styles';
-// import MyTheme from './themes/MyTheme';
 
 import http from './http';
 import UserContext from './contexts/UserContext';
@@ -34,7 +32,6 @@ import FoodWasteLogs from './pages/FoodWaste/FoodWasteLogs';
 import EditFoodWasteLogs from './pages/FoodWaste/EditFoodWasteLog';
 import AddFoodWasteLogs from './pages/FoodWaste/AddFoodWasteLog';
 
-
 import Error from './pages/Others/Error';
 import Report from './pages/Others/Report';
 import AdminDashboard from './pages/Others/AdminDashboard';
@@ -53,7 +50,6 @@ import Attributes from './pages/Admin/attributes/Attributes';
 import AddUserAttribute from './pages/Admin/attributes/AddUserAttribute'
 import EditUserAttribute from './pages/Admin/attributes/EditUserAttribute';
 import UserAttributes from './pages/Admin/attributes/UserAttributes';
-
 
 function App() {
   const [user, setUser] = useState(null);
@@ -99,16 +95,32 @@ function App() {
           <main className="container">
             <nav style={{ paddingBlock: "0.75rem" }} >
               <ul>
-                <li> <a href="/"> <strong>RecipeRight</strong> </a> </li>
+                <li> 
+                  <a href="/"> 
+                    <strong>RecipeRight</strong> 
+                  </a> 
+                </li>
                 <li></li>
                 {user && (
                   <>
                     <li>
                       <details className="dropdown">
-                        <summary> Recipes </summary>
+                        <summary>
+                          {(() => {
+                            // Dynamically update dropdown title based on the current path
+                            const path = window.location.pathname;
+                            let title = "Recipes";
+                            if (path.startsWith("/pantry")) {
+                              title = "Pantry";
+                            } else if (path.startsWith("/bookmarks")) {
+                              title = "Bookmarks";
+                            }
+                            return title;
+                          })()}
+                        </summary>
                         <ul>
                           <li><a href="/pantry">Pantry</a></li>
-                          <li> <a href="/bookmarks"> Bookmarks </a> </li>
+                          <li><a href="/bookmarks">Bookmarks</a></li>
                         </ul>
                       </details>
                     </li>
@@ -126,7 +138,7 @@ function App() {
                         <summary> Resources </summary>
                         <ul>
                           <li><a href="/resources">View Resources</a></li>
-                          <li> <a href="/resourcetypes"> View Resource Types </a> </li>
+                          <li><a href="/resourcetypes"> View Resource Types </a></li>
                         </ul>
                       </details>
                     </li>
@@ -137,8 +149,8 @@ function App() {
                       <details className="dropdown">
                         <summary> Attributes </summary>
                         <ul>
-                          <li> <a href="/attributes"> Attributes </a> </li>
-                          <li> <a href="/userattributes"> User Attributes </a> </li>
+                          <li><a href="/attributes"> Attributes </a></li>
+                          <li><a href="/userattributes"> User Attributes </a></li>
                         </ul>
                       </details>
                     </li>
@@ -160,7 +172,9 @@ function App() {
                       <a href="/profile" className="contrast">{user.name}</a>
                     </button>
                   </li>
-                  <li><button onClick={logout}>Logout</button></li>
+                  <li>
+                    <button onClick={logout}>Logout</button>
+                  </li>
                 </ul>
               )}
               {!user && (
@@ -178,7 +192,6 @@ function App() {
                 </ul>
               )}
             </nav>
-
           </main>
         )}
 
@@ -224,7 +237,6 @@ function App() {
             <Route path="/resetpassword" element={<ResetPassword />} />
             <Route path="/verify-2fa" element={<TwoFactorAuth />} />
 
-
             {/* TODO: Add admin dashboard */}
             <Route path={"/admin/dashboard"} element={
               <>
@@ -235,8 +247,7 @@ function App() {
                   <Error />
                 )}
               </>
-          } />
-
+            } />
 
             <Route path={"/pantry"} element={
               <>
@@ -408,11 +419,10 @@ function App() {
 
             <Route path="/" element={
               <>
-              {!user && (<Login />)}
-              {user && (<Pantry />)}
+                {!user && (<Login />)}
+                {user && (<Pantry />)}
               </>
-              } />
-
+            } />
           </Routes>
         </Container>
       </Router>
