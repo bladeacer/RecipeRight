@@ -173,3 +173,79 @@
     background-color: #218838;
   }
   
+  /* Remove All Button */
+.remove-all-button {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.remove-all-button:hover {
+  background-color: #cc0000;
+}
+
+/* Ingredient Grid */
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Smaller Ingredient Cards */
+.ingredient-card {
+  padding: 8px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Centered Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.search-bar {
+  margin-top: 15px; /* Adds space above */
+  padding: 8px; /* Inner padding */
+  width: 100%; /* Ensure full width */
+  max-width: 400px; /* Set max width for better readability */
+  display: block; /* Ensures it behaves like a block element */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Button Row - Align Buttons in the Same Row */
+.button-row {
+  display: flex;
+  justify-content: space-between; /* Space out buttons */
+  align-items: center; /* Align buttons vertically */
+  gap: 15px; /* Increased spacing */
+  margin-top: 15px;
+  flex-wrap: wrap; /* Ensures responsiveness on small screens */
+}
+
+/* Ensure Buttons Have Equal Sizing */
+.button-row button {
+  flex: 1; /* Makes both buttons equal width */
+  padding: 10px 15px;
+  font-size: 16px;
+  text-align: center;
+}
+
+
+.page-description {
+  text-align: center;
+  font-size: 1rem;
+  color: #555; /* Soft gray for readability */
+  margin-bottom: 15px; /* Adds space below the text */
+}

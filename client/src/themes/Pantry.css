@@ -1,26 +1,38 @@
+/* Page Layout */
 .pantry-page {
     padding: 20px;
     font-family: Arial, sans-serif;
-    max-width: 1200px; /* Wider page layout for better alignment */
+    max-width: 1200px;
     margin: 0 auto;
 }
 
+/* Page Heading */
 .pantry-page h1 {
     text-align: center;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 28px;
 }
 
-.pantry-page .input-section {
-    display: flex;
-    gap: 10px;
+/* Description */
+.page-description {
+    text-align: center;
+    font-size: 1rem;
+    color: #555;
     margin-bottom: 20px;
-    justify-content: center; /* Center-align search input and button */
 }
 
-.pantry-page .input-section input {
-    flex: 1;
+/* Input Section */
+.input-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.input-section input {
+    width: 100%;
     max-width: 500px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -28,7 +40,13 @@
     font-size: 16px;
 }
 
-.pantry-page .input-section button {
+/* Button Group */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-section button {
     padding: 10px 20px;
     background-color: #3b43dc;
     color: white;
@@ -39,21 +57,31 @@
     transition: background-color 0.3s ease;
 }
 
-.pantry-page .input-section button:hover:not(:disabled) {
+.input-section button:hover:not(:disabled) {
     background-color: #2f0db9;
 }
 
-.pantry-page .recipes-section {
+.fridge-button {
+    background-color: #4CAF50;
+}
+
+.fridge-button:hover {
+    background-color: #388E3C;
+}
+
+/* Recipes Section */
+.recipes-section {
     margin-top: 20px;
 }
 
-.pantry-page .recipes-list {
+.recipes-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
 }
 
-.pantry-page .recipe-card {
+/* Recipe Card */
+.recipe-card {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 15px;
@@ -64,47 +92,43 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    overflow: hidden; /* Prevent content overflow */
+    overflow: hidden;
 }
 
-.pantry-page .recipe-card:hover {
+.recipe-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
-.pantry-page .recipe-card a {
+.recipe-card a {
     text-decoration: none;
     color: inherit;
     width: 100%;
 }
 
-.pantry-page .recipe-image {
+/* Recipe Image */
+.recipe-image {
     width: 100%;
-    height: 200px;
-    object-fit: cover; /* Ensures proper aspect ratio */
+    height: 180px;
+    object-fit: cover;
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
-.pantry-page .recipe-details h3 {
+/* Recipe Details */
+.recipe-details h3 {
     font-size: 18px;
     color: #333;
     margin-bottom: 10px;
-    line-height: 1.4;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
 }
 
-.pantry-page .recipe-details p {
+.recipe-details p {
     font-size: 14px;
     color: #666;
-    margin-top: 5px;
-    line-height: 1.6;
 }
 
+/* Missing Ingredients */
 .missing-ingredients {
     font-size: 14px;
-    color: #d9534f; /* Red color for missing ingredients */
-    margin-top: 5px;
+    color: #d9534f;
 }

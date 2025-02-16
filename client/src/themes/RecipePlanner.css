@@ -1,0 +1,101 @@
+/* ============================
+   Recipe Planner Styles
+   ============================ */
+
+/* Main container */
+.recipe-planner-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Page Description */
+.page-description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Generate Button */
+.generate-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.generate-button:hover {
+    background-color: #0056b3;
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Meal Plan Section */
+.meal-plan-section {
+    margin-top: 20px;
+    text-align: left;
+}
+
+/* Nutritional Info */
+.nutritional-info {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Recipe Cards */
+.recipes-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Recipe Card */
+.recipe-card {
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white;
+    transition: transform 0.3s ease;
+}
+
+.recipe-card:hover {
+    transform: scale(1.05);
+}
+
+/* Recipe Image */
+.recipe-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+/* Recipe Details */
+.recipe-details {
+    padding: 10px;
+    text-align: center;
+}
+
+.recipe-details h3 {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* Chat Button Position */
+.chat-button-container {
+    margin-top: 30px;
+}

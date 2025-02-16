@@ -21,6 +21,7 @@ import RecipeDetails from "./pages/Recipe/RecipeDetails";
 import Bookmarks from "./pages/Recipe/Bookmarks";
 import Fridge from "./pages/Recipe/Fridge";
 import Chatbot from './pages/Recipe/Chatbot';
+import RecipePlanner from './pages/Recipe/RecipePlanner';
 
 import EditSustainabilityGoal from './pages/Sustainability/EditSustainabilityGoal';
 import AddSustainabilityGoal from './pages/Sustainability/AddSustainabilityGoal';
@@ -102,7 +103,7 @@ function AppContent() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      {/* Only render the nav bar if NOT on /complete-profile */}
+      
       {!loading && location.pathname !== '/complete-profile' && (
         <main className="container">
           <nav style={{ paddingBlock: "0.75rem" }} >
