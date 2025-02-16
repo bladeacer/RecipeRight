@@ -20,6 +20,7 @@ import RecipeDetails from "./pages/Recipe/RecipeDetails";
 import Bookmarks from "./pages/Recipe/Bookmarks";
 import Fridge from "./pages/Recipe/Fridge";
 import Chatbot from './pages/Recipe/Chatbot';
+import RecipePlanner from './pages/Recipe/RecipePlanner';
 
 import EditSustainabilityGoal from './pages/Sustainability/EditSustainabilityGoal';
 import AddSustainabilityGoal from './pages/Sustainability/AddSustainabilityGoal';
@@ -114,13 +115,20 @@ function App() {
                               title = "Pantry";
                             } else if (path.startsWith("/bookmarks")) {
                               title = "Bookmarks";
+                            } else if (path.startsWith("/fridge")) {
+                              title = "Fridge";
+                            } else if (path.startsWith("/RecipePlanner")) {
+                              title = "Meal Planner";
                             }
+                            
                             return title;
                           })()}
                         </summary>
                         <ul>
                           <li><a href="/pantry">Pantry</a></li>
                           <li><a href="/bookmarks">Bookmarks</a></li>
+                          <li><a href="/fridge">Fridge</a></li>
+                          <li><a href="/RecipePlanner">Meal Planner</a></li>
                         </ul>
                       </details>
                     </li>
@@ -276,6 +284,12 @@ function App() {
             <Route path="/chatbot" element={
               <>
                 {user && (<Chatbot />)}
+                {!user && (<Error />)}
+              </>
+            } />
+            <Route path="/recipeplanner" element={
+              <>
+                {user && (<RecipePlanner />)}
                 {!user && (<Error />)}
               </>
             } />
