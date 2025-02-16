@@ -4,6 +4,7 @@ import http from "../../http";
 import DOMPurify from "dompurify"; // For HTML sanitisation
 import "../../themes/RecipeDetails.css";
 import ChatButton from "../../components/ChatButton";
+import BookmarkPopup from "../../components/BookmarkPopup";
 
 const RecipeDetails = () => {
     const { id } = useParams();
@@ -14,6 +15,7 @@ const RecipeDetails = () => {
     const [newFolderName, setNewFolderName] = useState(""); // Name input for new folder
     const [cookError, setCookError] = useState(""); // Error message for cook process
     const [cookMessage, setCookMessage] = useState(""); // Status message for cook process
+    const [showPopup, setShowPopup] = useState(false)
 
     useEffect(() => {
         const fetchRecipeDetails = async () => {
@@ -146,12 +148,12 @@ const RecipeDetails = () => {
 
     const sanitizedSummary = DOMPurify.sanitize(recipeDetails.summary);
 
-    return (
+     return (
         <div className="recipe-details-page">
             <h1>{recipeDetails.title}</h1>
             <img src={recipeDetails.image} alt={recipeDetails.title} className="recipe-image" />
-            <div className="recipe-summary" dangerouslySetInnerHTML={{ __html: sanitizedSummary }} />
-            
+            <div dangerouslySetInnerHTML={{ __html: recipeDetails.summary }} />
+
             <h2>Ingredients</h2>
             <ul>
                 {recipeDetails.extendedIngredients.map((ingredient) => (
@@ -160,45 +162,20 @@ const RecipeDetails = () => {
             </ul>
 
             <h2>Instructions</h2>
-            {recipeDetails.instructions ? (
-                <div dangerouslySetInnerHTML={{ __html: recipeDetails.instructions }} />
-            ) : (
-                <p>No detailed instructions available.</p>
+            <div dangerouslySetInnerHTML={{ __html: recipeDetails.instructions || "No instructions available." }} />
+
+            {/* Save to Bookmarks Button */}
+            <div className="bookmark-section">
+                <button className="bookmark-button" onClick={() => setShowPopup(true)}>
+                    ★ Save to Bookmarks
+                </button>
+            </div>
+
+            {/* Bookmark Popup (Only Visible When showPopup is true) */}
+            {showPopup && (
+                <BookmarkPopup recipe={recipeDetails} onClose={() => setShowPopup(false)} />
             )}
 
-            <div className="bookmark-section">
-                <h3>Bookmark this Recipe</h3>
-                <div className="folder-dropdown">
-                    <select
-                        value={selectedFolder}
-                        onChange={(e) => setSelectedFolder(e.target.value)}
-                    >
-                        <option value="">Select a folder</option>
-                        {folders.map((folder) => (
-                            <option key={folder.name} value={folder.name}>
-                                {folder.name}
-                            </option>
-                        ))}
-                    </select>
-                    <div className="new-folder">
-                        <input
-                            type="text"
-                            placeholder="Add a new folder"
-                            value={newFolderName}
-                            onChange={(e) => setNewFolderName(e.target.value)}
-                        />
-                    </div>
-                </div>
-                <button onClick={addBookmark}>Add Bookmark</button>
-            </div>
-
-            {/* --- Cook It! Section --- */}
-            <div className="cook-section">
-                <h3>Cook This Recipe</h3>
-                {cookError && <p style={{ color: "red" }}>{cookError}</p>}
-                {cookMessage && <p>{cookMessage}</p>}
-                <button onClick={cookRecipe}>Cook It!</button>
-            </div>
             <ChatButton />
         </div>
     );

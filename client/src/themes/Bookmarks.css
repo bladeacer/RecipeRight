@@ -11,10 +11,12 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Add Folder Section */
 .add-folder-section {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    height: 60px;
 }
 
 .add-folder-section input {
@@ -39,6 +41,7 @@ h1 {
     background-color: #2f0db9;
 }
 
+/* Bookmark Folder */
 .bookmark-folder {
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -47,42 +50,39 @@ h1 {
     background-color: #f9f9f9;
 }
 
-.bookmark-folder h2 {
+/* Folder Header */
+.folder-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+/* Folder Title */
+.bookmark-folder h2 {
     font-size: 20px;
-    margin-bottom: 10px;
+    margin: 0;
     color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.bookmark-folder h2 button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* Folder Actions (Edit & Delete) */
+.folder-actions {
+    display: flex;
+    gap: 8px;
 }
 
-.bookmark-folder h2 button:nth-child(2) {
-    background-color: #FF5733;
-    color: white;
-}
 
-.bookmark-folder h2 button:nth-child(3) {
-    background-color: #FFC300;
-    color: black;
-}
-
-.bookmark-folder h2 button:hover {
-    opacity: 0.9;
-}
-
+/* Bookmark Items (Recipes inside Folder) */
 .bookmark-item {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: space-between; 
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.2s ease-in-out;
 }
 
 .bookmark-item img {
@@ -98,42 +98,186 @@ h1 {
     color: #333;
 }
 
+.bookmark-item .recipe-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1; /* Ensures the recipe title takes up available space */
+}
+
+/* Remove Recipe Button */
 .bookmark-item button {
+    margin-left: auto; /* Pushes the button to the right */
     padding: 5px 10px;
     font-size: 14px;
     border: none;
     border-radius: 5px;
-    background-color: #FF5733;
+    background-color: #ff5733;
     color: white;
     cursor: pointer;
+    transition: background 0.3s ease-in-out;
 }
 
 .bookmark-item button:hover {
     background-color: #e84525;
 }
 
-.edit-folder-section {
+/* Confirmation Dialog */
+
+.confirm-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Centered Confirmation Popup */
+.confirm-dialog {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 350px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    align-items: center;
 }
 
-.edit-folder-section input {
+/* Buttons Container */
+.confirm-dialog footer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* Standardized Button Styles */
+.confirm-dialog footer button {
     flex: 1;
-    padding: 5px;
-    font-size: 14px;
-    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
     border-radius: 5px;
+    transition: background 0.3s ease-in-out;
 }
 
-.edit-folder-section button {
-    padding: 5px 10px;
-    font-size: 14px;
+/* Cancel Button (Blue) */
+.confirm-dialog footer button:first-child {
+    background-color: #007bff;
+    color: white;
+    margin-right: 10px;
+}
+
+.confirm-dialog footer button:first-child:hover {
+    background-color: #0056b3;
+}
+
+/* Confirm Button (Red) */
+.confirm-dialog footer button:last-child {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.confirm-dialog footer button:last-child:hover {
+    background-color: #cc0000;
+}
+
+
+/* Dialog Content */
+.confirm-dialog article {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+}
+
+/* Delete Confirmation Button */
+.delete-confirm-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
+}
+
+.delete-confirm-button:hover {
+    background-color: #cc0000;
 }
 
 p {
     text-align: center;
     color: black;
     font-size: 16px;
+}
+
+
+/* Folder Title + Edit Button (Left Side) */
+.folder-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Edit Button (Pencil Icon) */
+.edit-folder-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #3b43dc;
+    transition: color 0.3s ease-in-out;
+}
+
+.edit-folder-button:hover {
+    color: #2f0db9;
+}
+
+/* Delete Button (Trash Icon - Right Side) */
+.delete-folder-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #ff4d4d; 
+    transition: color 0.3s ease-in-out;
+}
+
+.delete-folder-button:hover {
+    color: #cc0000;
+}
+
+/* Recipe Link Styling */
+.recipe-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none; 
+    color: inherit; 
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.2s ease-in-out;
+}
+
+.recipe-link:hover {
+    background-color: #f0f0f0;
+}
+
+/* Bookmark Item (Recipe) */
+.bookmark-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background 0.2s ease-in-out;
+}
+
+/* Bookmark Image */
+.bookmark-image {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
 }
