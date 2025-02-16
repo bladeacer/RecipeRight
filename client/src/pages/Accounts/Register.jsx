@@ -104,7 +104,7 @@ function Register() {
                     var default_user_attr2 = {
                         userAttributeName: "view_report",
                         userAttributeDescription: "let users view report",
-                        attributeId: 1,
+                        attributeId: 2,
                         userId: 1
                     }
                     http.post("/userattributes", default_user_attr2);
