@@ -8,7 +8,7 @@ const Fridge = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 14;
+  const itemsPerPage = 16;
 
   const [newItem, setNewItem] = useState({
     ingredientName: "",

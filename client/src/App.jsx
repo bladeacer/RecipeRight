@@ -127,6 +127,10 @@ function AppContent() {
                             title = "Pantry";
                           } else if (path.startsWith("/bookmarks")) {
                             title = "Bookmarks";
+                          }else if (path.startsWith("/fridge")) {
+                            title = "Fridge";
+                          }else if (path.startsWith("/recipeplanner")) {
+                            title = "Meal Planner";
                           }
                           return title;
                         })()}
@@ -134,6 +138,8 @@ function AppContent() {
                       <ul>
                         <li><a href="/pantry">Pantry</a></li>
                         <li><a href="/bookmarks">Bookmarks</a></li>
+                        <li><a href="/fridge">Fridge</a></li>
+                        <li><a href="/recipeplanner">Meal Planner</a></li>
                       </ul>
                     </details>
                   </li>
@@ -295,6 +301,12 @@ function AppContent() {
           <Route path="/chatbot" element={
             <>
               {user && (<Chatbot />)}
+              {!user && (<Error />)}
+            </>
+          } />
+          <Route path="/recipeplanner" element={
+            <>
+              {user && (<RecipePlanner />)}
               {!user && (<Error />)}
             </>
           } />
