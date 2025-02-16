@@ -73,3 +73,11 @@ Content-Type: application/json
   "token": "c1c5e08f-124f-4342-b1a3-b7245a53024e",
   "newPassword": "NewSecurePassword123!"
 }
+
+###
+POST {{LearningAPI_HostAddress}}/user/resend-2fa
+Content-Type: application/json
+
+{
+  "email": "hiihoo1230@gmail.com"
+}
