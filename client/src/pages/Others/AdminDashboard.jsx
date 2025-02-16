@@ -210,11 +210,11 @@ export default function AdminDashboard() {
     return (
         <Box sx={{ p: 3, textAlign: 'center' }}>
             <h4 style={{ mb: 4 }}>Admin Dashboard</h4>
-            {users != null? <Bar data={userRegData} options={barConfig1.options} /> : <p>Not available</p>}
-            {users != null ? <Pie data={userGenderData} options={pieConfig1.options} /> : <p>Not available</p>}
-            {rtList != null ? <Pie data={resourceTypeData} options={pieConfig2.options} /> : <p>Not available</p>}
-            {resList != null ? <Pie data={resourceData} options={pieConfig3.options}/> : <p>Not available</p>}
-            {attributes != null ? <Bar data={attributesData} options={barConfig2.options} /> : <p>Not available</p>}
+            {users.length > 0 ? <Bar data={userRegData} options={barConfig1.options} /> : <p>Not available</p>}
+            {users.length > 0 ? <Pie data={userGenderData} options={pieConfig1.options} /> : <p>Not available</p>}
+            {rtList.length > 0 ? <Pie data={resourceTypeData} options={pieConfig2.options} /> : <p>Not available</p>}
+            {resList.length > 0 ? <Pie data={resourceData} options={pieConfig3.options}/> : <p>Not available</p>}
+            {attributes.length > 0 ? <Bar data={attributesData} options={barConfig2.options} /> : <p>Not available</p>}
         </Box>
     );
 
