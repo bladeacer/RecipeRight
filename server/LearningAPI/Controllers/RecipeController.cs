@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using LearningAPI.Models;
-
+using Microsoft.Extensions.Configuration;
 
 namespace LearningAPI.Controllers
 {
@@ -13,12 +13,13 @@ namespace LearningAPI.Controllers
     public class RecipeController : ControllerBase
     {
         private readonly HttpClient _httpClient;
-        private const string SpoonacularApiKey = "d55b00451c9a4dd6bd3dcc1a3857415a";
+        private readonly string _spoonacularApiKey;
         private const string SpoonacularBaseUrl = "https://api.spoonacular.com/recipes";
 
-        public RecipeController(HttpClient httpClient)
+        public RecipeController(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _spoonacularApiKey = configuration["Spoonacular:ApiKey"] ?? throw new ArgumentNullException("Spoonacular API Key is missing from appsettings.json");
         }
 
         [HttpPost("search")]
@@ -30,7 +31,7 @@ namespace LearningAPI.Controllers
             }
 
             string ingredients = pantryRequest.Pantry;
-            var url = $"{SpoonacularBaseUrl}/findByIngredients?ingredients={ingredients}&apiKey={SpoonacularApiKey}&number=10&ranking=1";
+            var url = $"{SpoonacularBaseUrl}/findByIngredients?ingredients={ingredients}&apiKey={_spoonacularApiKey}&number=10&ranking=1";
 
             try
             {
@@ -55,7 +56,7 @@ namespace LearningAPI.Controllers
         [HttpGet("details/{id}")]
         public async Task<IActionResult> GetRecipeDetails(int id)
         {
-            var url = $"{SpoonacularBaseUrl}/{id}/information?apiKey={SpoonacularApiKey}";
+            var url = $"{SpoonacularBaseUrl}/{id}/information?apiKey={_spoonacularApiKey}";
 
             try
             {
@@ -74,13 +75,10 @@ namespace LearningAPI.Controllers
             }
         }
 
-
-        // Have yet to add this in front end
-
         [HttpGet("random")]
         public async Task<IActionResult> GetRandomRecipes([FromQuery] int number = 10, [FromQuery] string includeTags = "", [FromQuery] string excludeTags = "")
         {
-            var url = $"{SpoonacularBaseUrl}/random?number={number}&apiKey={SpoonacularApiKey}";
+            var url = $"{SpoonacularBaseUrl}/random?number={number}&apiKey={_spoonacularApiKey}";
 
             if (!string.IsNullOrEmpty(includeTags))
             {
@@ -108,7 +106,5 @@ namespace LearningAPI.Controllers
                 return StatusCode(500, $"Request failed: {ex.Message}");
             }
         }
-
-
     }
 }

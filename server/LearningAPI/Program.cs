@@ -1,7 +1,7 @@
 using AutoMapper;
 using LearningAPI;
-using LearningAPI.Services; // Add this line
-using LearningAPI.Middleware; // Add this line
+using LearningAPI.Services;
+using LearningAPI.Middleware; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;

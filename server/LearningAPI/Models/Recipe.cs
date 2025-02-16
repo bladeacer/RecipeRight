@@ -1,6 +1,4 @@
-﻿// File: LearningAPI/Models/Recipe.cs
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LearningAPI.Models
 {
