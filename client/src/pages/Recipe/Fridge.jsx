@@ -120,7 +120,7 @@ const Fridge = () => {
     const sampleIngredients = [
       { ingredientName: "Chicken Breast", quantity: 2, unit: "pieces" },
       { ingredientName: "Ground Beef", quantity: 500, unit: "g" },
-      { ingredientName: "Salmon Fillet", quantity: 2, unit: "fillets" },
+      { ingredientName: "Dill", quantity: 2, unit: "stalks" },
       { ingredientName: "Eggs", quantity: 12, unit: "pcs" },
       { ingredientName: "Carrots", quantity: 4, unit: "pcs" },
       { ingredientName: "Spinach", quantity: 1, unit: "bunch" },
@@ -138,7 +138,7 @@ const Fridge = () => {
       { ingredientName: "Mushrooms", quantity: 200, unit: "g" },
       { ingredientName: "Flour", quantity: 1, unit: "kg" },
       { ingredientName: "Sugar", quantity: 500, unit: "g" },
-      { ingredientName: "Yogurt", quantity: 1, unit: "cup" },
+      { ingredientName: "Sour Cream", quantity: 1, unit: "cup" },
     ];
 
     try {
