@@ -14,13 +14,26 @@ function Register() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
-   
+    const [attributes, setAttributes] = useState([]);
+    const [isExistsAdmin, setIsExistsAdmin] = useState(false);
+    const [users, setUser] = useState([]);
     const [passwordStrength, setPasswordStrength] = useState({ color: "red", text: "Weak", width: "25%" });
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const getUsers = () => {
+        http.get("/user").then((res) => {
+            console.log(res.data);
+            setUser(res.data);
+        })
+    }
 
 
-
+    const getAttributes = () => {
+        http.get("/attributes").then((res) => {
+            setAttributes(res.data);
+        });
+    };
     const genderOptions = {
         1: { gender: "Male" },
         2: { gender: "Female" },
@@ -73,8 +86,42 @@ function Register() {
             formData.append("gender", data.gender);
             formData.append("image", data.image);
             formData.append("recaptchaToken", captchaToken);
+
+            getAttributes();
             // Make the first user admin :)
- 
+            if (attributes.length == 0) {
+                http.get("/userattributes/attr?attribute=admin").then((res) => {
+                    setIsExistsAdmin(Object.keys(res.data).length == 0);
+                });
+                if (!isExistsAdmin) {
+                    var default_attr = {
+                        attributeName: "admin group",
+                        attributeDescription: "users who have admin"
+                    }
+
+                    http.post("/attributes", default_attr);
+                    var default_user_attr = {
+                        userAttributeName: "admin",
+                        userAttributeDescription: "let users have admin",
+                        attributeId: 1,
+                        userId: 1
+                    }
+                    http.post("/userattributes", default_user_attr);
+                    var default_attr2 = {
+                        attributeName: "view report group",
+                        attributeDescription: "users who can view report"
+                    }
+
+                    http.post("/attributes", default_attr2);
+                    var default_user_attr2 = {
+                        userAttributeName: "view_report",
+                        userAttributeDescription: "let users view report",
+                        attributeId: 2,
+                        userId: 1
+                    }
+                    http.post("/userattributes", default_user_attr2);
+                }
+            }
 
             http.post("/user/register", formData, {
                 headers: {

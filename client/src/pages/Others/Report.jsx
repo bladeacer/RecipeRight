@@ -27,7 +27,7 @@ export default function Report() {
     const getUsers = () => {
         http.get("/user").then((res) => {
             console.log(res.data);
-            setUser(res.data);
+            setUser(res.data.user);
         })
     }
     const getRes = () => {

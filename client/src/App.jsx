@@ -181,11 +181,6 @@ function AppContent() {
                       <a href="/report"> Generate Report </a>
                     </li>
                   )}
-                  {isAdmin && (
-                    <li>
-                      <a href="/admin/dashboard"> Admin Dashboard </a>
-                    </li>
-                  )}
                 </>
               )}
             </ul>
