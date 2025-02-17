@@ -4,7 +4,7 @@ import http from '../../http';
 import global from '../../global';
 import dayjs from 'dayjs';
 import { Bar, Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 
 export default function AdminDashboard() {
 
@@ -49,21 +49,23 @@ export default function AdminDashboard() {
     const [dates, setDates] = useState([]);
     const [genders, setGenders] = useState([]);
     
-    users.forEach(user => {
-        setDates(dates.push(dayjs(user.createdOn).format('DD-MM-YYYY')))
-        setGenders(genders.push(user.genders))
-    });
+    useEffect(() => {
+        const newDates = users.map(user => dayjs(user.createdOn).format('DD-MM-YYYY'));
+        const newGenders = users.map(user => user.gender);
+        setDates(newDates);
+        setGenders(newGenders);
+    }, [users]);
+
     const genderCounts = genders.reduce((acc, gender) => {
         acc[gender] = (acc[gender] || 0) + 1;
         return acc;
     }, {});
-
     const userRegData = {
         labels: dates,
         datasets: [
             {
                 label: 'User Registrations',
-                data: dates.map(date => users.filter(user => dayjs(user.createdOn).format('DD-MM-YYYY') === date).length),
+                data: Array(dates.length).fill(0),
                 fill: false,
                 backgroundColor: 'var(--pico-background-orange-450)',
                 borderColor: 'var(--pico-color-cyan-950)',
@@ -75,7 +77,7 @@ export default function AdminDashboard() {
         datasets: [
             {
                 label: 'Attributes',
-                data: attributes.map(attr => attr.filter(attr => attr.attributesId === attr.id).length),
+                data: Array(attributes.length).fill(0),
                 fill: false,
                 backgroundColor: 'var(--pico-color-amber-500)',
                 borderColor: 'var(--pico-color-cyan-950)',
@@ -205,7 +207,7 @@ export default function AdminDashboard() {
         },
     };
 
-    ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+    ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
 
     return (
         <Box sx={{ p: 3, textAlign: 'center' }}>

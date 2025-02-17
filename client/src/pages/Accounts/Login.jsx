@@ -12,8 +12,15 @@ import { GoogleLogin } from "@react-oauth/google";
 function Login() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const [attributes, setAttributes] = useState([]);
   const [captchaToken, setCaptchaToken] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  const getAttributes = () => {
+    http.get("/attributes").then((res) => {
+        setAttributes(res.data);
+    });
+};
 
   const formik = useFormik({
     initialValues: {
@@ -44,13 +51,45 @@ function Login() {
       data.password = data.password.trim();
       data.recaptchaToken = captchaToken;
 
+
       http.post("/user/login", data)
         .then((res) => {
           if (res.data.requires2FA) {
             navigate(`/verify-2fa?email=${encodeURIComponent(data.email)}`);
           } else {
             localStorage.setItem("accessToken", res.data.accessToken);
+            if (attributes.length == 0) {
+
+              var default_attr = {
+                  attributeName: "admin group",
+                  attributeDescription: "users who have admin"
+              }
+      
+              http.post("/attributes", default_attr);
+              var default_user_attr = {
+                  userAttributeName: "admin",
+                  userAttributeDescription: "let users have admin",
+                  attributeId: 1,
+                  userId: 1
+              }
+              http.post("/userattributes", default_user_attr);
+              var default_attr2 = {
+                  attributeName: "view report group",
+                  attributeDescription: "users who can view report"
+              }
+      
+              http.post("/attributes", default_attr2);
+              var default_user_attr2 = {
+                  userAttributeName: "view_report",
+                  userAttributeDescription: "let users view report",
+                  attributeId: 2,
+                  userId: 1
+              }
+              http.post("/userattributes", default_user_attr2);
+      
+      }
             navigate("/pantry");
+            window.location.reload(); 
           }
         })
         .catch(() => {
