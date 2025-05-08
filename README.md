@@ -21,6 +21,7 @@ A recipe generation web app written in C#, ReactJS and Pico CSS.
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bladeacer"><img src="https://avatars.githubusercontent.com/u/148305363?v=4?s=100" width="100px;" alt="bladeacer"/><br /><sub><b>bladeacer</b></sub></a><br /><a href="https://github.com/bladeacer/RecipeRight/commits?author=bladeacer" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Am0ose"><img src="https://avatars.githubusercontent.com/u/137263817?v=4?s=100" width="100px;" alt="Amos Ong Ze Ee"/><br /><sub><b>Amos Ong Ze Ee</b></sub></a><br /><a href="https://github.com/bladeacer/RecipeRight/commits?author=Am0ose" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/pribloa"><img src="https://avatars.githubusercontent.com/u/151531349?v=4?s=100" width="100px;" alt="pribloa"/><br /><sub><b>pribloa</b></sub></a><br /><a href="https://github.com/bladeacer/RecipeRight/commits?author=pribloa" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/nodroj0728"><img src="https://avatars.githubusercontent.com/u/140972636?v=4?s=100" width="100px;" alt="nodroj0728"/><br /><sub><b>nodroj0728</b></sub></a><br /><a href="https://github.com/bladeacer/RecipeRight/commits?author=nodroj0728" title="Code">💻</a></td>
     </tr>
   </tbody>
